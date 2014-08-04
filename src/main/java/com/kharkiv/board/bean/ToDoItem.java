@@ -30,6 +30,7 @@ public class ToDoItem implements Serializable {
 	
 	@Size(min=1, max=255)
 	private String title;
+	
 	private String description;
 	
 	@Future
