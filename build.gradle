@@ -39,13 +39,12 @@ sourceSets {
 
 buildscript {
     repositories {jcenter()}
-    dependencies {classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.3'}
+    dependencies {classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'}
 }
 
 dependencies {
 	compile group: 'org.springframework', 			name:'spring-core', 					version:'4.0.5.RELEASE'
 	compile group: 'org.springframework', 			name:'spring-context', 				version:'4.0.5.RELEASE'
-	compile group: 'org.springframework', 			name:'spring-webmvc', 				version:'4.0.5.RELEASE'
 	compile group: 'org.springframework', 			name:'spring-orm', 					version:'4.0.5.RELEASE'
 	compile group: 'org.hibernate',					name:'hibernate-core', 				version:'4.3.5.Final'
 	compile group: 'org.hibernate',					name:'hibernate-entitymanager',	version:'4.3.5.Final'
@@ -75,10 +74,14 @@ dependencies {
 	
 	providedCompile group: 'javax.servlet', 		name:'javax.servlet-api',			version:'3.1.0'
 	
-	def tomcatVersion = '6.0.29'
-    tomcat "org.apache.tomcat:catalina:${tomcatVersion}",
-           "org.apache.tomcat:coyote:${tomcatVersion}",
-           "org.apache.tomcat:jasper:${tomcatVersion}"
+	dependencies {
+    def tomcatVersion = '7.0.11'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+           "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
+}
 }
 
 jacocoTestReport {

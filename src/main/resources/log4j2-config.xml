@@ -5,17 +5,6 @@
   		<Console name="CONSOLE" target="SYSTEM_OUT">
       		<PatternLayout pattern="%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n"/>
     	</Console>
-    	<Syslog name="RFC5424" host="localhost" port="9997" protocol="UDP"
-			format="RFC5424" appName="yourService" enterpriseNumber="42082"
-			facility="LOCAL0" id="Structured Data ID from config" includeMDC="true"
-			mdcPrefix="someMdcPrefix:" messageId="someMessage" newLine="true">
-			<LoggerFields>
-				<KeyValuePair key="localDate" value="%d{ISO8601},%d{Z}" />
-				<KeyValuePair key="level" value="%-5level" />
-				<KeyValuePair key="class" value="%30.30c" />
-				<KeyValuePair key="message" value="%m%n" />
-			</LoggerFields>
-		</Syslog>
 	</Appenders>
 	
 	<loggers>
