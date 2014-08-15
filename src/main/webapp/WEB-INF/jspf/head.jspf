@@ -2,7 +2,6 @@
 <%@ include file="/WEB-INF/jspf/directives/taglib.jspf" %>
 <%-- bundle basename for localization --%>
 
-<title>Board</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="Eduard Dereza">	

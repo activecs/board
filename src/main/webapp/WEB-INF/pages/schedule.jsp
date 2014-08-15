@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<%@ include file="/WEB-INF/jspf/head.jspf"%>
+	<title>Schedule</title>
+	<%@ include file="/WEB-INF/jspf/head.jspf"%>
 </head>
 <body>
 	<!-- Header =============================== -->
@@ -10,7 +11,7 @@
 	</header>
 	<!-- Header end =============================== -->
 	
-	Hello world
+	Hello workout! ${name}
 	<!-- MainBody End ============================= -->
 	<!-- Footer =============================== -->
 	<footer>

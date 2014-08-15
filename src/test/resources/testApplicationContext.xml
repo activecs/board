@@ -25,7 +25,7 @@
 	</mvc:annotation-driven>
 	
 	<context:annotation-config />
-	<context:property-placeholder location="classpath:application.properties" />
+	<context:property-placeholder location="classpath:test-database.properties" />
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
