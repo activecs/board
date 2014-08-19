@@ -1,0 +1,31 @@
+properties:
+  ###############################################
+  ## Global environment configuration
+  ###############################################
+  global: &global_env
+    
+    database.driver.class: com.mysql.jdbc.Driver
+    
+ 
+  ###############################################
+  ## Local environment configuration
+  ###############################################
+  config-local: &config-local
+    <<: *global_env
+
+    database.username: root
+    database.password: root
+    database.url: jdbc:mysql://127.8.153.130:3306/board
+
+   
+  ###############################################
+  ## OpenShift environment configuration
+  ###############################################
+  config-openshift: &config-openshift
+    <<: *global_env
+
+    
+    database.username: adminwuRFBg7
+    database.password: 8EWFTbv4nc71
+    database.url: jdbc:mysql://127.8.153.130:3306/board
+    

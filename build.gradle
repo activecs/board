@@ -7,13 +7,18 @@ apply plugin: 'jacoco'
 apply plugin: 'sonar-runner'
 apply plugin: 'build-dashboard'
 
-
 group = 'com.kharkiv.board'
 version = '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 compileJava.options.encoding = 'UTF-8'
+
+ext {
+	SYSTEM_PROPERTY_ENVIRONMENT = 'env'
+	DEFAULT_ENV = 'config-local'
+	yamlPropertiesFile = file('properties.yaml')
+}
 
 repositories { 
 	maven { url "http://repo.maven.apache.org/maven2" } 
@@ -90,6 +95,22 @@ dependencies {
         exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
 }
+
+task generateProperties {
+	description = "Generates properties for environments"
+	inputs.files yamlPropertiesFile
+	doLast {
+		def env = getEnvironmentName();
+		def loader = new YamlLoader(env);
+		loader.process()
+	}
+}
+
+def getEnvironmentName() {
+	return System.getProperty(SYSTEM_PROPERTY_ENVIRONMENT, DEFAULT_ENV);
+}
+
+processResources.dependsOn generateProperties
 
 jacocoTestReport {
     group = "Reporting"

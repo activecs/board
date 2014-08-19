@@ -1,13 +1,16 @@
 build/*
+*/build
 target/*
 bin/*
 .project
 .classpath
 .settings/*
 .gradle/*
+*/.gradle
 .idea/*
 *.iml
 classes/*
 activemq-data/*
 /bin/
 /target
+src/main/resources/application.properties
