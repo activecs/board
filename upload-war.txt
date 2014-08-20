@@ -1,0 +1,14 @@
+ssh 53ea659450044640c600042b@board-netstalk3r.rhcloud.com
+cd app-root/data/tomcat/bin/
+sh shutdown.sh
+cd ../webapps/
+rm -f -r ROOT
+rm -f ROOT.war
+
+#отключаемся
+
+scp ROOT.war 53ea659450044640c600042b@board-netstalk3r.rhcloud.com:/var/lib/openshift/53ea659450044640c600042b/app-root/data/tomcat/webapps
+
+ssh 53ea659450044640c600042b@board-netstalk3r.rhcloud.com
+cd app-root/data/tomcat/bin/
+sh startup.sh
