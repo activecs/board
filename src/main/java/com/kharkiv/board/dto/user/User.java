@@ -14,19 +14,27 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.common.base.Objects;
 import com.kharkiv.board.dto.schedule.Comment;
 import com.kharkiv.board.dto.schedule.Schedule;
-import com.kharkiv.board.dto.schedule.TrainingVisitor;
+import com.kharkiv.board.dto.schedule.TrainingVisit;
+import com.kharkiv.board.util.QueryNamesConstants.UserQueries;
 
 @Entity
 @Table(name = "users", indexes = @Index(name = "login_index", columnList = "login"))
+@NamedQueries(value = { @NamedQuery(name = UserQueries.GET_ALL, query = "SELECT u FROM User u"),
+        @NamedQuery(name = UserQueries.GET_BY_ID, query = "SELECT u FROM User u WHERE u.id = :id"),
+        @NamedQuery(name = UserQueries.GET_BY_LOGIN, query = "SELECT u FROM User u WHERE u.login = :login"),
+        @NamedQuery(name = UserQueries.DELETE_BY_ID, query = "DELETE FROM User u WHERE u.id = :id"),
+        @NamedQuery(name = UserQueries.DELETE_BY_LOGIN, query = "DELETE FROM User u WHERE u.login = :login") })
 public class User implements Serializable {
 
-    private static final long serialVersionUID = -5035251611323604788L;
+    private static final long serialVersionUID = -8301776059810262474L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +64,7 @@ public class User implements Serializable {
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
-    private Set<TrainingVisitor> trainigVisited;
+    private Set<TrainingVisit> trainigVisited;
 
     public String getLogin() {
         return login;
@@ -102,6 +110,10 @@ public class User implements Serializable {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Set<Schedule> getSchedules() {
         return schedules;
     }
@@ -118,11 +130,11 @@ public class User implements Serializable {
         this.comments = comments;
     }
 
-    public Set<TrainingVisitor> getTrainigVisited() {
+    public Set<TrainingVisit> getTrainigVisited() {
         return trainigVisited;
     }
 
-    public void setTrainigVisited(Set<TrainingVisitor> trainigVisited) {
+    public void setTrainigVisited(Set<TrainingVisit> trainigVisited) {
         this.trainigVisited = trainigVisited;
     }
 

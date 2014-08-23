@@ -14,18 +14,27 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.kharkiv.board.dto.user.User;
+import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
 
 @Entity
 @Table(name = "schedules", indexes = @Index(name = "schedule_user_index", columnList = "user_id"))
+@NamedQueries(value = {
+        @NamedQuery(name = ScheduleQueries.GET_ALL, query = "SELECT s FROM Schedule s"),
+        @NamedQuery(name = ScheduleQueries.GET_BY_ID, query = "SELECT s FROM Schedule s WHERE s.id = :id"),
+        @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USER_ID, query = "SELECT s FROM Schedule s WHERE s.user.id = :userId"),
+        @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USER_LOGIN, query = "SELECT s FROM Schedule s WHERE s.user.login = :login"),
+        @NamedQuery(name = ScheduleQueries.DELETE_BY_ID, query = "DELETE FROM Schedule s WHERE s.id = :id") })
 public class Schedule implements Serializable {
 
-    private static final long serialVersionUID = -4164579667866948219L;
+    private static final long serialVersionUID = 7939181717447401002L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +46,7 @@ public class Schedule implements Serializable {
 
     @Column(name = "place", length = 150, nullable = false)
     private String place;
-    
+
     @Column(name = "created", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar created;
@@ -45,12 +54,12 @@ public class Schedule implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<TrainingVisitor> visitors;
+    private Set<TrainingVisit> visitors;
 
     public Calendar getDateTime() {
         return dateTime;
@@ -88,6 +97,10 @@ public class Schedule implements Serializable {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Set<Comment> getComments() {
         return comments;
     }
@@ -101,15 +114,15 @@ public class Schedule implements Serializable {
         comments.add(comment);
     }
 
-    public Set<TrainingVisitor> getVisitors() {
+    public Set<TrainingVisit> getVisitors() {
         return visitors;
     }
 
-    public void setVisitors(Set<TrainingVisitor> visitors) {
+    public void setVisitors(Set<TrainingVisit> visitors) {
         this.visitors = visitors;
     }
 
-    public void addVisitor(TrainingVisitor visitor) {
+    public void addVisitor(TrainingVisit visitor) {
         visitor.setSchedule(this);
         visitors.add(visitor);
     }

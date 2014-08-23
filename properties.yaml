@@ -5,6 +5,9 @@ properties:
   global: &global_env
     
     database.driver.class: com.mysql.jdbc.Driver
+    hibernate.hbm2ddl.auto: update
+    hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate.show_sql: true
     
  
   ###############################################
@@ -15,7 +18,7 @@ properties:
 
     database.username: root
     database.password: root
-    database.url: jdbc:mysql://127.8.153.130:3306/board
+    database.url: jdbc:mysql://127.0.0.1:3306/board
 
    
   ###############################################
