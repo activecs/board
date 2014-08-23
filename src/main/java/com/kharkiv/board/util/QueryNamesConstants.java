@@ -42,10 +42,10 @@ public class QueryNamesConstants {
         private TrainingVisitsQueris() {
         }
 
-        public static final String GET_4_USER_BY_USER_ID = "TrainigVisits.get4UserByUserId";
-        public static final String GET_4_SCHEDULE_BY_SCHEDULE_ID = "TrainigVisits.get4ScheduleByScheduleId";
+        public static final String GET_4_USER_BY_USER_ID = "TrainngVisits.get4UserByUserId";
+        public static final String GET_4_SCHEDULE_BY_SCHEDULE_ID = "TrainingVisits.get4ScheduleByScheduleId";
         
-        public static final String DELETE_BY_ID = "TrainigVisits.deleteById";
+        public static final String DELETE_BY_ID = "TrainingVisits.deleteById";
 
     }
 }
