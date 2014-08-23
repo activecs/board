@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.util.CollectionUtils;
 
 import com.kharkiv.board.dto.schedule.TrainingVisit;
-import com.kharkiv.board.util.QueryNamesConstants.TrainigVisitsQueris;
+import com.kharkiv.board.util.QueryNamesConstants.TrainingVisitsQueris;
 
 public class TrainigVisitDaoTest {
 
@@ -48,7 +48,7 @@ public class TrainigVisitDaoTest {
         TrainingVisit trainingVisit = new TrainingVisit();
         when(query.getResultList()).thenReturn(Arrays.asList(trainingVisit));
         List<TrainingVisit> usersVisits = tvDao.getAllTrainigVisitsByUserId(userId);
-        verify(em).createNamedQuery(TrainigVisitsQueris.GET_4_USER_BY_USER_ID, TrainingVisit.class);
+        verify(em).createNamedQuery(TrainingVisitsQueris.GET_4_USER_BY_USER_ID, TrainingVisit.class);
         verify(query).setParameter("userId", userId);
         verify(query).getResultList();
         assertFalse(CollectionUtils.isEmpty(usersVisits));
@@ -61,7 +61,7 @@ public class TrainigVisitDaoTest {
         TrainingVisit trainingVisit = new TrainingVisit();
         when(query.getResultList()).thenReturn(Arrays.asList(trainingVisit));
         List<TrainingVisit> schedulesVisits = tvDao.getAllTrainigVisitsByScheduleId(scheduleId);
-        verify(em).createNamedQuery(TrainigVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID, TrainingVisit.class);
+        verify(em).createNamedQuery(TrainingVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID, TrainingVisit.class);
         verify(query).setParameter("scheduleId", scheduleId);
         verify(query).getResultList();
         assertFalse(CollectionUtils.isEmpty(schedulesVisits));
@@ -89,7 +89,7 @@ public class TrainigVisitDaoTest {
         Integer id = 1;
         when(query.executeUpdate()).thenReturn(1);
         int deleted = tvDao.deleteTrainingVisitById(id);
-        verify(em).createNamedQuery(TrainigVisitsQueris.DELETE_BY_ID, TrainingVisit.class);
+        verify(em).createNamedQuery(TrainingVisitsQueris.DELETE_BY_ID, TrainingVisit.class);
         verify(query).setParameter("id", id);
         verify(query).executeUpdate();
         assertThat(deleted).isEqualTo(1);

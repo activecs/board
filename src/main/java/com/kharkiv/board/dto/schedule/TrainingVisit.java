@@ -16,15 +16,15 @@ import javax.persistence.Table;
 
 import com.google.common.base.Objects;
 import com.kharkiv.board.dto.user.User;
-import com.kharkiv.board.util.QueryNamesConstants.TrainigVisitsQueris;
+import com.kharkiv.board.util.QueryNamesConstants.TrainingVisitsQueris;
 
 @Entity
 @Table(name = "training_visits", indexes = { @Index(name = "visits_user_index", columnList = "user_id"),
         @Index(name = "visits_schedule_index", columnList = "schedule_id") })
 @NamedQueries(value = {
-        @NamedQuery(name = TrainigVisitsQueris.GET_4_USER_BY_USER_ID, query = "SELECT tv FROM TrainingVisit tv WHERE tv.user.id = :userId"),
-        @NamedQuery(name = TrainigVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID, query = "SELECT tv FROM TrainingVisit tv WHERE tv.schedule.id = :scheduleId"),
-        @NamedQuery(name = TrainigVisitsQueris.DELETE_BY_ID, query = "DELETE FROM TrainingVisit tv WHERE tv.id = :id") })
+        @NamedQuery(name = TrainingVisitsQueris.GET_4_USER_BY_USER_ID, query = "SELECT tv FROM TrainingVisit tv WHERE tv.user.id = :userId"),
+        @NamedQuery(name = TrainingVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID, query = "SELECT tv FROM TrainingVisit tv WHERE tv.schedule.id = :scheduleId"),
+        @NamedQuery(name = TrainingVisitsQueris.DELETE_BY_ID, query = "DELETE FROM TrainingVisit tv WHERE tv.id = :id") })
 public class TrainingVisit implements Serializable {
 
     private static final long serialVersionUID = 4140929018424276729L;

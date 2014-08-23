@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import com.kharkiv.board.dto.schedule.TrainingVisit;
-import com.kharkiv.board.util.QueryNamesConstants.TrainigVisitsQueris;
+import com.kharkiv.board.util.QueryNamesConstants.TrainingVisitsQueris;
 
 
 @Repository("trainingVisitDao")
@@ -20,14 +20,14 @@ public class TrainingVisitDaoImpl implements TrainingVisitDao {
 
     @Override
     public List<TrainingVisit> getAllTrainigVisitsByUserId(Integer userId) {
-        TypedQuery<TrainingVisit> query = em.createNamedQuery(TrainigVisitsQueris.GET_4_USER_BY_USER_ID,
+        TypedQuery<TrainingVisit> query = em.createNamedQuery(TrainingVisitsQueris.GET_4_USER_BY_USER_ID,
                 TrainingVisit.class);
         return query.setParameter("userId", userId).getResultList();
     }
 
     @Override
     public List<TrainingVisit> getAllTrainigVisitsByScheduleId(Integer scheduleId) {
-        TypedQuery<TrainingVisit> query = em.createNamedQuery(TrainigVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID,
+        TypedQuery<TrainingVisit> query = em.createNamedQuery(TrainingVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID,
                 TrainingVisit.class);
         return query.setParameter("scheduleId", scheduleId).getResultList();
     }
@@ -46,7 +46,7 @@ public class TrainingVisitDaoImpl implements TrainingVisitDao {
 
     @Override
     public int deleteTrainingVisitById(Integer id) {
-        TypedQuery<TrainingVisit> query = em.createNamedQuery(TrainigVisitsQueris.DELETE_BY_ID, TrainingVisit.class);
+        TypedQuery<TrainingVisit> query = em.createNamedQuery(TrainingVisitsQueris.DELETE_BY_ID, TrainingVisit.class);
         return query.setParameter("id", id).executeUpdate();
     }
 

@@ -38,8 +38,8 @@ public class QueryNamesConstants {
         public static final String DELETE_BY_ID = "Schedules.deleteById";
     }
 
-    public static class TrainigVisitsQueris {
-        private TrainigVisitsQueris() {
+    public static class TrainingVisitsQueris {
+        private TrainingVisitsQueris() {
         }
 
         public static final String GET_4_USER_BY_USER_ID = "TrainigVisits.get4UserByUserId";
