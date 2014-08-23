@@ -6,9 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.stereotype.Repository;
+
 import com.kharkiv.board.dto.schedule.TrainingVisit;
 import com.kharkiv.board.util.QueryNamesConstants.TrainigVisitsQueris;
 
+
+@Repository("trainingVisitDao")
 public class TrainingVisitDaoImpl implements TrainingVisitDao {
 
     @PersistenceContext
