@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class IToDoItemServlet extends AbstractAutowiringServlet {
 
-    private static final long serialVersionUID = -5997974315047155971L;
+    private static final long serialVersionUID = 3018857587188514839L;
     private static final String PAGE_SCHEDULE = "/WEB-INF/pages/schedule.jsp";
 
     @Override
