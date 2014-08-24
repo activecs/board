@@ -11,7 +11,7 @@
 	</header>
 	<!-- Header end =============================== -->
 	
-	Hello workout! ${name}
+	<fmt:message key="say.hello" /> ${name}
 	<!-- MainBody End ============================= -->
 	<!-- Footer =============================== -->
 	<footer>

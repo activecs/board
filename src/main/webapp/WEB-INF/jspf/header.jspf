@@ -1,2 +1,14 @@
 <div class="container">
+
+<script type="text/javascript">
+	function changeLocale(loc) {
+		$.get( window.location.pathname, { "lang": loc }, function() {
+			window.location.reload(true);
+		} );
+	}
+</script>
+
+<a href="#" onclick="changeLocale('ru')">ru</a>
+<br/>
+<a href="#" onclick="changeLocale('en')">en</a>
 </div>
