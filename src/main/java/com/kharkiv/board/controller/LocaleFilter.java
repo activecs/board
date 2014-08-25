@@ -10,11 +10,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class LocaleFilter implements Filter {
+
+    private static final String LANG_PARAMETER = "lang";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,8 +27,10 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        if (StringUtils.isNotBlank(request.getParameter("lang")) && req.getSession() != null) {
-            Config.set(req.getSession(), Config.FMT_LOCALE, new Locale(request.getParameter("lang")));
+        String lang = request.getParameter(LANG_PARAMETER);
+        HttpSession session = req.getSession();
+        if (StringUtils.isNotBlank(lang) && session != null) {
+            Config.set(session, Config.FMT_LOCALE, new Locale(lang));
             return;
         }
         chain.doFilter(request, response);

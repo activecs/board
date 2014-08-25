@@ -1,7 +1,6 @@
 package com.kharkiv.board.dao;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -13,7 +12,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -57,7 +55,7 @@ public class TrainigVisitDaoTest {
         verify(em).createNamedQuery(TrainingVisitsQueris.GET_4_USER_BY_USER_ID, TrainingVisit.class);
         verify(query).setParameter("userId", USER_ID);
         verify(query).getResultList();
-        assertTrue(CollectionUtils.isNotEmpty(usersVisits));
+        assertThat(usersVisits).isNotEmpty();
         assertThat(usersVisits).containsOnly(trainingVisit);
     }
 
@@ -68,7 +66,7 @@ public class TrainigVisitDaoTest {
         verify(em).createNamedQuery(TrainingVisitsQueris.GET_4_SCHEDULE_BY_SCHEDULE_ID, TrainingVisit.class);
         verify(query).setParameter("scheduleId", SCHEDULE_ID);
         verify(query).getResultList();
-        assertTrue(CollectionUtils.isNotEmpty(schedulesVisits));
+        assertThat(schedulesVisits).isNotEmpty();
         assertThat(schedulesVisits).containsOnly(trainingVisit);
     }
 

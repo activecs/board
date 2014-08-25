@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+@Ignore
 public class IToDoItemServletTest {
 	
 	private static final String PAGE_INDEX = "/WEB-INF/pages/index.jsp";
