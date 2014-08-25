@@ -34,7 +34,7 @@ import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
         @NamedQuery(name = ScheduleQueries.DELETE_BY_ID, query = "DELETE FROM Schedule s WHERE s.id = :id") })
 public class Schedule implements Serializable {
 
-    private static final long serialVersionUID = 7939181717447401002L;
+    private static final long serialVersionUID = -2722111922699237216L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +59,7 @@ public class Schedule implements Serializable {
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<TrainingVisit> visitors;
+    private Set<TrainingVisit> visits;
 
     public Calendar getDateTime() {
         return dateTime;
@@ -114,16 +114,16 @@ public class Schedule implements Serializable {
         comments.add(comment);
     }
 
-    public Set<TrainingVisit> getVisitors() {
-        return visitors;
+    public Set<TrainingVisit> getVisits() {
+        return visits;
     }
 
-    public void setVisitors(Set<TrainingVisit> visitors) {
-        this.visitors = visitors;
+    public void setVisits(Set<TrainingVisit> visits) {
+        this.visits = visits;
     }
 
     public void addVisitor(TrainingVisit visitor) {
         visitor.setSchedule(this);
-        visitors.add(visitor);
+        visits.add(visitor);
     }
 }

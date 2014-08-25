@@ -25,10 +25,16 @@ import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
 
 public class ScheduleDaoTest {
 
+    private static final Integer ID = 1;
+    private static final Integer USER_ID = 1;
+    private static final String USER_LOGIN = "login";
+    
     @Mock
     private EntityManager em;
     @Mock
     private TypedQuery<Schedule> query;
+    
+    private Schedule schedule;
 
     @InjectMocks
     private ScheduleDao scheduleDao = new ScheduleDaoImpl();
@@ -38,13 +44,14 @@ public class ScheduleDaoTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
+        schedule = new Schedule();
+        
         when(em.createNamedQuery(anyString(), any(Class.class))).thenReturn(query);
         when(query.setParameter(anyString(), any())).thenReturn(query);
     }
 
     @Test
     public void shouldReturnAllSchedules_whenCallGetAllSchedules() {
-        Schedule schedule = new Schedule();
         when(query.getResultList()).thenReturn(Arrays.asList(schedule));
         List<Schedule> allSchedules = scheduleDao.getAllSchedules();
         verify(em).createNamedQuery(ScheduleQueries.GET_ALL, Schedule.class);
@@ -55,73 +62,68 @@ public class ScheduleDaoTest {
 
     @Test
     public void shouldReturnScheduleAccordingGivenId_whenCallGetScheduleById() {
-        Integer id = 1;
-        Schedule schedule = new Schedule();
         when(query.getSingleResult()).thenReturn(schedule);
-        Schedule scheduleById = scheduleDao.getScheduleById(id);
+        Schedule scheduleById = scheduleDao.getScheduleById(ID);
         verify(em).createNamedQuery(ScheduleQueries.GET_BY_ID, Schedule.class);
-        verify(query).setParameter("id", id);
+        verify(query).setParameter("id", ID);
         verify(query).getSingleResult();
         assertSame(schedule, scheduleById);
     }
 
     @Test
     public void shouldReturnSchedulesForGivenUserId_whenCallGetSchedulesByUserId() {
-        Integer userId = 1;
-        Schedule schedule = new Schedule();
         when(query.getResultList()).thenReturn(Arrays.asList(schedule));
-        List<Schedule> usersSchedule = scheduleDao.getSchedulesByUserId(userId);
+        List<Schedule> usersSchedule = scheduleDao.getSchedulesByUserId(USER_ID);
         verify(em).createNamedQuery(ScheduleQueries.GET_4_USER_BY_USER_ID, Schedule.class);
-        verify(query).setParameter("userId", userId);
+        verify(query).setParameter("userId", USER_ID);
         verify(query).getResultList();
         assertThat(usersSchedule).containsOnly(schedule);
     }
     
     @Test
     public void shouldReturnSchedulesForGivenUserLogin_whenCallGetSchedulesByUserLogin() {
-        String userLogin = "login";
-        Schedule schedule = new Schedule();
         when(query.getResultList()).thenReturn(Arrays.asList(schedule));
-        List<Schedule> usersSchedule = scheduleDao.getSchedulesByUserLogin(userLogin);
+        List<Schedule> usersSchedule = scheduleDao.getSchedulesByUserLogin(USER_LOGIN);
         verify(em).createNamedQuery(ScheduleQueries.GET_4_USER_BY_USER_LOGIN, Schedule.class);
-        verify(query).setParameter("login", userLogin);
+        verify(query).setParameter("login", USER_LOGIN);
         verify(query).getResultList();
         assertThat(usersSchedule).containsOnly(schedule);
     }
     
     @Test
     public void verifyUser_whenDeleteSchedule() {
-        Schedule schedule = new Schedule();
         scheduleDao.deleteSchedule(schedule);
         verify(em).remove(schedule);
     }
     
     @Test
     public void shouldDeleteScheduleAccordingGivenId_whenCallDeleteScgeduleById() {
-        Integer id = 1;
         when(query.executeUpdate()).thenReturn(1);
-        int deleted = scheduleDao.deleteScheduleById(id);
+        int deleted = scheduleDao.deleteScheduleById(ID);
         verify(em).createNamedQuery(ScheduleQueries.DELETE_BY_ID, Schedule.class);
-        verify(query).setParameter("id", id);
+        verify(query).setParameter("id", ID);
         verify(query).executeUpdate();
         assertThat(deleted).isEqualTo(1);
     }
     
     @Test
     public void shouldPersistGivenSchedule_whenCallAddSchedule() {
-        Schedule toAdd = new Schedule();
-        Schedule added = scheduleDao.addSchedule(toAdd);
-        verify(em).persist(toAdd);
+        Schedule added = scheduleDao.addSchedule(schedule);
+        verify(em).persist(schedule);
+        assertThat(added).isEqualTo(schedule);
+    }
+    
+    public void shouldFlushPersistedSchedule_whenCallAddSchedule() {
+        Schedule added = scheduleDao.addSchedule(schedule);
         verify(em).flush();
-        assertThat(added).isEqualTo(toAdd);
+        assertThat(added).isEqualTo(schedule);
     }
     
     @Test
     public void shouldUpdateGivenSchedule_whenCallUpdateSchedule() {
-        Schedule toUpdate = new Schedule();
-        when(em.merge(any(Schedule.class))).thenReturn(toUpdate);
-        Schedule updated = scheduleDao.updateSchedule(toUpdate);
-        verify(em).merge(toUpdate);
-        assertThat(updated).isSameAs(toUpdate);
+        when(em.merge(any(Schedule.class))).thenReturn(schedule);
+        Schedule updated = scheduleDao.updateSchedule(schedule);
+        verify(em).merge(schedule);
+        assertThat(updated).isSameAs(schedule);
     }
 }

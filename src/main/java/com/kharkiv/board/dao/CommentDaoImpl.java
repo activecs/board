@@ -51,4 +51,22 @@ public class CommentDaoImpl implements CommentDao {
         return query.setParameter("scheduleId", scheduleId).getResultList();
     }
 
+    @Override
+    public Comment addComment(Comment comment) {
+        em.persist(comment);
+        em.flush();
+        return comment;
+    }
+
+    @Override
+    public Comment updateComment(Comment comment) {
+        return em.merge(comment);
+    }
+
+    @Override
+    public int deleteCommentById(Integer id) {
+        TypedQuery<Comment> query = em.createNamedQuery(CommentQueries.DELETE_BY_ID, Comment.class);
+        return query.setParameter("id", id).executeUpdate();
+    }
+
 }

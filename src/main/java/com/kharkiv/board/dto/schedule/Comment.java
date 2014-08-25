@@ -23,9 +23,11 @@ import com.kharkiv.board.util.QueryNamesConstants.CommentQueries;
 
 @Entity
 @Table(name = "comments")
-@NamedQueries(value = { @NamedQuery(name = CommentQueries.GET_4_USER_BY_USER_ID, query = "SELECT c FROM Comment c WHERE c.user.id = :userId"),
+@NamedQueries(value = {
+        @NamedQuery(name = CommentQueries.GET_4_USER_BY_USER_ID, query = "SELECT c FROM Comment c WHERE c.user.id = :userId"),
         @NamedQuery(name = CommentQueries.GET_4_USER_BY_USER_LOGIN, query = "SELECT c FROM Comment c WHERE c.user.login = :login"),
-        @NamedQuery(name = CommentQueries.GET_4_SCHEDULE_BY_SCHEDULE_ID, query = "SELECT c FROM Comment c WHERE c.schedule.id = :scheduleId")})
+        @NamedQuery(name = CommentQueries.GET_4_SCHEDULE_BY_SCHEDULE_ID, query = "SELECT c FROM Comment c WHERE c.schedule.id = :scheduleId"),
+        @NamedQuery(name = CommentQueries.DELETE_BY_ID, query = "DELETE FROM Comment c WHERE c.id = :id") })
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 3764659291337159820L;

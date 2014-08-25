@@ -24,6 +24,8 @@ public class QueryNamesConstants {
         public static final String GET_4_USER_BY_USER_ID = "Comments.get4USerByUserId";
         public static final String GET_4_USER_BY_USER_LOGIN = "Comments.get4USerByUserLogin";
         public static final String GET_4_SCHEDULE_BY_SCHEDULE_ID = "Comments.get4ScheduleByScheduleId";
+        
+        public static final String DELETE_BY_ID = "Comments.deleteById";
     }
 
     public static class ScheduleQueries {

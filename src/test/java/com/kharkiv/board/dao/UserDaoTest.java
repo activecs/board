@@ -26,10 +26,15 @@ import com.kharkiv.board.util.QueryNamesConstants.UserQueries;
 
 public class UserDaoTest {
 
+    private static final Integer ID = 1;
+    private static final String LOGIN = "login";
+
     @Mock
     private EntityManager em;
     @Mock
     private TypedQuery<User> query;
+
+    private User user;
 
     @InjectMocks
     private UserDao userDao = new UserDaoImpl();
@@ -39,13 +44,16 @@ public class UserDaoTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
+        user = new User();
+        user.setId(ID);
+        user.setLogin(LOGIN);
+
         when(em.createNamedQuery(anyString(), any(Class.class))).thenReturn(query);
         when(query.setParameter(anyString(), any())).thenReturn(query);
     }
 
     @Test
     public void shouldReturnAllUsers_whenCallGetAllUsers() {
-        User user = new User();
         when(query.getResultList()).thenReturn(Arrays.<User> asList(user));
         List<User> allUsers = userDao.getAllUsers();
         assertThat(allUsers).containsOnly(user);
@@ -55,29 +63,24 @@ public class UserDaoTest {
 
     @Test
     public void shouldSetGivenidInQuery_whenCallGetUserById() {
-        int id = 1;
-        User user = new User();
-        user.setId(id);
+
         when(query.getSingleResult()).thenReturn(user);
-        User userById = userDao.getUserById(id);
+        User userById = userDao.getUserById(ID);
         verify(em).createNamedQuery(UserQueries.GET_BY_ID, User.class);
-        verify(query).setParameter("id", id);
+        verify(query).setParameter("id", ID);
         verify(query).getSingleResult();
         assertEquals(user, userById);
     }
 
     @Test
     public void shouldSetGivenLoginInQuery_whenCallGetUserByLogin() {
-        User user = new User();
-        String login = "login";
-        user.setLogin(login);
         when(query.getSingleResult()).thenReturn(user);
-        User userByLogin = userDao.getUserByLogin(login);
+        User userByLogin = userDao.getUserByLogin(LOGIN);
         verify(em).createNamedQuery(UserQueries.GET_BY_LOGIN, User.class);
-        verify(query).setParameter("login", login);
+        verify(query).setParameter("login", LOGIN);
         verify(query).getSingleResult();
         assertNotNull(userByLogin);
-        assertEquals(login, userByLogin.getLogin());
+        assertEquals(LOGIN, userByLogin.getLogin());
     }
 
     @Test
@@ -89,39 +92,42 @@ public class UserDaoTest {
 
     @Test
     public void shouldReturnCountOfDeletedRows_whenCallDeleteUserById() {
-        Integer id = 1;
         when(query.executeUpdate()).thenReturn(1);
-        int deleted = userDao.deleteUserById(id);
+        int deleted = userDao.deleteUserById(ID);
         verify(em).createNamedQuery(UserQueries.DELETE_BY_ID, User.class);
-        verify(query).setParameter("id", id);
+        verify(query).setParameter("id", ID);
         assertEquals(1, deleted);
     }
 
     @Test
     public void shouldReturnCountOfDeletedRows_whenCallDeleteUserByLogin() {
-        String login = "login";
         when(query.executeUpdate()).thenReturn(1);
-        int deleted = userDao.deleteUserByLogin(login);
+        int deleted = userDao.deleteUserByLogin(LOGIN);
         verify(em).createNamedQuery(UserQueries.DELETE_BY_LOGIN, User.class);
-        verify(query).setParameter("login", login);
+        verify(query).setParameter("login", LOGIN);
         assertEquals(1, deleted);
     }
 
     @Test
     public void shouldPersistGiveUser_whenCallAddUser() {
-        User toAdd = new User();
-        User added = userDao.addUser(toAdd);
-        verify(em).persist(toAdd);
+        User added = userDao.addUser(user);
+        verify(em).persist(user);
         verify(em).flush();
-        assertSame(toAdd, added);
+        assertSame(user, added);
+    }
+
+    @Test
+    public void shouldFlushedPersistedUser_whenCallAddUser() {
+        User added = userDao.addUser(user);
+        verify(em).flush();
+        assertSame(user, added);
     }
 
     @Test
     public void shouldUpdateGivenUser_whenCallUpdateUser() {
-        User toUpdate = new User();
-        when(em.merge(any(User.class))).thenReturn(toUpdate);
-        User updated = userDao.updateUser(toUpdate);
-        verify(em).merge(toUpdate);
-        assertSame(toUpdate, updated);
+        when(em.merge(any(User.class))).thenReturn(user);
+        User updated = userDao.updateUser(user);
+        verify(em).merge(user);
+        assertSame(user, updated);
     }
 }
