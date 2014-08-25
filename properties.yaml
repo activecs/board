@@ -18,7 +18,7 @@ properties:
 
     database.username: root
     database.password: root
-    database.url: jdbc:mysql://127.0.0.1:3306/board
+    database.url: jdbc:mysql://127.0.0.1:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
 
    
   ###############################################
@@ -30,5 +30,5 @@ properties:
     
     database.username: adminwuRFBg7
     database.password: 8EWFTbv4nc71
-    database.url: jdbc:mysql://127.8.153.130:3306/board
+    database.url: jdbc:mysql://127.8.153.130:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
     
