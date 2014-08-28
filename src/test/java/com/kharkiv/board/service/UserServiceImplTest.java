@@ -26,24 +26,22 @@ public class UserServiceImplTest {
 	private UserService service = new UserServiceImpl();
 	@Mock
 	private UserDao mockUserDao;
-	@Mock
-	private User mockUser;
 	
-	private List<User> users;
+	private User user = new User();
+	private List<User> users = Lists.newArrayList(user);
 	
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		users = Lists.newArrayList(mockUser);
 		initMockBehaviour();
 	}
 
 	private void initMockBehaviour() {
 		when(mockUserDao.getAllUsers()).thenReturn(users);
-		when(mockUserDao.getUserById(USER_ID)).thenReturn(mockUser);
-		when(mockUserDao.getUserByLogin(USER_LOGIN)).thenReturn(mockUser);
-		when(mockUserDao.addUser(mockUser)).thenReturn(mockUser);
-		when(mockUserDao.updateUser(mockUser)).thenReturn(mockUser);
+		when(mockUserDao.getUserById(USER_ID)).thenReturn(user);
+		when(mockUserDao.getUserByLogin(USER_LOGIN)).thenReturn(user);
+		when(mockUserDao.addUser(user)).thenReturn(user);
+		when(mockUserDao.updateUser(user)).thenReturn(user);
 	}
 
 	@Test
@@ -55,7 +53,7 @@ public class UserServiceImplTest {
 	@Test
 	public void shouldReturnUserReturnedByDao_whenCallGetUserById() {
 		User actualUser = service.getUserById(USER_ID);
-		assertThat(actualUser).isEqualTo(mockUser);
+		assertThat(actualUser).isEqualTo(user);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -84,7 +82,7 @@ public class UserServiceImplTest {
 	@Test
 	public void shouldReturnUserReturnedByDao_whenCallGetUserByLogin() {
 		User actualUser = service.getUserByLogin(USER_LOGIN);
-		assertThat(actualUser).isEqualTo(mockUser);
+		assertThat(actualUser).isEqualTo(user);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -99,8 +97,8 @@ public class UserServiceImplTest {
 	
 	@Test
 	public void shouldCallDeleteUserOnDaoWithGivenUser_whenCallDeleteUser() {
-		service.deleteUser(mockUser);
-		verify(mockUserDao).deleteUser(mockUser);
+		service.deleteUser(user);
+		verify(mockUserDao).deleteUser(user);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -137,14 +135,14 @@ public class UserServiceImplTest {
 	
 	@Test
 	public void shouldCallAddUserWithGivenUser_whenCallAddUser() {
-		service.addUser(mockUser);
-		verify(mockUserDao).addUser(mockUser);
+		service.addUser(user);
+		verify(mockUserDao).addUser(user);
 	}
 	
 	@Test
 	public void shouldReturnUserReturnedByDao_whenCallAddUser() {
-		User actualUser = service.addUser(mockUser);
-		assertThat(actualUser).isEqualTo(mockUser);
+		User actualUser = service.addUser(user);
+		assertThat(actualUser).isEqualTo(user);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -154,14 +152,14 @@ public class UserServiceImplTest {
 	
 	@Test
 	public void shouldCallUpdateUserWithGivenUser_whenCallUpdateUser() {
-		service.updateUser(mockUser);
-		verify(mockUserDao).updateUser(mockUser);
+		service.updateUser(user);
+		verify(mockUserDao).updateUser(user);
 	}
 	
 	@Test
 	public void shouldReturnUserReturnedByDao_whenCallUpdateUser() {
-		User actualUser = service.updateUser(mockUser);
-		assertThat(actualUser).isEqualTo(mockUser);
+		User actualUser = service.updateUser(user);
+		assertThat(actualUser).isEqualTo(user);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

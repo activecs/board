@@ -26,23 +26,21 @@ public class TrainingVisitServiceImplTest {
 	private TrainingVisitService service = new TrainingVisitServiceImpl();
 	@Mock
 	private TrainingVisitDao mockTrainingVisitDao;
-	@Mock
-	private TrainingVisit mockTrainingVisit;
 	
-	private List<TrainingVisit> trainingVisits;
+	private TrainingVisit trainingVisit = new TrainingVisit();
+	private List<TrainingVisit> trainingVisits = newArrayList(trainingVisit);
 	
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		trainingVisits = newArrayList(mockTrainingVisit);
 		initMockBehaviour();
 	}
 
 	private void initMockBehaviour() {
 		when(mockTrainingVisitDao.getAllTrainigVisitsByUserId(USER_ID)).thenReturn(trainingVisits);
 		when(mockTrainingVisitDao.getAllTrainigVisitsByScheduleId(SCHEDULE_ID)).thenReturn(trainingVisits);
-		when(mockTrainingVisitDao.addTrainingVisit(mockTrainingVisit)).thenReturn(mockTrainingVisit);
-		when(mockTrainingVisitDao.updateTrainingVisit(mockTrainingVisit)).thenReturn(mockTrainingVisit);
+		when(mockTrainingVisitDao.addTrainingVisit(trainingVisit)).thenReturn(trainingVisit);
+		when(mockTrainingVisitDao.updateTrainingVisit(trainingVisit)).thenReturn(trainingVisit);
 	}
 
 	@Test
@@ -81,14 +79,14 @@ public class TrainingVisitServiceImplTest {
 	
 	@Test
 	public void shouldCallAddScheduleWithGivenTrainigVisit_whenCallAddTrainigVisit() {
-		service.addTrainingVisit(mockTrainingVisit);
-		verify(mockTrainingVisitDao).addTrainingVisit(mockTrainingVisit);
+		service.addTrainingVisit(trainingVisit);
+		verify(mockTrainingVisitDao).addTrainingVisit(trainingVisit);
 	}
 	
 	@Test
 	public void shouldReturnScheduleReturnedByDao_whenCallAddSchedule() {
-		TrainingVisit actualTrainingVisit = service.addTrainingVisit(mockTrainingVisit);
-		assertThat(actualTrainingVisit).isEqualTo(mockTrainingVisit);
+		TrainingVisit actualTrainingVisit = service.addTrainingVisit(trainingVisit);
+		assertThat(actualTrainingVisit).isEqualTo(trainingVisit);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -98,14 +96,14 @@ public class TrainingVisitServiceImplTest {
 	
 	@Test
 	public void shouldCallUpdateTrainigVisitWithGivenTrainigVisit_whenCallUpdateTrainigVisit() {
-		service.updateTrainingVisit(mockTrainingVisit);
-		verify(mockTrainingVisitDao).updateTrainingVisit(mockTrainingVisit);
+		service.updateTrainingVisit(trainingVisit);
+		verify(mockTrainingVisitDao).updateTrainingVisit(trainingVisit);
 	}
 	
 	@Test
 	public void shouldReturnScheduleReturnedByDao_whenCallUpdateTrainigVisit() {
-		TrainingVisit actualTrainingVisit = service.updateTrainingVisit(mockTrainingVisit);
-		assertThat(actualTrainingVisit).isEqualTo(mockTrainingVisit);
+		TrainingVisit actualTrainingVisit = service.updateTrainingVisit(trainingVisit);
+		assertThat(actualTrainingVisit).isEqualTo(trainingVisit);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -115,8 +113,8 @@ public class TrainingVisitServiceImplTest {
 	
 	@Test
 	public void shouldCallDeleteTrainigVisitOnDaoWithGivenTrainigVisit_whenCallDeleteTrainigVisit() {
-		service.deleteTrainingVisit(mockTrainingVisit);
-		verify(mockTrainingVisitDao).deleteTrainingVisit(mockTrainingVisit);
+		service.deleteTrainingVisit(trainingVisit);
+		verify(mockTrainingVisitDao).deleteTrainingVisit(trainingVisit);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

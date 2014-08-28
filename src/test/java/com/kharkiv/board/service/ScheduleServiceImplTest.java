@@ -27,15 +27,13 @@ public class ScheduleServiceImplTest {
 	private ScheduleService service = new ScheduleServiceImpl();
 	@Mock
 	private ScheduleDao mockScheduleDao;
-	@Mock
-	private Schedule mockSchedule;
 	
-	private List<Schedule> schedules;
+	private Schedule schedule = new Schedule();
+	private List<Schedule> schedules = newArrayList(schedule);
 	
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		schedules = newArrayList(mockSchedule);
 		initMockBehaviour();
 	}
 
@@ -43,9 +41,9 @@ public class ScheduleServiceImplTest {
 		when(mockScheduleDao.getAllSchedules()).thenReturn(schedules);
 		when(mockScheduleDao.getSchedulesByUserId(USER_ID)).thenReturn(schedules);
 		when(mockScheduleDao.getSchedulesByUserLogin(USER_LOGIN)).thenReturn(schedules);
-		when(mockScheduleDao.getScheduleById(SCHEDULE_ID)).thenReturn(mockSchedule);
-		when(mockScheduleDao.addSchedule(mockSchedule)).thenReturn(mockSchedule);
-		when(mockScheduleDao.updateSchedule(mockSchedule)).thenReturn(mockSchedule);
+		when(mockScheduleDao.getScheduleById(SCHEDULE_ID)).thenReturn(schedule);
+		when(mockScheduleDao.addSchedule(schedule)).thenReturn(schedule);
+		when(mockScheduleDao.updateSchedule(schedule)).thenReturn(schedule);
 	}
 
 	@Test
@@ -108,7 +106,7 @@ public class ScheduleServiceImplTest {
 	@Test
 	public void shouldReturnSchedulesReturnedByDao_whenCallGetScheduleById() {
 		Schedule actualSchedule = service.getScheduleById(SCHEDULE_ID);
-		assertThat(actualSchedule).isEqualTo(mockSchedule);
+		assertThat(actualSchedule).isEqualTo(schedule);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -118,8 +116,8 @@ public class ScheduleServiceImplTest {
 	
 	@Test
 	public void shouldCallDeleteScheduleOnDaoWithGivenSchedule_whenCallDeleteSchedule() {
-		service.deleteSchedule(mockSchedule);
-		verify(mockScheduleDao).deleteSchedule(mockSchedule);
+		service.deleteSchedule(schedule);
+		verify(mockScheduleDao).deleteSchedule(schedule);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -140,14 +138,14 @@ public class ScheduleServiceImplTest {
 	
 	@Test
 	public void shouldCallAddScheduleWithGivenSchedule_whenCallAddSchedule() {
-		service.addSchedule(mockSchedule);
-		verify(mockScheduleDao).addSchedule(mockSchedule);
+		service.addSchedule(schedule);
+		verify(mockScheduleDao).addSchedule(schedule);
 	}
 	
 	@Test
 	public void shouldReturnScheduleReturnedByDao_whenCallAddSchedule() {
-		Schedule actualSchedule = service.addSchedule(mockSchedule);
-		assertThat(actualSchedule).isEqualTo(mockSchedule);
+		Schedule actualSchedule = service.addSchedule(schedule);
+		assertThat(actualSchedule).isEqualTo(schedule);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -157,14 +155,14 @@ public class ScheduleServiceImplTest {
 	
 	@Test
 	public void shouldCallUpdateScheduleWithGivenSchedule_whenCallUpdateSchedule() {
-		service.updateSchedule(mockSchedule);
-		verify(mockScheduleDao).updateSchedule(mockSchedule);
+		service.updateSchedule(schedule);
+		verify(mockScheduleDao).updateSchedule(schedule);
 	}
 	
 	@Test
 	public void shouldReturnScheduleReturnedByDao_whenCallUpdateSchedule() {
-		Schedule actualSchedule = service.updateSchedule(mockSchedule);
-		assertThat(actualSchedule).isEqualTo(mockSchedule);
+		Schedule actualSchedule = service.updateSchedule(schedule);
+		assertThat(actualSchedule).isEqualTo(schedule);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

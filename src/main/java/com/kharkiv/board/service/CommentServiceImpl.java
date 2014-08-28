@@ -23,6 +23,8 @@ public class CommentServiceImpl implements CommentService {
 	private static final String ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY = "User login cannot be empty";
 	private static final String ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL = "Schedule cannot be null";
 	private static final String ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL = "Schedule id cannot be null";
+	private static final String ERR_COMMENT_CANNOT_BE_NULL = "Comment cannot be null";
+	private static final String ERR_COMMENT_ID_CANNOT_BE_NULL = "Comment id cannot be null";
 	
 	@Inject
 	private CommentDao commentDao;
@@ -65,6 +67,27 @@ public class CommentServiceImpl implements CommentService {
 		if(scheduleId == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL);
 		return commentDao.getAllCommentsForScheduleByScheduleId(scheduleId);
+	}
+
+	@Override
+	public Comment addComment(Comment comment) {
+		if(comment == null)
+			throw new IllegalArgumentException(ERR_COMMENT_CANNOT_BE_NULL);
+		return commentDao.addComment(comment);
+	}
+
+	@Override
+	public Comment updateComment(Comment comment) {
+		if(comment == null)
+			throw new IllegalArgumentException(ERR_COMMENT_CANNOT_BE_NULL);
+		return commentDao.updateComment(comment);
+	}
+
+	@Override
+	public void deleteCommentById(Integer id) {
+		if(id == null)
+			throw new IllegalArgumentException(ERR_COMMENT_ID_CANNOT_BE_NULL);
+		commentDao.deleteCommentById(id);
 	}
 
 }

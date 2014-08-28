@@ -21,46 +21,46 @@ import com.kharkiv.board.dto.user.User;
 
 public class CommentServiceImplTest {
 	
+	private static final Integer COMMENT_ID = 21;
 	private static final String USER_LOGIN = "userLogin";
 	private static final Integer USER_ID = 15;
 	private static final Integer SCHEDULE_ID = 16;
+	
 	@InjectMocks
 	private CommentService service = new CommentServiceImpl();
 	@Mock
 	private CommentDao mockCommentDao;
-	@Mock
-	private User mockUser;
-	@Mock
-	private Comment mockComment;
-	@Mock
-	private Schedule mockSchedule;
 	
-	private List<Comment> comments;
+	private User user = new User();
+	private Comment comment = new Comment();
+	private Schedule schedule = new Schedule();
+	private List<Comment> comments = newArrayList(comment);
 
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		comments = newArrayList(mockComment);
 		initMockBehaviour();
 	}
 
 	private void initMockBehaviour() {
-		when(mockCommentDao.getAllCommentsForUser(mockUser)).thenReturn(comments);
+		when(mockCommentDao.updateComment(comment)).thenReturn(comment);
+		when(mockCommentDao.addComment(comment)).thenReturn(comment);
+		when(mockCommentDao.getAllCommentsForUser(user)).thenReturn(comments);
 		when(mockCommentDao.getAllCommentsForUserByUserLogin(USER_LOGIN)).thenReturn(comments);
 		when(mockCommentDao.getAllCommentsForUserByUserId(USER_ID)).thenReturn(comments);
-		when(mockCommentDao.getAllCommentsForSchedule(mockSchedule)).thenReturn(comments);
+		when(mockCommentDao.getAllCommentsForSchedule(schedule)).thenReturn(comments);
 		when(mockCommentDao.getAllCommentsForScheduleByScheduleId(SCHEDULE_ID)).thenReturn(comments);
 	}
 
 	@Test
 	public void shouldCallGetAllCommentsForUserOnDaoWithGivenUser_whenCallGetAllCommentsForUser() {
-		service.getAllCommentsForUser(mockUser);
-		verify(mockCommentDao).getAllCommentsForUser(mockUser);
+		service.getAllCommentsForUser(user);
+		verify(mockCommentDao).getAllCommentsForUser(user);
 	}
 	
 	@Test
 	public void shouldReturnCommentsReturnedByDao_whenCallGetAllCommentsForUser() {
-		List<Comment> actualComments = service.getAllCommentsForUser(mockUser);
+		List<Comment> actualComments = service.getAllCommentsForUser(user);
 		assertThat(actualComments).isEqualTo(comments);
 	}
 	
@@ -110,13 +110,13 @@ public class CommentServiceImplTest {
 	
 	@Test
 	public void shouldCallGetAllCommentsForScheduleOnDaoWithGivenSchedule_whenCallGetAllCommentsForSchedule() {
-		service.getAllCommentsForSchedule(mockSchedule);
-		verify(mockCommentDao).getAllCommentsForSchedule(mockSchedule);
+		service.getAllCommentsForSchedule(schedule);
+		verify(mockCommentDao).getAllCommentsForSchedule(schedule);
 	}
 	
 	@Test
 	public void shouldReturnCommentsReturnedByDao_whenCallGetAllCommentsForSchedule() {
-		List<Comment> actualComments = service.getAllCommentsForSchedule(mockSchedule);
+		List<Comment> actualComments = service.getAllCommentsForSchedule(schedule);
 		assertThat(actualComments).isEqualTo(comments);
 	}
 	
@@ -140,5 +140,50 @@ public class CommentServiceImplTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenScheduleIdIsNullAndCallGetAllCommentsForScheduleByScheduleId() {
 		service.getAllCommentsForScheduleByScheduleId(null);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentException_whenCommentIsNullAndCallGetAddComments() {
+		service.addComment(null);
+	}
+	
+	@Test
+	public void shouldCallAddCommentOnDaoWithGivenComment_whenCallAddComment(){
+		service.addComment(comment);
+		verify(mockCommentDao).addComment(comment);
+	}
+	
+	@Test
+	public void shouldReturnCommentGivenByDao_whenCallAddComment(){
+		Comment actualComment = service.addComment(comment);
+		assertThat(actualComment).isEqualTo(comment);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentException_whenCommentIsNullAndCallUpdateComment() {
+		service.updateComment(null);
+	}
+	
+	@Test
+	public void shouldCallUpdateCommentOnDaoWithGivenComment_whenCallUpdateComment(){
+		service.updateComment(comment);
+		verify(mockCommentDao).updateComment(comment);
+	}
+	
+	@Test
+	public void shouldReturnCommentGivenByDao_whenCallUpdateComment(){
+		Comment actualComment = service.updateComment(comment);
+		assertThat(actualComment).isEqualTo(comment);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void shouldThrowIllegalArgumentException_whenCommentIdIsNullAndCallDeleteCommentById() {
+		service.deleteCommentById(null);
+	}
+	
+	@Test
+	public void shouldCallDeleteCommentOnDaoWithGivenCommentId_whenCallDeleteCommentById(){
+		service.deleteCommentById(COMMENT_ID);
+		verify(mockCommentDao).deleteCommentById(COMMENT_ID);
 	}
 }
