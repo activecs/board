@@ -1,6 +1,5 @@
 package com.kharkiv.board.dto.user;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -10,9 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.common.base.Objects;
+import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.schedule.Comment;
 import com.kharkiv.board.dto.schedule.Schedule;
 import com.kharkiv.board.dto.schedule.TrainingVisit;
@@ -32,13 +29,9 @@ import com.kharkiv.board.util.QueryNamesConstants.UserQueries;
         @NamedQuery(name = UserQueries.GET_BY_LOGIN, query = "SELECT u FROM User u WHERE u.login = :login"),
         @NamedQuery(name = UserQueries.DELETE_BY_ID, query = "DELETE FROM User u WHERE u.id = :id"),
         @NamedQuery(name = UserQueries.DELETE_BY_LOGIN, query = "DELETE FROM User u WHERE u.login = :login") })
-public class User implements Serializable {
+public class User extends BaseEntity {
 
-    private static final long serialVersionUID = -8301776059810262474L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private static final long serialVersionUID = -5766469760606469192L;
 
     @Column(name = "login", length = 55, nullable = false, unique = true)
     private String login;
@@ -106,14 +99,6 @@ public class User implements Serializable {
         this.ban = ban;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Set<Schedule> getSchedules() {
         return schedules;
     }
@@ -139,23 +124,8 @@ public class User implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (!(obj instanceof User))
-            return false;
-        return Objects.equal(id, ((User) obj).id);
-    }
-
-    @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("login", login).add("role", role).add("ban", ban).toString();
+        return Objects.toStringHelper(this).add("id", super.getId()).add("login", login).add("role", role)
+                .add("ban", ban).toString();
     }
 }

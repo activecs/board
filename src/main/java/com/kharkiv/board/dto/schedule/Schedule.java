@@ -1,6 +1,5 @@
 package com.kharkiv.board.dto.schedule;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Set;
 
@@ -8,9 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.google.common.base.Objects;
+import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
 
@@ -32,13 +30,9 @@ import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
         @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USER_ID, query = "SELECT s FROM Schedule s WHERE s.user.id = :userId"),
         @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USER_LOGIN, query = "SELECT s FROM Schedule s WHERE s.user.login = :login"),
         @NamedQuery(name = ScheduleQueries.DELETE_BY_ID, query = "DELETE FROM Schedule s WHERE s.id = :id") })
-public class Schedule implements Serializable {
+public class Schedule extends BaseEntity {
 
-    private static final long serialVersionUID = -2722111922699237216L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private static final long serialVersionUID = 2420156575897057076L;
 
     @Column(name = "dateTime", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -93,14 +87,6 @@ public class Schedule implements Serializable {
         this.user = user;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Set<Comment> getComments() {
         return comments;
     }
@@ -125,5 +111,11 @@ public class Schedule implements Serializable {
     public void addVisitor(TrainingVisit visitor) {
         visitor.setSchedule(this);
         visits.add(visitor);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).add("id", super.getId()).add("dateTime", dateTime).add("place", place)
+                .add("userLogin", user.getLogin()).toString();
     }
 }
