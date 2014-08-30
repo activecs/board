@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +27,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = { "userServiceCache" }, key = "{#root.methodName}")
 	public List<User> getAllUsers() {
 		return userDao.getAllUsers();
     }
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = { "userServiceCache" }, key = "{#root.methodName,#id}")
 	public User getUserById(Integer id) {
 		if(id == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_ID_CANNOT_BE_NULL);
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = { "userServiceCache" }, key = "{#root.methodName,#login}")
 	public User getUserByLogin(String login) {
 		if(isEmpty(login))
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY );
@@ -46,6 +51,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = { "userServiceCache" }, condition = "#user != null", allEntries = true, beforeInvocation = true)
 	public void deleteUser(User user) {
 		if(user == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);
@@ -53,6 +59,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = { "userServiceCache" }, condition = "#id != null", allEntries = true, beforeInvocation = true)
 	public void deleteUserById(Integer id) {
 		if(id == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_ID_CANNOT_BE_NULL);
@@ -60,6 +67,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = { "userServiceCache" }, condition = "#login != null", allEntries = true, beforeInvocation = true)
 	public void deleteUserByLogin(String login) {
 		if(isEmpty(login))
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY );
@@ -67,6 +75,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = { "userServiceCache" }, condition = "#user != null", allEntries = true, beforeInvocation = true)
 	public User addUser(User user) {
 		if(user == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);
@@ -74,6 +83,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = { "userServiceCache" }, condition = "#user != null", allEntries = true, beforeInvocation = true)
 	public User updateUser(User user) {
 		if(user == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);

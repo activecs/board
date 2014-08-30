@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ public class TrainingVisitServiceImpl implements TrainingVisitService {
 	
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = { "trainingVisitServiceCache" }, key = "{#root.methodName,#userId}")
 	public List<TrainingVisit> getAllTrainigVisitsByUserId(Integer userId) {
 		if(userId == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_USER_ID_CANNOT_BE_NULL);
@@ -32,6 +35,7 @@ public class TrainingVisitServiceImpl implements TrainingVisitService {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = { "trainingVisitServiceCache" }, key = "{#root.methodName,#scheduleId}")
 	public List<TrainingVisit> getAllTrainigVisitsByScheduleId(Integer scheduleId) {
 		if(scheduleId == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL);
@@ -39,6 +43,7 @@ public class TrainingVisitServiceImpl implements TrainingVisitService {
 	}
 
 	@Override
+	@CacheEvict(value = { "trainingVisitServiceCache" }, condition = "#trainingVisit != null", allEntries = true, beforeInvocation = true)
 	public TrainingVisit addTrainingVisit(TrainingVisit trainingVisit) {
 		if(trainingVisit == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_TRAINING_VISIT_CANNOT_BE_NULL);
@@ -46,6 +51,7 @@ public class TrainingVisitServiceImpl implements TrainingVisitService {
 	}
 
 	@Override
+	@CacheEvict(value = { "trainingVisitServiceCache" }, condition = "#trainingVisit != null", allEntries = true, beforeInvocation = true)
 	public void deleteTrainingVisit(TrainingVisit trainingVisit) {
 		if(trainingVisit == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_TRAINING_VISIT_CANNOT_BE_NULL);
@@ -53,6 +59,7 @@ public class TrainingVisitServiceImpl implements TrainingVisitService {
 	}
 
 	@Override
+	@CacheEvict(value = { "trainingVisitServiceCache" }, condition = "#id != null", allEntries = true, beforeInvocation = true)
 	public void deleteTrainingVisitById(Integer id) {
 		if(id == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_TRAINING_VISIT_ID_CANNOT_BE_NULL);
@@ -60,6 +67,7 @@ public class TrainingVisitServiceImpl implements TrainingVisitService {
 	}
 
 	@Override
+	@CacheEvict(value = { "trainingVisitServiceCache" }, condition = "#trainingVisit != null", allEntries = true, beforeInvocation = true)
 	public TrainingVisit updateTrainingVisit(TrainingVisit trainingVisit) {
 		if(trainingVisit == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_TRAINING_VISIT_CANNOT_BE_NULL);
