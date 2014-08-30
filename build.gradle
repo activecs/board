@@ -6,6 +6,7 @@ apply plugin: 'wrapper'
 apply plugin: 'jacoco'
 apply plugin: 'sonar-runner'
 apply plugin: 'build-dashboard'
+apply plugin: 'ssh'
 
 group = 'com.kharkiv.board'
 version = '0.0.1-SNAPSHOT'
@@ -17,7 +18,22 @@ compileJava.options.encoding = 'UTF-8'
 ext {
 	SYSTEM_PROPERTY_ENVIRONMENT = 'env'
 	DEFAULT_ENV = 'config-local'
-	yamlPropertiesFile = file('properties.yaml')
+	YAML_PROPERTIES_FILE = file('properties.yaml')
+	RED_HAT_USERNAME = '53ea659450044640c600042b'
+	RED_HAT_WAR_NAME = 'ROOT'
+	RED_HAT_TOMCAT_HOME = '/app-root/data/tomcat'
+	RED_HAT_WAR_HOME = "/var/lib/openshift/${RED_HAT_USERNAME}${RED_HAT_TOMCAT_HOME}/webapps"
+	ASSEMBLED_WAR_HOME = war.archivePath.absolutePath
+}
+
+remotes {
+  redHat {
+    host = 'board-netstalk3r.rhcloud.com'
+    user = RED_HAT_USERNAME
+	identity = file('ssh/id_rsa')
+	knownHosts = file('ssh/known_hosts')
+	retryCount = 10
+  }
 }
 
 repositories { 
@@ -48,6 +64,7 @@ buildscript {
 	}
     dependencies {
 		classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
+		classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
 	}
 }
 
@@ -94,7 +111,7 @@ dependencies {
 
 task generateProperties {
 	description = "Generates properties for environments"
-	inputs.files yamlPropertiesFile
+	inputs.files YAML_PROPERTIES_FILE
 	doLast {
 		def env = getEnvironmentName();
 		def loader = new YamlLoader(env);
@@ -150,3 +167,15 @@ eclipse {
 		]
 	}
 }
+
+task deployToRedHat(type: SshTask, dependsOn: 'war', group:'Deploy'){
+	session(remotes.redHat) {
+		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/shutdown.sh"
+		execute "rm -r -f ${RED_HAT_TOMCAT_HOME}/webapp/${RED_HAT_WAR_NAME}"
+		execute "rm -f ${RED_HAT_TOMCAT_HOME}/webapp/${RED_HAT_WAR_NAME}.war"
+		put     "${ASSEMBLED_WAR_HOME}", "${RED_HAT_WAR_HOME}/${RED_HAT_WAR_NAME}.war"
+		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/startup.sh"
+	}
+}
+deployToRedHat.description = 'Deploys application to red hat hosting'
+
