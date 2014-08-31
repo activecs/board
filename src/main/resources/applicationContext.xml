@@ -30,17 +30,8 @@
 		<property name="caches">
 			<set>
 				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                    <property name="name" value="commentServiceCache"/>
+                    <property name="name" value="serviceGetAllCache"/>
                 </bean>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                    <property name="name" value="trainingVisitServiceCache"/>
-                </bean>
-				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                     <property name="name" value="userServiceCache"/>
-                 </bean>
-                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-                     <property name="name" value="scheduleServiceCache"/>
-                 </bean>
 			</set>
 		</property>
 	</bean>
