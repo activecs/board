@@ -88,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, condition = "{#comment != null}", allEntries = true, beforeInvocation = true)
+	@CacheEvict(value = { Constants.CACHE_NAME }, condition = "{#id != null}", allEntries = true, beforeInvocation = true)
 	public void deleteCommentById(Integer id) {
 		if(id == null)
 			throw new IllegalArgumentException(ERR_COMMENT_ID_CANNOT_BE_NULL);
