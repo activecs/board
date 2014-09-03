@@ -7,6 +7,7 @@ apply plugin: 'jacoco'
 apply plugin: 'sonar-runner'
 apply plugin: 'build-dashboard'
 apply plugin: 'ssh'
+apply plugin: 'compass'
 
 group = 'com.kharkiv.board'
 version = '0.0.1-SNAPSHOT'
@@ -61,10 +62,12 @@ buildscript {
     repositories {
 		jcenter()
 		mavenCentral()
+		maven {url 'http://dl.bintray.com/robfletcher/gradle-plugins'}
 	}
     dependencies {
 		classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
 		classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
+		classpath 'org.gradle.plugins:gradle-compass:1.0.7'
 	}
 }
 
@@ -109,21 +112,9 @@ dependencies {
     }
 }
 
-task generateProperties {
-	description = "Generates properties for environments"
-	inputs.files YAML_PROPERTIES_FILE
-	doLast {
-		def env = getEnvironmentName();
-		def loader = new YamlLoader(env);
-		loader.process()
-	}
-}
-
 def getEnvironmentName() {
 	return System.getProperty(SYSTEM_PROPERTY_ENVIRONMENT, DEFAULT_ENV);
 }
-
-processResources.dependsOn generateProperties
 
 jacocoTestReport {
     group = "Reporting"
@@ -138,6 +129,14 @@ jacoco {
     toolVersion = "0.7.1.201405082137"
     reportsDir = file("$buildDir/reports/coverage")
 }
+
+compass {
+    cssDir = file('src/main/webapp/resources/css')
+    sassDir = file('src/main/webapp/WEB-INF/scss')
+}
+processResources.inputs.files compileSass
+tomcatRun.dependsOn watchSass
+clean.dependsOn cleanCompileSass
 
 sonarRunner {
     sonarProperties {
@@ -179,3 +178,13 @@ task deployToRedHat(type: SshTask, dependsOn: 'war', group:'Deploy'){
 }
 deployToRedHat.description = 'Deploys application to red hat hosting'
 
+task generateProperties {
+	description = "Generates properties for environments"
+	inputs.files YAML_PROPERTIES_FILE
+	doLast {
+		def env = getEnvironmentName();
+		def loader = new YamlLoader(env);
+		loader.process()
+	}
+}
+processResources.dependsOn generateProperties

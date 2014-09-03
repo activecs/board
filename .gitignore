@@ -8,9 +8,12 @@ bin/*
 .gradle/*
 */.gradle
 .idea/*
+.jruby/*
+.sass-cache/*
 *.iml
 classes/*
 activemq-data/*
 /bin/
 /target
-src/main/resources/application.properties
+*/application.properties
+*/changes.css
