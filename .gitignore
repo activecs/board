@@ -15,5 +15,5 @@ classes/*
 activemq-data/*
 /bin/
 /target
-*/application.properties
-*/changes.css
+src/main/resources/application.properties
+src/main/webapp/resources/css/changes.css
