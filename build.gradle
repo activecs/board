@@ -179,6 +179,14 @@ task deployToRedHat(type: SshTask, dependsOn: 'war', group:'Deploy'){
 }
 deployToRedHat.description = 'Deploys application to red hat hosting'
 
+task restartRedHatTomcat(type: SshTask,group:'Deploy'){
+	session(remotes.redHat) {
+		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/shutdown.sh"
+		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/startup.sh"
+	}
+}
+restartRedHatTomcat.description = 'Restart remote red hat tomcat'
+
 task generateProperties {
 	description = "Generates properties for environments"
 	inputs.files YAML_PROPERTIES_FILE
