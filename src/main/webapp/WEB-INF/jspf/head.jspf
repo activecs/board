@@ -13,6 +13,7 @@
 <!-- jQuery library and jQuery plugin for media gallery -> lightbox -->
 <script type="text/javascript" src="<c:url value='/resources/js/jquery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/analitics.js'/>"></script>
 
 <!-- style --> 
 <link rel="stylesheet" href="<c:url value='/resources/css/changes.css'/>" />

@@ -170,8 +170,8 @@ eclipse {
 task deployToRedHat(type: SshTask, dependsOn: 'war', group:'Deploy'){
 	session(remotes.redHat) {
 		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/shutdown.sh"
-		execute "rm -r -f ${RED_HAT_TOMCAT_HOME}/webapp/${RED_HAT_WAR_NAME}"
-		execute "rm -f ${RED_HAT_TOMCAT_HOME}/webapp/${RED_HAT_WAR_NAME}.war"
+		execute "rm -r -f .${RED_HAT_TOMCAT_HOME}/webapp/${RED_HAT_WAR_NAME}"
+		execute "rm -f .${RED_HAT_TOMCAT_HOME}/webapp/${RED_HAT_WAR_NAME}.war"
 		put     "${ASSEMBLED_WAR_HOME}", "${RED_HAT_WAR_HOME}/${RED_HAT_WAR_NAME}.war"
 		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/startup.sh"
 	}
