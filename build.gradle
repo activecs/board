@@ -17,6 +17,7 @@ targetCompatibility = 1.7
 compileJava.options.encoding = 'UTF-8'
 
 ext {
+	tomcatVersion = '7.0.55'
 	SYSTEM_PROPERTY_ENVIRONMENT = 'env'
 	DEFAULT_ENV = 'config-local'
 	YAML_PROPERTIES_FILE = file('properties.yaml')
@@ -103,13 +104,14 @@ dependencies {
 	testCompile group: 'com.jayway.jsonpath', 		name:'json-path',					version:'0.9.1'
 	
 	providedCompile group: 'javax.servlet', 		name:'javax.servlet-api',			version:'3.1.0'
+	providedCompile group: 'javax.websocket', 		name:'javax.websocket-api',			version:'1.0'
 	
-	def tomcatVersion = '7.0.55'
-    tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-core',			version:tomcatVersion
-    tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-logging-juli',	version:tomcatVersion
-    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
-        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
-    }
+	tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-core',			version:tomcatVersion
+	tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-logging-juli',	version:tomcatVersion
+	tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-websocket',		version:tomcatVersion
+	tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+		exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+	}
 }
 
 def getEnvironmentName() {
@@ -182,6 +184,7 @@ deployToRedHat.description = 'Deploys application to red hat hosting'
 task restartRedHatTomcat(type: SshTask,group:'Deploy'){
 	session(remotes.redHat) {
 		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/shutdown.sh"
+		execute "sleep 5"
 		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/startup.sh"
 	}
 }
