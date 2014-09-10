@@ -19,7 +19,9 @@ compileJava.options.encoding = 'UTF-8'
 ext {
 	tomcatVersion = '7.0.55'
 	SYSTEM_PROPERTY_ENVIRONMENT = 'env'
+	NOT_FOUND = 'not-found'
 	DEFAULT_ENV = 'config-local'
+	OPENSHIFT_ENV = 'config-openshift'
 	YAML_PROPERTIES_FILE = file('properties.yaml')
 	RED_HAT_USERNAME = '53ea659450044640c600042b'
 	RED_HAT_WAR_NAME = 'ROOT'
@@ -115,7 +117,13 @@ dependencies {
 }
 
 def getEnvironmentName() {
-	return System.getProperty(SYSTEM_PROPERTY_ENVIRONMENT, DEFAULT_ENV);
+	String env = System.getProperty(SYSTEM_PROPERTY_ENVIRONMENT, NOT_FOUND);
+	if(env != NOT_FOUND)
+		return env;
+	if(project.gradle.taskGraph.hasTask(deployToRedHat))
+		return OPENSHIFT_ENV;
+	else
+		return DEFAULT_ENV;
 }
 
 jacocoTestReport {
