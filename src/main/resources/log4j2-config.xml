@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration  monitorInterval="30">
-	<!--console appender configuration -->
   	<Appenders>
-  		<Console name="CONSOLE" target="SYSTEM_OUT">
+  		<Console name="Console" target="SYSTEM_OUT">
       		<PatternLayout pattern="%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n"/>
     	</Console>
+		 <RollingRandomAccessFile name="RollingRandomAccessFileDebug" immediateFlush="true" fileName="${sys:catalina.home}/logs/debug.log"
+                                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/project-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFile" immediateFlush="true" fileName="${sys:catalina.home}/logs/info.log"
+                                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/project-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
 	</Appenders>
 	
 	<loggers>
-		<Root level="INFO">
-	      <AppenderRef ref="CONSOLE"/>
+		<Root level="ALL">
+	      <AppenderRef ref="RollingRandomAccessFileDebug" level="DEBUG"/>
+          <AppenderRef ref="RollingRandomAccessFile" level="INFO"/>
+          <AppenderRef ref="Console"  level="TRACE"/>
 	    </Root>
     </loggers>
 </Configuration>
