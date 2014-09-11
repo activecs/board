@@ -5,7 +5,7 @@
       		<PatternLayout pattern="%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n"/>
     	</Console>
 		 <RollingRandomAccessFile name="RollingRandomAccessFileDebug" immediateFlush="true" fileName="${sys:catalina.home}/logs/debug.log"
-                                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/project-%d{MM-dd-yyyy}-%i.log.gz">
+                                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/board-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n</Pattern>
             </PatternLayout>
@@ -14,8 +14,8 @@
                 <SizeBasedTriggeringPolicy size="250 MB"/>
             </Policies>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="RollingRandomAccessFile" immediateFlush="true" fileName="${sys:catalina.home}/logs/info.log"
-                                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/project-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingRandomAccessFile name="RollingRandomAccessFile" immediateFlush="true" fileName="${sys:catalina.home}/logs/%d{MM-dd-yyyy}info.log"
+                                 filePattern="${sys:catalina.home}/logs/$${date:yyyy-MM}/board-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d{ISO8601},%d{Z} | %-5level | ...%30.30c | %m%n</Pattern>
             </PatternLayout>
@@ -27,7 +27,7 @@
 	</Appenders>
 	
 	<loggers>
-		<Root level="ALL">
+		<Root>
 	      <AppenderRef ref="RollingRandomAccessFileDebug" level="DEBUG"/>
           <AppenderRef ref="RollingRandomAccessFile" level="INFO"/>
           <AppenderRef ref="Console"  level="TRACE"/>

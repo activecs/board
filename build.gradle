@@ -17,7 +17,6 @@ targetCompatibility = 1.7
 compileJava.options.encoding = 'UTF-8'
 
 ext {
-	tomcatVersion = '7.0.55'
 	SYSTEM_PROPERTY_ENVIRONMENT = 'env'
 	NOT_FOUND = 'not-found'
 	DEFAULT_ENV = 'config-local'
@@ -76,6 +75,7 @@ buildscript {
 
 dependencies {
 	def springVersion = '4.0.5.RELEASE'
+	def tomcatVersion = '7.0.55'
 
 	compile group: 'org.springframework', 				name:'spring-core', 					version:springVersion
 	compile group: 'org.springframework', 				name:'spring-context', 					version:springVersion
