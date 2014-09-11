@@ -25,6 +25,10 @@ var ScheduleWS = {
 		socket.onmessage = function(message) {
 			// message.data - get the info from the message
 		};
+		
+		socket.onerror = function(cause) {
+			// show message when error
+		}
 
 	},
 

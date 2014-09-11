@@ -28,6 +28,7 @@ public class ScheduleWebSocket {
 
     @OnMessage
     public void message(Session session, String msg) {
+        // add encoder and decoder
     }
 
     @OnError
