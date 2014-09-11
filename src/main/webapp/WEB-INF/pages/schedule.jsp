@@ -2,6 +2,7 @@
 <head>
 	<title>Schedule</title>
 	<%@ include file="/WEB-INF/jspf/head.jspf"%>
+	<script src="<c:url value='/resources/js/schedule.js'/>" type="text/javascript"></script>
 </head>
 <body>
 	<!-- Header =============================== -->

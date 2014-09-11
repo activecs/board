@@ -75,11 +75,14 @@ buildscript {
 }
 
 dependencies {
-	compile group: 'org.springframework', 				name:'spring-core', 					version:'4.0.5.RELEASE'
-	compile group: 'org.springframework', 				name:'spring-context', 					version:'4.0.5.RELEASE'
-	compile group: 'org.springframework', 				name:'spring-orm', 						version:'4.0.5.RELEASE'
-	compile group: 'org.springframework', 				name:'spring-web', 						version:'4.0.5.RELEASE'
-	compile group: 'org.springframework', 				name:'spring-jdbc', 					version:'4.0.5.RELEASE'
+	def springVersion = '4.0.5.RELEASE'
+
+	compile group: 'org.springframework', 				name:'spring-core', 					version:springVersion
+	compile group: 'org.springframework', 				name:'spring-context', 					version:springVersion
+	compile group: 'org.springframework', 				name:'spring-orm', 						version:springVersion
+	compile group: 'org.springframework', 				name:'spring-web', 						version:springVersion
+	compile group: 'org.springframework', 				name:'spring-jdbc', 					version:springVersion
+	compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
 	compile group: 'org.hibernate',						name:'hibernate-core', 					version:'4.3.5.Final'
 	compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:'4.3.5.Final'
 	compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.0.Final'
