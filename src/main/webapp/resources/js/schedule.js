@@ -42,7 +42,3 @@ var ScheduleWS = {
 	SendMessage : function send() {
 	}
 };
-
-$(document).ready(function() {
-	ScheduleWS.Initialize();
-});
