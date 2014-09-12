@@ -1,16 +1,10 @@
 <%@ page isErrorPage="true" %>
-<html>
-<head>
-	<title>Error</title>
-	<%@ include file="/WEB-INF/jspf/head.jspf"%>
-</head>
-<body>
-	<!-- Header =============================== -->
-	<header>
-		<%@ include file="/WEB-INF/jspf/header.jspf"%>
-	</header>
-	<!-- Header end =============================== -->
-	
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<template:page title="Schedule">	
 	<c:set var="error_code" value="${requestScope['javax.servlet.error.status_code']}" />
 	<c:if test="${error_code == '404'}">
 		<h1><fmt:message key="error.error"/>: <c:out value="${error_code}"/></h1>
@@ -20,10 +14,4 @@
 		<h1><fmt:message key="error.error"/>: <c:out value="${error_code}"/></h1>
 		<h3><fmt:message key="error.500" /></h3>
 	</c:if>
-	<!-- Footer =============================== -->
-	<footer>
-		<%@ include file="/WEB-INF/jspf/footer.jspf"%>
-	</footer>
-	<!-- Footer end =============================== -->
-</body>
-</html>
+</template:page>
