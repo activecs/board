@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<template:page title="Schedule">	
+<template:page title="Error">	
 	<c:set var="error_code" value="${requestScope['javax.servlet.error.status_code']}" />
 	<c:if test="${error_code == '404'}">
 		<h1><fmt:message key="error.error"/>: <c:out value="${error_code}"/></h1>
