@@ -1,3 +1,6 @@
+import com.kharkiv.board.deploy.TomcatSshDeploy
+import com.kharkiv.board.tests.NotificationTestListener;
+
 apply plugin: 'maven'
 apply plugin: 'war'
 apply plugin: 'eclipse'
@@ -5,9 +8,8 @@ apply plugin: 'tomcat'
 apply plugin: 'wrapper'
 apply plugin: 'jacoco'
 apply plugin: 'sonar-runner'
-apply plugin: 'build-dashboard'
-apply plugin: 'ssh'
 apply plugin: 'compass'
+apply plugin: 'ssh'
 
 group = 'com.kharkiv.board'
 version = '0.0.1-SNAPSHOT'
@@ -17,117 +19,141 @@ targetCompatibility = 1.7
 compileJava.options.encoding = 'UTF-8'
 
 ext {
-	SYSTEM_PROPERTY_ENVIRONMENT = 'env'
-	NOT_FOUND = 'not-found'
-	DEFAULT_ENV = 'config-local'
-	OPENSHIFT_ENV = 'config-openshift'
-	YAML_PROPERTIES_FILE = file('properties.yaml')
-	RED_HAT_USERNAME = '53ea659450044640c600042b'
-	RED_HAT_WAR_NAME = 'ROOT'
-	RED_HAT_TOMCAT_HOME = '/app-root/data/tomcat'
-	RED_HAT_WAR_HOME = "/var/lib/openshift/${RED_HAT_USERNAME}${RED_HAT_TOMCAT_HOME}/webapps"
-	ASSEMBLED_WAR_HOME = war.archivePath.absolutePath
+    warName = 'ROOT';
+    notFound = 'not-found';
+    systemPropertyEnvironment = 'env';
+    yamlPropertiesFile = file('properties.yaml');
+    defaultEnv = 'config-local';
+    openshiftEnv = 'config-openshift';
+    amazonEnv = 'config-amazon';
+    openshiftTomcatPath = "/var/lib/openshift/53ea659450044640c600042b/app-root/data/tomcat";
+    amazonTomcatPath = "/home/ubuntu/apache-tomcat-7.0.55";
 }
 
 remotes {
-  redHat {
-    host = 'board-netstalk3r.rhcloud.com'
-    user = RED_HAT_USERNAME
-	identity = file('ssh/id_rsa')
-	knownHosts = file('ssh/known_hosts')
-	retryCount = 10
-  }
+    redHat {
+        host = 'board-netstalk3r.rhcloud.com'
+        user = '53ea659450044640c600042b'
+        identity = file('ssh/id_rsa')
+        knownHosts = file('ssh/known_hosts')
+        retryCount = 2
+    }
+    amazon {
+        host = 'kaa-team.mine.nu'
+        user = 'ubuntu'
+        identity = file('ssh/aws.pem')
+        retryCount = 2
+    }
 }
 
-repositories { 
-	maven { url "http://repo.maven.apache.org/maven2" } 
-	mavenCentral()
+repositories {
+    maven { url "http://repo.maven.apache.org/maven2" }
+    mavenCentral()
+}
+
+configurations {
+    integTestCompile.extendsFrom testCompile
+    integTestRuntime.extendsFrom testRuntime
 }
 
 sourceSets {
-	main {
-		java { 
-				srcDir 'src/main/java' 
-				}
-		resources { srcDir 'src/main/resources' }
-	}
-	test {
-		java { 
-				srcDir 'src/test/java'
-				include '**/*Test.java' 
-				}
-		resources { srcDir 'src/test/resources' }
-	}
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources { srcDir 'src/main/resources' }
+    }
+    test {
+        java {
+            srcDir 'src/test/java'
+            include '**/*Test.java'
+        }
+        resources { srcDir 'src/test/resources' }
+    }
+    integrationTest{
+        java {
+            srcDir 'src/integtest/java'
+            include '**/*Test.java'
+        }
+        resources { srcDir 'src/integtest/resources' }
+        compileClasspath = sourceSets.main.output + configurations.integTestCompile
+        runtimeClasspath = output + compileClasspath + configurations.integTestRuntime
+    }
 }
 
 buildscript {
     repositories {
-		jcenter()
-		mavenCentral()
-		maven {url 'http://dl.bintray.com/robfletcher/gradle-plugins'}
-	}
+        jcenter()
+        mavenCentral()
+        maven {url 'http://dl.bintray.com/robfletcher/gradle-plugins'}
+    }
     dependencies {
-		classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
-		classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
-		classpath 'org.gradle.plugins:gradle-compass:1.0.7'
-	}
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
+        classpath 'org.gradle.plugins:gradle-compass:1.0.7'
+        classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
+    }
 }
 
 dependencies {
-	def springVersion = '4.0.5.RELEASE'
-	def tomcatVersion = '7.0.55'
+    def springVersion = '4.0.5.RELEASE'
+    def tomcatVersion = '7.0.55'
+    def hybernateVersion = '4.3.5.Final'
+    def jacksonVersion = '2.4.0'
+    def log4j2Version = '2.0-rc1'
 
-	compile group: 'org.springframework', 				name:'spring-core', 					version:springVersion
-	compile group: 'org.springframework', 				name:'spring-context', 					version:springVersion
-	compile group: 'org.springframework', 				name:'spring-orm', 						version:springVersion
-	compile group: 'org.springframework', 				name:'spring-web', 						version:springVersion
-	compile group: 'org.springframework', 				name:'spring-jdbc', 					version:springVersion
-	compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
-	compile group: 'org.hibernate',						name:'hibernate-core', 					version:'4.3.5.Final'
-	compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:'4.3.5.Final'
-	compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.0.Final'
-	compile group: 'org.apache.commons', 				name:'commons-lang3', 					version:'3.3.2'
-	compile group: 'commons-collections', 				name:'commons-collections', 			version:'3.2.1'
-	compile group: 'com.google.guava', 					name:'guava', 							version:'17.0'
-	compile group: 'com.fasterxml.jackson.core',		name:'jackson-core',					version:'2.4.0'
-	compile group: 'com.fasterxml.jackson.core',		name:'jackson-databind',				version:'2.4.0'
-	compile group: 'com.fasterxml.jackson.core',		name:'jackson-annotations',				version:'2.4.0'
-	compile group: 'org.slf4j', 						name:'slf4j-api', 						version:'1.7.5'
-	compile group: 'javax.inject', 						name:'javax.inject',					version:'1'
-	compile group: 'javax.servlet', 					name:'jstl', 							version:'1.2'
-	compile group: 'com.google.code.gson',				name:'gson',							version:'2.2.4'
-	
-	runtime group: 'org.apache.logging.log4j',		name:'log4j-slf4j-impl',			version:'2.0-rc1'
-	runtime group: 'org.apache.logging.log4j',		name:'log4j-core',					version:'2.0-rc1'
-	runtime group: 'org.apache.logging.log4j',		name:'log4j-jcl', 					version:'2.0-rc1'
-	runtime group: 'mysql', 						name:'mysql-connector-java',	 	version:'5.1.30'
-	
-	testCompile group: 'junit', 					name: 'junit', 						version:'4.11'
-	testCompile group: 'org.mockito', 				name: 'mockito-core', 				version: '1.9.5'
-	testCompile group: 'org.easytesting', 			name: 'fest-assert-core', 			version:'2.0M10'
-	testCompile group: 'org.springframework', 		name: 'spring-test', 				version:'4.0.5.RELEASE'
-	testCompile group: 'com.jayway.jsonpath', 		name:'json-path',					version:'0.9.1'
-	
-	providedCompile group: 'javax.servlet', 		name:'javax.servlet-api',			version:'3.1.0'
-	providedCompile group: 'javax.servlet.jsp', 	name:'javax.servlet.jsp-api',		version:'2.3.1'
-	providedCompile group: 'javax.websocket', 		name:'javax.websocket-api',			version:'1.0'
-	
-	tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-core',			version:tomcatVersion
-	tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-logging-juli',	version:tomcatVersion
-	tomcat group: 'org.apache.tomcat.embed',		name:'tomcat-embed-websocket',		version:tomcatVersion
-	tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
-		exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
-	}
+    compile group: 'org.springframework', 				name:'spring-core', 					version:springVersion
+    compile group: 'org.springframework', 				name:'spring-context', 					version:springVersion
+    compile group: 'org.springframework', 				name:'spring-orm', 						version:springVersion
+    compile group: 'org.springframework', 				name:'spring-web', 						version:springVersion
+    compile group: 'org.springframework', 				name:'spring-jdbc', 					version:springVersion
+    compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
+    compile group: 'org.hibernate',						name:'hibernate-core', 					version:hybernateVersion
+    compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:hybernateVersion
+    compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.0.Final'
+    compile group: 'org.apache.commons', 				name:'commons-lang3', 					version:'3.3.2'
+    compile group: 'commons-collections', 				name:'commons-collections', 			version:'3.2.1'
+    compile group: 'com.google.guava', 					name:'guava', 							version:'18.0'
+    compile group: 'com.fasterxml.jackson.core',		name:'jackson-core',					version:jacksonVersion
+    compile group: 'com.fasterxml.jackson.core',		name:'jackson-databind',				version:jacksonVersion
+    compile group: 'com.fasterxml.jackson.core',		name:'jackson-annotations',				version:jacksonVersion
+    compile group: 'org.slf4j', 						name:'slf4j-api', 						version:'1.7.5'
+    compile group: 'javax.inject', 						name:'javax.inject',					version:'1'
+    compile group: 'javax.servlet', 					name:'jstl', 							version:'1.2'
+    compile group: 'com.google.code.gson',				name:'gson',							version:'2.2.4'
+
+    runtime group: 'org.apache.logging.log4j',	    	name:'log4j-slf4j-impl',		    	version:log4j2Version
+    runtime group: 'org.apache.logging.log4j',	    	name:'log4j-core',				    	version:log4j2Version
+    runtime group: 'org.apache.logging.log4j',	    	name:'log4j-jcl', 				    	version:log4j2Version
+    runtime group: 'mysql', 					    	name:'mysql-connector-java',	    	version:'5.1.30'
+
+    testCompile group: 'junit', 			    		name: 'junit', 					    	version:'4.11'
+    testCompile group: 'org.mockito', 			    	name: 'mockito-core', 			    	version: '1.9.5'
+    testCompile group: 'org.easytesting', 			    name: 'fest-assert-core', 		    	version:'2.0M10'
+    testCompile group: 'org.springframework',    		name: 'spring-test', 			    	version:'4.0.5.RELEASE'
+    testCompile group: 'com.jayway.jsonpath', 	    	name:'json-path',			    		version:'0.9.1'
+
+    providedCompile group: 'javax.servlet',      		name:'javax.servlet-api',			    version:'3.1.0'
+    providedCompile group: 'javax.websocket', 	    	name:'javax.websocket-api',		    	version:'1.0'
+
+    tomcat group: 'org.apache.tomcat.embed',	    	name:'tomcat-embed-core',			    version:tomcatVersion
+    tomcat group: 'org.apache.tomcat.embed',    		name:'tomcat-embed-logging-juli',   	version:tomcatVersion
+    tomcat group: 'org.apache.tomcat.embed',	    	name:'tomcat-embed-websocket',  		version:tomcatVersion
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
 }
 
+project.gradle.addListener(new NotificationTestListener(project));
+
 def getEnvironmentName() {
-	String env = System.getProperty(SYSTEM_PROPERTY_ENVIRONMENT, NOT_FOUND);
-	if(env != NOT_FOUND)
-		return env;
-	if(project.gradle.taskGraph.hasTask(deployToRedHat))
-		return OPENSHIFT_ENV;
-	else
-		return DEFAULT_ENV;
+    String env = System.getProperty(systemPropertyEnvironment, notFound);
+    if(env != notFound)
+        return env;
+    if(project.gradle.taskGraph.hasTask(deployToRedHat))
+        return openshiftEnv;
+    if(project.gradle.taskGraph.hasTask(deployToAmazon))
+        return amazonEnv;
+    return defaultEnv;
 }
 
 jacocoTestReport {
@@ -163,52 +189,54 @@ sonarRunner {
 }
 
 tomcat {
-	httpPort = 8095
-	httpsPort = 8096
-	stopPort = 8083
-	ajpPort = 8010
-	enableSSL = true
+    httpPort = 8095
+    httpsPort = 8096
+    stopPort = 8083
+    ajpPort = 8010
+    enableSSL = true
 }
 tomcatRun.daemon = false
 tomcatRun.contextPath = ''
 
 eclipse {
-	project {
-		natures += [
-			'org.springframework.ide.eclipse.core.springnature',
-			'org.springsource.ide.eclipse.gradle.core.nature',
-		]
-	}
+    project {
+        natures += [
+                'org.springframework.ide.eclipse.core.springnature',
+                'org.springsource.ide.eclipse.gradle.core.nature',
+        ]
+    }
 }
-
-task deployToRedHat(type: SshTask, dependsOn: 'war', group:'Deploy'){
-	session(remotes.redHat) {
-		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/shutdown.sh"
-		execute "rm -f ${RED_HAT_WAR_HOME}/${RED_HAT_WAR_NAME}.war"
-		execute "rm -rf ${RED_HAT_WAR_HOME}/${RED_HAT_WAR_NAME}"
-		execute "sleep 5"
-		put     "${ASSEMBLED_WAR_HOME}", "${RED_HAT_WAR_HOME}/${RED_HAT_WAR_NAME}.war"
-		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/startup.sh"
-	}
-}
-deployToRedHat.description = 'Deploys application to red hat hosting'
-
-task restartRedHatTomcat(type: SshTask,group:'Deploy'){
-	session(remotes.redHat) {
-		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/shutdown.sh"
-		execute "sleep 5"
-		execute "sh .${RED_HAT_TOMCAT_HOME}/bin/startup.sh"
-	}
-}
-restartRedHatTomcat.description = 'Restart remote red hat tomcat'
 
 task generateProperties {
-	description = "Generates properties for environments"
-	inputs.files YAML_PROPERTIES_FILE
-	doLast {
-		def env = getEnvironmentName();
-		def loader = new YamlLoader(env);
-		loader.process()
-	}
+    description = "Generates properties for environments"
+    inputs.files yamlPropertiesFile
+    doLast {
+        def env = getEnvironmentName();
+        def loader = new YamlLoader(env);
+        loader.process()
+    }
 }
 processResources.dependsOn generateProperties
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    reports.html.destination = file("$reports.html.destination/integration")
+    reports.junitXml.destination = file("$reports.junitXml.destination/integration")
+}
+check.dependsOn integrationTest
+
+
+task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to openshift'){
+    remote = remotes.redHat;
+    tomcatPath = openshiftTomcatPath;
+    warName = "${warName}";
+    warAbsolutePath = war.archivePath.absolutePath;
+}
+
+task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws'){
+    remote = remotes.amazon;
+    tomcatPath = amazonTomcatPath;
+    warName = "${warName}";
+    warAbsolutePath = war.archivePath.absolutePath;
+}

@@ -1,0 +1,49 @@
+apply plugin: 'ssh'
+
+ext {
+    userName = '53ea659450044640c600042b'
+    warName = 'ROOT'
+    tomcatHome = '/app-root/data/tomcat'
+    warHome = "/var/lib/openshift/${userName}${tomcatHome}/webapps"
+    assembledWarHome = war.archivePath.absolutePath
+}
+
+
+remotes {
+    redHat {
+        host = 'board-netstalk3r.rhcloud.com'
+        user = '53ea659450044640c600042b'
+        identity = file('ssh/id_rsa')
+        knownHosts = file('ssh/known_hosts')
+        retryCount = 10
+    }
+}
+
+if(project.hasProperty('cloudbeesApiKey')) {
+    ext.apiKey = project.property('cloudbeesApiKey')
+}
+
+task deployToRedHat(type: SshTask, dependsOn: 'war', group:'openshift'){
+
+    inputs.property('remote', remotes.redHat);
+    inputs.file(war.archivePath.absolutePath);
+
+    session(remotes.redHat) {
+        execute "sh .${tomcatHome}/bin/shutdown.sh"
+        execute "rm -f ${warHome}/${warName}.war"
+        execute "rm -rf ${warHome}/${warName}"
+        execute "sleep 5"
+        put     "${assembledWarHome}", "${warHome}/${warName}.war"
+        execute "sh .${tomcatHome}/bin/startup.sh"
+    }
+}
+deployToRedHat.description = 'Deploys application to red hat hosting'
+
+task restartRedHatTomcat(type: SshTask,group:'openshift'){
+    session(remotes.redHat) {
+        execute "sh .${tomcatHome}/bin/shutdown.sh"
+        execute "sleep 5"
+        execute "sh .${tomcatHome}/bin/startup.sh"
+    }
+}
+restartRedHatTomcat.description = 'Restart remote red hat tomcat'

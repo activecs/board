@@ -1,4 +1,5 @@
 apply plugin: 'groovy'
+apply plugin: 'ssh'
 
 repositories {
 	mavenCentral()
@@ -6,4 +7,13 @@ repositories {
 
 dependencies {
 	compile 'org.yaml:snakeyaml:1.13'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:0.3.10'
+    }
 }

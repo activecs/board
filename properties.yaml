@@ -32,3 +32,12 @@ properties:
     database.password: 8EWFTbv4nc71
     database.url: jdbc:mysql://127.8.153.130:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
     
+  ###############################################
+  ## Amazon environment configuration
+  ###############################################
+  amazon-local: &amazon-local
+    <<: *global_env
+
+    database.username: root
+    database.password: root
+    database.url: jdbc:mysql://127.0.0.1:3306/board?autoReconnect=true&useEncoding=true&characterEncoding=UTF-8
