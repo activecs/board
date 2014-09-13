@@ -1,8 +1,5 @@
+<%@ include file="/WEB-INF/jspf/taglibs.jspf"%>
 <%@ page isErrorPage="true" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <template:page title="Error">	
 	<c:set var="error_code" value="${requestScope['javax.servlet.error.status_code']}" />

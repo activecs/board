@@ -1,5 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
+<%@ include file="/WEB-INF/jspf/taglibs.jspf"%>
 
 <template:page title="Schedule">
 	
