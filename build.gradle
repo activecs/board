@@ -1,4 +1,5 @@
-import com.kharkiv.board.deploy.TomcatSshDeploy
+import com.kharkiv.board.deploy.TomcatSshDeploy;
+import com.kharkiv.board.deploy.TomcatSshRestart;
 import com.kharkiv.board.tests.NotificationTestListener;
 
 apply plugin: 'maven'
@@ -232,6 +233,11 @@ task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to opens
     tomcatPath = openshiftTomcatPath;
     warName = "${warName}";
     warAbsolutePath = war.archivePath.absolutePath;
+}
+
+task restartRedHatTomcat(type: TomcatSshRestart, description: 'Restart tomcat on openshift'){
+    remote = remotes.redHat;
+    tomcatPath = openshiftTomcatPath;
 }
 
 task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws'){
