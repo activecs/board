@@ -14,6 +14,7 @@
 	    <div class="container">
 	        <div class="row">
 				<jsp:doBody />
+				<%@ include file="/WEB-INF/jspf/right.jspf"%>
 			</div>
 	    	<hr>
 			<footer>
