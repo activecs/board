@@ -11,6 +11,7 @@ bin/*
 .jruby/*
 .sass-cache/*
 *.iml
+*.log
 classes/*
 activemq-data/*
 /bin/
