@@ -229,7 +229,7 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 
-task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to openshift'){
+task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to openshift', dependsOn: 'war'){
     remote = remotes.redHat;
     tomcatPath = openshiftTomcatPath;
     warName = "${warName}";
@@ -241,7 +241,7 @@ task restartRedHatTomcat(type: TomcatSshRestart, description: 'Restart tomcat on
     tomcatPath = openshiftTomcatPath;
 }
 
-task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws'){
+task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws', dependsOn: 'war'){
     remote = remotes.amazon;
     tomcatPath = amazonTomcatPath;
     warName = "${warName}";
