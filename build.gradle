@@ -20,7 +20,6 @@ targetCompatibility = 1.7
 compileJava.options.encoding = 'UTF-8'
 
 ext {
-    warName = 'ROOT';
     notFound = 'not-found';
     systemPropertyEnvironment = 'env';
     yamlPropertiesFile = file('properties.yaml');
@@ -232,7 +231,7 @@ check.dependsOn integrationTest
 task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to openshift', dependsOn: 'war'){
     remote = remotes.redHat;
     tomcatPath = openshiftTomcatPath;
-    warName = "${warName}";
+    warName = 'ROOT';
     warAbsolutePath = war.archivePath.absolutePath;
 }
 
@@ -244,6 +243,6 @@ task restartRedHatTomcat(type: TomcatSshRestart, description: 'Restart tomcat on
 task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws', dependsOn: 'war'){
     remote = remotes.amazon;
     tomcatPath = amazonTomcatPath;
-    warName = "${warName}";
+    warName = 'ROOT';
     warAbsolutePath = war.archivePath.absolutePath;
 }
