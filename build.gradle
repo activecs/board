@@ -43,6 +43,7 @@ remotes {
         host = 'kaa-team.mine.nu'
         user = 'ubuntu'
         identity = file('ssh/aws.pem')
+		knownHosts = file('ssh/known_hosts')
         retryCount = 2
     }
 }
