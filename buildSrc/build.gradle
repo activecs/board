@@ -7,6 +7,10 @@ repositories {
 
 dependencies {
 	compile 'org.yaml:snakeyaml:1.13'
+    compile 'org.hidetake:gradle-ssh-plugin:0.3.10';
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'commons-collections:commons-collections:3.2.1'
+    compile 'com.google.guava:guava:18.0'
 }
 
 buildscript {

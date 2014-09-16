@@ -27,7 +27,7 @@ ext {
     openshiftEnv = 'config-openshift';
     amazonEnv = 'config-amazon';
     openshiftTomcatPath = "/var/lib/openshift/53ea659450044640c600042b/app-root/data/tomcat";
-    amazonTomcatPath = "/home/ubuntu/apache-tomcat-7.0.55";
+    amazonTomcatPath = "/home/ubuntu/apache-tomcat";
 }
 
 remotes {
@@ -228,11 +228,11 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 
-task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to openshift', dependsOn: 'war'){
+task deployToRedHat(type: TomcatSshDeploy, description: 'Deploy the war to openshift', dependsOn : war){
     remote = remotes.redHat;
     tomcatPath = openshiftTomcatPath;
     warName = 'ROOT';
-    warAbsolutePath = war.archivePath.absolutePath;
+    warTask = war;
 }
 
 task restartRedHatTomcat(type: TomcatSshRestart, description: 'Restart tomcat on openshift'){
@@ -240,9 +240,10 @@ task restartRedHatTomcat(type: TomcatSshRestart, description: 'Restart tomcat on
     tomcatPath = openshiftTomcatPath;
 }
 
-task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws', dependsOn: 'war'){
+task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazon ws', dependsOn : war){
     remote = remotes.amazon;
     tomcatPath = amazonTomcatPath;
     warName = 'ROOT';
-    warAbsolutePath = war.archivePath.absolutePath;
+    warTask = war;
+    runAsRoot = true;
 }
