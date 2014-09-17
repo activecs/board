@@ -1,9 +1,8 @@
-<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template" %>
+<%@ taglib tagdir="/WEB-INF/tags/template" prefix="template"%>
 
-<div class="row">
-   <div class="col-lg-12">
-       <p>Copyright &copy; Your Website 2014</p>
-     </div>
-</div>
-
+<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+	<div class="container">
+		<p class="text-center lead">Copyright &copy; kaa-team 2014</p>
+	</div>
+</nav>
 <template:js />
