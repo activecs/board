@@ -8,7 +8,49 @@
 	    <h1 class="page-header">
 	        Page Heading
 	        <small>Secondary Text</small>
+        	<button  type="button" class="btn btn-primary pull-right add-event"><fmt:message key="event.add.new"/></button>
+	        
 	    </h1>
+		
+		<form class="add-event form-horizontal" role="form">
+			<legend><fmt:message key="event.add.new"/></legend>
+			
+			<div class="form-group">
+				<p class="col-sm-2"></p>
+			    <label for="eventTitle" class="col-sm-2 control-label"><fmt:message key="event.title"/></label>
+			    <div class="input-group col-sm-6">
+			      <input type="text" class="form-control" id="eventTitle" placeholder='<fmt:message key="event.title"/>'>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+				<p class="col-sm-2"></p>
+			    <label for="eventPlace" class="col-sm-2 control-label"><fmt:message key="event.place"/></label>
+			    <div class="input-group col-sm-6">
+			      <input type="text" class="form-control" id="eventPlace" placeholder='<fmt:message key="event.place"/>'>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+				<p class="col-sm-2"></p>
+                <label for="eventDate" class="col-sm-2 control-label"><fmt:message key="event.date"/></label>
+                <div class="input-group date form_datetime col-sm-6" data-link-field="eventDate">
+                    <input class="form-control" type="text" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove icon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" id="eventDate"/>
+            </div>
+			
+			<button type="submit" class="btn btn-success">
+				<span class="glyphicon glyphicon-plus"></span><fmt:message key="event.create"/>
+			</button>
+			<div class="col-sm-6" ></div>
+			<button type="button" class="btn btn-danger cancel">
+				<span class="glyphicon glyphicon-remove"></span><fmt:message key="event.cancel"/>
+			</button>
+			    
+		</form>
 	
 	    <!-- First Blog Post -->
 	    <h2>
@@ -38,22 +80,6 @@
 	    <img class="img-responsive" src="http://placehold.it/900x300" alt="">
 	    <hr>
 	    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, quasi, fugiat, asperiores harum voluptatum tenetur a possimus nesciunt quod accusamus saepe tempora ipsam distinctio minima dolorum perferendis labore impedit voluptates!</p>
-	    <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-	
-	    <hr>
-	
-	    <!-- Third Blog Post -->
-	    <h2>
-	        <a href="#">Blog Post Title</a>
-	    </h2>
-	    <p class="lead">
-	        by <a href="index.php">Start Bootstrap</a>
-	    </p>
-	    <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
-	    <hr>
-	    <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-	    <hr>
-	    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, voluptates, voluptas dolore ipsam cumque quam veniam accusantium laudantium adipisci architecto itaque dicta aperiam maiores provident id incidunt autem. Magni, ratione.</p>
 	    <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 	
 	    <hr>

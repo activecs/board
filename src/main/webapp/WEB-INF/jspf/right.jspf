@@ -55,9 +55,9 @@
 							<span class="btn btn-success fileinput-button">
 								<i class="glyphicon glyphicon-plus"></i>
 							<span><fmt:message key="sign.up.add.file"/></span>
-							<input id="fileupload" type="file" name="file" accept="image/jpeg" onclick="RegistrationService.initUpload()">
+							<input id="fileupload" type="file" name="file" accept="image/jpeg" onclick="registrationService.initUpload()">
 							</span>
-							<a id='cnlBtn' class="btn btn-danger delete" href="#" role="button" onclick="RegistrationService.destroyUpload()">
+							<a id='cnlBtn' class="btn btn-danger delete" href="#" role="button" onclick="registrationService.destroyUpload()">
 								<i class="glyphicon glyphicon-trash"></i>
 								<span><fmt:message key="sign.up.remove.file"/></span>
 							</a>

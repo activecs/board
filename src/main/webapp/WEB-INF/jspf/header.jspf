@@ -17,15 +17,7 @@
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<c:set var="loc" value="${not empty sessionScope['javax.servlet.jsp.jstl.fmt.locale.session'] ? sessionScope['javax.servlet.jsp.jstl.fmt.locale.session'] : pageContext.request.locale.language}" />
-					<c:choose>
-						<c:when test="${loc eq 'en'}">
-							<li><a href="#" onclick="changeLocale('ru')">ru</a></li>
-						</c:when>
-						<c:otherwise>
-							<li><a href="#" onclick="changeLocale('en')">en</a></li>
-						</c:otherwise>
-					</c:choose>
+					<template:locale />
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->

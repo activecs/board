@@ -40,6 +40,9 @@ public class Schedule extends BaseEntity {
 
     @Column(name = "place", length = 150, nullable = false)
     private String place;
+    
+    @Column(name = "title", length = 150, nullable = false)
+    private String title;
 
     @Column(name = "created", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)

@@ -5,3 +5,4 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/changes.css'/>" />
 <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>" />
 <link rel="stylesheet" href="<c:url value='/resources/css/jquery.fileupload.css'/>" />
+<link rel="stylesheet" href="<c:url value='/resources/css/datetimepicker.min.css'/>" />
