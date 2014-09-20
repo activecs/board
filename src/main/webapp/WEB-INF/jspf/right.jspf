@@ -14,7 +14,7 @@
 	
 	    <!-- Blog Categories Well -->
 	    <div class="well">
-			<a href="<c:url value="/pages/schedule" />"><img src="<c:url value="/resources/images/Board_logm.png" />" class="img-rounded" style="width: 23em; height: 20em;"></a>
+			<a href="<c:url value="/schedule" />"><img src="<c:url value="/resources/images/Board_logm.png" />" class="img-rounded" style="width: 23em; height: 20em;"></a>
 	    </div>
 	
 	    <!-- Side Widget Well -->

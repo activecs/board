@@ -29,16 +29,6 @@
         <param-value>ru</param-value>
     </context-param>
 
-
-	<servlet>
-		<servlet-name>servlet</servlet-name>
-		<servlet-class>com.kharkiv.board.controller.IToDoItemServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>servlet</servlet-name>
-		<url-pattern>/pages/schedule</url-pattern>
-	</servlet-mapping>
-
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
