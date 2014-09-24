@@ -31,56 +31,108 @@ var common = {
 
 var registrationService = {
 		
-		REGISTRATION_URL : 'url',
-		logoUploadActiveFlag : false,
+		REGISTRATION_URL : 'registration',
 		
-		initUpload : function initialize() {
-			if (!registrationService.logoUploadActiveFlag) {
-			    'use strict';
-			    $('#fileupload').fileupload({
-			        autoUpload: false,
-			        maxFileSize: 5000000, // 5 MB
-			        previewMaxWidth: 150,
-			        previewMaxHeight: 150,
-			        previewCrop: true
-			    }).on('fileuploadadd', function (e, data) {
-			    	$('#files').html('');
-			        data.context = $('<div/>').attr('id','image').attr('align','center').appendTo('#files');
-			        $.each(data.files, function (index, file) {
-			            var node = $('<p/>')
-			                    .append($('<span/>').text(file.name));
-			            if (!index) {
-			  
-			            }
-			            node.appendTo(data.context);
-			        });
-			    }).on('fileuploadprocessalways', function (e, data) {
-			        var index = data.index,
-			            file = data.files[index],
-			            node = $(data.context.children()[index]);
-			        if (file.preview) {
-			        	$('#image').append(file.preview);
-			            $('#fileupload').attr('disabled','disabled');
+		validate : function validateForm(e) {
+			var loginForm = $('#registrationForm');
+			var confirmation = $('#conf_failed');
+			
+			confirmation.css({'display' : 'none'});
+			
+			loginForm.validate({
+				  debug: true,
+				  rules: {
+			            login: {
+			            	required: true,
+			            	minlength: 3
+			            },
+			            password: {
+			                required: true,
+			                minlength: 6
+			            },
+			            confirm_password: {
+			            	required: true,
+			            	minlength: 6
+			            },
 			        }
-			        if (file.error) {
-			            node
-			                .append('<br>')
-			                .append($('<span class="text-danger"/>').text(file.error));
-			        }
-			    }).prop('disabled', !$.support.fileInput)
-			        .parent().addClass($.support.fileInput ? undefined : 'disabled');
-			    registrationService.logoUploadActiveFlag = true;
+				});
+			
+			loginForm.validate();
+			if (loginForm.valid()) {
+				var pass = $('#password').val();
+				var passConf = $('#confirm_password').val();
+				if (pass == passConf) {
+					registrationService.register(e);
+				} else {
+					confirmation.css({'display' : 'block'});
 				}
+			}
 		},
 		
-		destroyUpload : function destroy() {
-			if (registrationService.logoUploadActiveFlag) {
-				$('#fileupload').fileupload('destroy');
-				$('#fileupload').removeAttr( 'disabled' )
-				$('#files').html('');
-				registrationService.logoUploadActiveFlag = false;
-			}
+		register : function sendData(e) {
+			var loginForm = $('#registrationForm');
+			loginForm.submit(function(e){
+			e.preventDefault();
+			var formData = new FormData($(this)[0]);
+				
+			jQuery.ajax({
+				url : registrationService.REGISTRATION_URL,
+				type : 'POST',
+				cache : false,
+				contentType: false,
+				processData: false,
+				data : formData,
+				beforeSend : function() {
+					$('#loading').css({'display' : 'inline'});
+				},
+				complete : function() {
+					$('#loading').css({'display' : 'none'});
+				},
+				success : function(data) {
+					alert(data);
+				},
+				error : function() {
+					alert('Server Error!');
+				}
+			});
+					
+			return false;
+			});
+			loginForm.submit();
+		},
+		
+		preview : function createPreview() {
+			var input = $("#fileupload");
+			input.on("change", function()
+					    {
+					        var files = !!this.files ? this.files : [];
+					        if (!files.length || !window.FileReader) return;
+					 
+					        if (/^image/.test( files[0].type)){
+					        	// lower than 5MB
+					        	if (files[0].size <= 5242880) {
+						            var reader = new FileReader(); 
+						            reader.readAsDataURL(files[0]); 
+						 
+						            reader.onloadend = function(){ 
+						                $("#files").css("background-image", "url("+this.result+")");
+						            }
+						            input.prop('disabled', true);
+					        	} else {
+					        		registrationService.clean();
+					        		alert($('#image_error').text());
+					        	}
+					        }
+					    });
+		}, 
+		
+		clean : function cleanPreview() {
+			$("#files").css("background-image", "url(/resources/images/profile-placeholder.jpg)");
+			var input = $("#fileupload");
+			input.prop('disabled', false);
+			input.replaceWith(input.val('').clone(true));
 		}
+		
 }
 
 var scheduleEvent = {

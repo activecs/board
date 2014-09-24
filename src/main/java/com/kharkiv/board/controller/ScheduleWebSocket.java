@@ -12,7 +12,7 @@ import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.kharkiv.board.service.ScheduleService;
 
-@ServerEndpoint(value = "/pages/wsschedule", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/wsschedule", configurator = SpringConfigurator.class)
 public class ScheduleWebSocket {
 
     @Inject

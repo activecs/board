@@ -12,16 +12,11 @@
 <script type="text/javascript" src="<c:url value='/resources/js/locales/datetimepicker.ua.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/locales/datetimepicker.ru.js'/>"></script>
 
-<!-- file upload js -->
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.ui.widget.js'/>" ></script>
-<script type="text/javascript" src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
-<script type="text/javascript" src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.iframe-transport.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.fileupload.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.fileupload-process.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.fileupload-image.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.fileupload-validate.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/resources/js/upload/jquery.fileupload-ui.js'/>" ></script>
+<!-- jQuery validate -->
+<script type="text/javascript" src="<c:url value='/resources/js/jquery.validate.min.js'/>"></script>
+<c:if test="${loc eq 'ru'}">
+	<script type="text/javascript" src="<c:url value='/resources/js/locales/messages_ru.js'/>"></script>
+</c:if>
 
 <!-- customization js -->
 <script type="text/javascript" src="<c:url value='/resources/js/changes.js'/>" ></script>

@@ -14,6 +14,7 @@ bin/*
 *.log
 classes/*
 activemq-data/*
+/avatars/
 /bin/
 /target
 src/main/resources/application.properties

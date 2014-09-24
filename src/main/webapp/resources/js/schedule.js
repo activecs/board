@@ -1,6 +1,6 @@
 var scheduleWS = {
 
-	SCHEDULE_WEB_SOCKET_URL : window.location.host + '/pages/wsschedule',
+	SCHEDULE_WEB_SOCKET_URL : window.location.host + 'wsschedule',
 
 	socket : null,
 
