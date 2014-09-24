@@ -14,8 +14,8 @@ bin/*
 *.log
 classes/*
 activemq-data/*
-/avatars/
 /bin/
 /target
 src/main/resources/application.properties
 src/main/webapp/resources/css/changes.css
+src/main/webapp/avatars/*

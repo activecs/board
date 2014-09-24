@@ -73,6 +73,8 @@ var registrationService = {
 			var loginForm = $('#registrationForm');
 			loginForm.submit(function(e){
 			e.preventDefault();
+			var input = $("#fileupload");
+			input.prop('disabled', false);
 			var formData = new FormData($(this)[0]);
 				
 			jQuery.ajax({
@@ -99,6 +101,7 @@ var registrationService = {
 			return false;
 			});
 			loginForm.submit();
+			input.prop('disabled', true);
 		},
 		
 		preview : function createPreview() {

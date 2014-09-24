@@ -20,6 +20,8 @@ public class RegistrationController extends AbstractAutowiringServlet {
 
     private static final long serialVersionUID = 1L;
     
+    private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5BM
+    
     @Value(value = "${avatar.storage.folder}")
     private String AVATAR_DIR;
     
@@ -44,6 +46,7 @@ public class RegistrationController extends AbstractAutowiringServlet {
             String fileName = extractFileName(part);
             if (StringUtils.isNotBlank(fileName)) {
                 file = fileName;
+                part.getSize();
                 part.write(savePath + fileName);
             }
         }
