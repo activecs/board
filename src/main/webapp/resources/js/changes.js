@@ -1,7 +1,9 @@
 $(function(){
+	scheduleWS.initialize();
+	scheduleForm.bindEvents();
 	$('.form_datetime').datetimepicker({
 		language:  locale,
-		format: "dd MM yyyy - hh:ii",
+		format: "dd.mm.yyyy - hh:ii",
 		autoclose: true,
 		todayHighlight: true,
 		startDate: "2014-01-01 10:00",
@@ -11,14 +13,6 @@ $(function(){
 	$('.glyphicon-remove').bind('click', function(){
 		$(this).closest('div').find('input').val('');
 	});
-	
-	$('button.add-event').bind('click', function(){
-		scheduleEvent.showForm();
-	});
-	
-	scheduleEvent.$form.find('button.cancel').bind('click', function(){
-		scheduleEvent.hideForm();
-	});
 });
 
 var common = {
@@ -26,6 +20,17 @@ var common = {
 		$.get(window.location.pathname, { "lang": loc }, function() {
 			window.location.reload(true);
 		});
+	},
+
+	convertFormToJSON : function(form){
+	    var array = $(form).serializeArray();
+	    var json = {};
+	    
+	    $.each(array, function() {
+	        json[this.name] = this.value || '';
+	    });
+	    
+	    return JSON.stringify(json);
 	}
 }
 
@@ -138,21 +143,46 @@ var registrationService = {
 		
 }
 
-var scheduleEvent = {
+var scheduleForm = {
 	
 	$form : $('form.add-event'),
+	
+	bindEvents : function(){
+		$('button.add-event').bind('click', function(){
+			scheduleForm.show();
+		});
 		
-	showForm : function(){
+		this.$form.find('button.cancel').bind('click', function(){
+			scheduleForm.hide();
+		});
+		
+		this.$form.validationEngine('attach',{
+			promptPosition : "centerRight",
+			showOneMessage : true,
+			scroll: false,
+			onValidationComplete: function(form, isValid){
+				if(isValid)
+					scheduleForm.send();
+			}
+		});
+	},
+		
+	show : function(){
 		this.$form.animate({
 			opacity: 1,
 			height: "toggle"
 		}, 500);
 	},
 		
-	hideForm : function() {
+	hide : function() {
 		this.$form.animate({
 			opacity: 0,
 			height: "toggle"
 		}, 500);
+	},
+	
+	send : function(){
+		var json = common.convertFormToJSON(this.$form);
+		scheduleWS.send(json);
 	}
 }

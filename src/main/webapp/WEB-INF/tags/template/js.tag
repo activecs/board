@@ -3,6 +3,17 @@
 
 <!-- jQuery library -->
 <script type="text/javascript" src="<c:url value='/resources/js/jquery.js'/>"></script>
+
+<script type="text/javascript" src="<c:url value='/resources/js/validationengine.js'/>"></script>
+<c:choose>
+	<c:when test="${loc eq 'en'}">
+		<script type="text/javascript" src="<c:url value='/resources/js/locales/validationengine.en.js'/>"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="<c:url value='/resources/js/locales/validationengine.ru.js'/>"></script>
+	</c:otherwise>
+</c:choose>
+
 <script type="text/javascript" src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/analitics.js'/>"></script>
 

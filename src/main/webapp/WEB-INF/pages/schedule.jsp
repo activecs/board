@@ -19,7 +19,7 @@
 				<p class="col-sm-2"></p>
 			    <label for="eventTitle" class="col-sm-2 control-label"><fmt:message key="event.title"/></label>
 			    <div class="input-group col-sm-6">
-			      <input type="text" class="form-control" id="eventTitle" placeholder='<fmt:message key="event.title"/>'>
+			      <input type="text" class="form-control validate[required,minSize[5],maxSize[18]]" name="title" placeholder='<fmt:message key="event.title"/>'>
 			    </div>
 			</div>
 			
@@ -27,7 +27,7 @@
 				<p class="col-sm-2"></p>
 			    <label for="eventPlace" class="col-sm-2 control-label"><fmt:message key="event.place"/></label>
 			    <div class="input-group col-sm-6">
-			      <input type="text" class="form-control" id="eventPlace" placeholder='<fmt:message key="event.place"/>'>
+			      <input type="text" class="form-control validate[required,minSize[5],maxSize[18]] datepicker" name="place" placeholder='<fmt:message key="event.place"/>'>
 			    </div>
 			</div>
 			
@@ -35,11 +35,10 @@
 				<p class="col-sm-2"></p>
                 <label for="eventDate" class="col-sm-2 control-label"><fmt:message key="event.date"/></label>
                 <div class="input-group date form_datetime col-sm-6" data-link-field="eventDate">
-                    <input class="form-control" type="text" readonly>
+                    <input class="form-control validate[required]" name="dateTime" type="text" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove icon-remove"></span></span>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
-				<input type="hidden" id="eventDate"/>
             </div>
 			
 			<button type="submit" class="btn btn-success">

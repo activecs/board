@@ -1,4 +1,4 @@
-package com.kharkiv.board.controller;
+package com.kharkiv.board.filter;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -9,12 +9,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 
 import org.apache.commons.lang3.StringUtils;
 
+@WebFilter("/*")
 public class LocaleFilter implements Filter {
 
     private static final String LANG_PARAMETER = "lang";

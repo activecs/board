@@ -18,6 +18,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.kharkiv.board.filter.LocaleFilter;
+
 public class LocaleFilterTest {
 
     private static final String LANG_PARAM = "ru";
