@@ -1,10 +1,13 @@
 package com.kharkiv.board.endpoint;
 
+import java.io.IOException;
+import java.util.Set;
+
 import javax.inject.Inject;
-import javax.websocket.OnClose;
+import javax.websocket.EncodeException;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
+import javax.websocket.RemoteEndpoint.Basic;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -24,22 +27,23 @@ public class ScheduleEndpoint {
 	@Inject
 	private ScheduleService scheduleService;
 
-	@OnOpen
-	public void open(Session session) {
-	}
-
-	@OnClose
-	public void close(Session session) {
-	}
-
 	@OnMessage
-	public void message(@PathParam("action") String action,Session session, Schedule schedule) {
-		System.out.println(schedule);
+	public void message(@PathParam("action") String action,Session session, Schedule schedule) throws IOException, EncodeException {
+		System.out.println("receiver schedule id ->" + schedule.getTitle());
+		share(schedule, session);
+	}
+
+	private void share(Schedule schedule, Session currentSession) throws IOException, EncodeException {
+		Set<Session> allSessions = currentSession.getOpenSessions();
+		for(Session session : allSessions){
+			Basic client = session.getBasicRemote();
+			client.sendObject(schedule);
+		}
+		
 	}
 
 	@OnError
 	public void onError(Session session, Throwable error) throws Throwable {
 		System.out.println(error);
 	}
-
 }

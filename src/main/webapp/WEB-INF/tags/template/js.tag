@@ -29,6 +29,8 @@
 	<script type="text/javascript" src="<c:url value='/resources/js/locales/messages_ru.js'/>"></script>
 </c:if>
 
+<script type="text/javascript" src="<c:url value='/resources/js/jsrender.min.js'/>"></script>
+
 <!-- customization js -->
 <script type="text/javascript" src="<c:url value='/resources/js/changes.js'/>" ></script>
 <script type="text/javascript" src="<c:url value='/resources/js/schedule.js'/>"></script>

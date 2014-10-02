@@ -119,9 +119,16 @@ public class Schedule extends BaseEntity {
         visits.add(visitor);
     }
 
-    @Override
+    public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("dateTime", dateTime).add("place", place)
-                .add("userLogin", user.getLogin()).toString();
+        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("title", title).toString();
     }
 }

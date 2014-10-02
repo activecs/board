@@ -38,10 +38,18 @@ var scheduleWS = {
 
 	initialize : function() {
 		var host = sockets.getHost(this.scheduleUrl);
-		this.socket = sockets.connect(host);
+		this.socket = sockets.connect(host, null, null, this.showNewPost);
 	},
 
 	send : function(event) {
 		this.socket.send(event)
-	}
+	},
+	
+	showNewPost : function(message){
+		var data = $.parseJSON(message.data);
+		$.get('/resources/templates/scheduleTemplate.html',function(template) {
+			$postTemplate = $.templates(template);
+			$("#posts").prepend($postTemplate.render(data));
+		});
+	} 
 };
