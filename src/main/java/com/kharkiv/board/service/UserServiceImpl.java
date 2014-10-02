@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY)
+    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY, condition = Constants.GET_ALL_USER_CACHE_CONDITION)
     public void deleteUser(User user) {
         if (user == null)
             throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY)
+    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY, condition = Constants.GET_ALL_USER_CACHE_CONDITION)
     public void deleteUserById(Integer id) {
         if (id == null)
             throw new IllegalArgumentException(ERR_MESSAGE_USER_ID_CANNOT_BE_NULL);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY)
+    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY, condition = Constants.GET_ALL_USER_CACHE_CONDITION)
     public void deleteUserByLogin(String login) {
         if (isEmpty(login))
             throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY);
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY)
+    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY, condition = Constants.GET_ALL_USER_CACHE_CONDITION)
     public User addUser(User user) {
         if (user == null)
             throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY)
+    @CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_USER_CACHE_KEY, condition = Constants.GET_ALL_USER_CACHE_CONDITION)
     public User updateUser(User user) {
         if (user == null)
             throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);

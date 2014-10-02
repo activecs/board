@@ -3,6 +3,7 @@ package com.kharkiv.board.dao;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -74,13 +76,20 @@ public class UserDaoTest {
 
     @Test
     public void shouldSetGivenLoginInQuery_whenCallGetUserByLogin() {
-        when(query.getSingleResult()).thenReturn(user);
+        when(query.getResultList()).thenReturn(Arrays.asList(user));
         User userByLogin = userDao.getUserByLogin(LOGIN);
         verify(em).createNamedQuery(UserQueries.GET_BY_LOGIN, User.class);
         verify(query).setParameter("login", LOGIN);
-        verify(query).getSingleResult();
+        verify(query).getResultList();
         assertNotNull(userByLogin);
         assertEquals(LOGIN, userByLogin.getLogin());
+    }
+    
+    @Test
+    public void shouldReturnNull_whenUserIsNotFound() {
+        when(query.getResultList()).thenReturn(Collections.<User>emptyList());
+        User userByLogin = userDao.getUserByLogin(LOGIN);
+        assertNull(userByLogin);
     }
 
     @Test

@@ -14,8 +14,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import com.google.common.base.Objects;
+import org.hibernate.annotations.DynamicInsert;
+
+import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.schedule.Comment;
 import com.kharkiv.board.dto.schedule.Schedule;
@@ -23,6 +27,7 @@ import com.kharkiv.board.dto.schedule.TrainingVisit;
 import com.kharkiv.board.util.QueryNamesConstants.UserQueries;
 
 @Entity
+@DynamicInsert
 @Table(name = "users", indexes = @Index(name = "login_index", columnList = "login"))
 @NamedQueries(value = { @NamedQuery(name = UserQueries.GET_ALL, query = "SELECT u FROM User u"),
         @NamedQuery(name = UserQueries.GET_BY_ID, query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -33,10 +38,14 @@ public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5766469760606469192L;
 
+    @NotNull(message = "login:sign.up.requried.field")
+    @Size(min = 3, message = "login:sign.up.field.size")
     @Column(name = "login", length = 55, nullable = false, unique = true)
     private String login;
 
-    @Column(name = "password", length = 32, nullable = false)
+    @NotNull(message = "password:sign.up.requried.field")
+    @Size(min = 6, message = "password:sign.up.field.size")
+    @Column(name = "password", length = 62, nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -47,7 +56,7 @@ public class User extends BaseEntity {
     private String logo;
 
     @Basic
-    @Column(name = "ban", columnDefinition = "BIT DEFAULT 0", length = 1)
+    @Column(name = "ban", columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
     private Boolean ban;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
@@ -125,7 +134,7 @@ public class User extends BaseEntity {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("id", super.getId()).add("login", login).add("role", role)
+        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("login", login).add("role", role)
                 .add("ban", ban).toString();
     }
 }

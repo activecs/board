@@ -73,7 +73,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="col-md-12">
-						<button type="button" class="btn btn-primary" onclick="registrationService.validate()"><fmt:message key="sign.in"/></button>
+						<button type="button" class="btn btn-primary" onclick="registrationService.validate(); return false;"><fmt:message key="sign.in"/></button>
 						<button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="sign.up.close"/></button>
 					</div>
 				</div>

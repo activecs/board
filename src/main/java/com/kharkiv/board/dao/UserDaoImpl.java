@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.kharkiv.board.dto.user.User;
@@ -32,7 +33,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByLogin(String login) {
         TypedQuery<User> query = em.createNamedQuery(UserQueries.GET_BY_LOGIN, User.class);
-        return query.setParameter("login", login).getSingleResult();
+        List<User> users = query.setParameter("login", login).getResultList();
+        return CollectionUtils.isEmpty(users) ? null : users.get(0);
     }
 
     @Override

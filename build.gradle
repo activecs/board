@@ -108,9 +108,10 @@ dependencies {
     compile group: 'org.springframework', 				name:'spring-web', 						version:springVersion
     compile group: 'org.springframework', 				name:'spring-jdbc', 					version:springVersion
     compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
+    compile group: 'org.springframework.security', 		name:'spring-security-core', 			version:'3.2.5.RELEASE'
     compile group: 'org.hibernate',						name:'hibernate-core', 					version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:hybernateVersion
-    compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.0.Final'
+    compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.2.Final'
     compile group: 'org.apache.commons', 				name:'commons-lang3', 					version:'3.3.2'
     compile group: 'commons-collections', 				name:'commons-collections', 			version:'3.2.1'
     compile group: 'com.google.guava', 					name:'guava', 							version:'18.0'

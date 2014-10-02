@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.CommentQueries;
@@ -77,7 +77,7 @@ public class Comment extends BaseEntity {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("id", super.getId()).add("user", user.getLogin())
+        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("user", user.getLogin())
                 .add("schedule", schedule.getDateTime()).toString();
     }
 }

@@ -76,10 +76,12 @@ var registrationService = {
 		
 		register : function sendData(e) {
 			var loginForm = $('#registrationForm');
+			var input = $("#fileupload");
 			loginForm.submit(function(e){
 			e.preventDefault();
-			var input = $("#fileupload");
-			input.prop('disabled', false);
+			if (input.prop('disabled')) {
+				input.prop('disabled', false);
+			}
 			var formData = new FormData($(this)[0]);
 				
 			jQuery.ajax({
@@ -106,7 +108,9 @@ var registrationService = {
 			return false;
 			});
 			loginForm.submit();
-			input.prop('disabled', true);
+			if (input.prop('disabled')) {
+				input.prop('disabled', true);
+			}
 		},
 		
 		preview : function createPreview() {

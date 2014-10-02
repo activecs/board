@@ -9,7 +9,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.TrainingVisitsQueris;
@@ -51,7 +51,7 @@ public class TrainingVisit extends BaseEntity {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("id", super.getId()).add("login", user.getLogin())
+        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("login", user.getLogin())
                 .add("schedule", schedule.getDateTime()).toString();
     }
 }

@@ -59,7 +59,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY)
+	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
 	public void deleteSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);
@@ -67,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY)
+	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
 	public void deleteScheduleById(Integer scheduleId) {
 		if(scheduleId == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL);
@@ -75,7 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY)
+	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
 	public Schedule addSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);
@@ -83,7 +83,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY)
+	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
 	public Schedule updateSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);

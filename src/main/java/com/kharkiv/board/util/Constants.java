@@ -9,6 +9,9 @@ public class Constants {
     public static final String CACHE_NAME = "serviceGetAllCache";
     
     // cache keys
-    public static final String GET_ALL_USER_CACHE_KEY = "getAllUsers";
-    public static final String GET_ALL_SCHEDULE_CACHE_KEY = "getAllSchedules";
+    public static final String GET_ALL_USER_CACHE_KEY = "#getAllUsers";
+    public static final String GET_ALL_SCHEDULE_CACHE_KEY = "#getAllSchedules";
+    
+    public static final String GET_ALL_USER_CACHE_CONDITION = "#getAllSchedules != null";
+    public static final String GET_ALL_SCHEDULE_CACHE_CONDITION = "#getAllSchedules != null";
 }

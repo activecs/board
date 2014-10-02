@@ -17,12 +17,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.google.common.base.Objects;
+import org.hibernate.annotations.DynamicInsert;
+
+import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
 
 @Entity
+@DynamicInsert
 @Table(name = "schedules", indexes = @Index(name = "schedule_user_index", columnList = "user_id"))
 @NamedQueries(value = {
         @NamedQuery(name = ScheduleQueries.GET_ALL, query = "SELECT s FROM Schedule s"),
@@ -118,7 +121,7 @@ public class Schedule extends BaseEntity {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("id", super.getId()).add("dateTime", dateTime).add("place", place)
+        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("dateTime", dateTime).add("place", place)
                 .add("userLogin", user.getLogin()).toString();
     }
 }
