@@ -61,7 +61,7 @@
 			    </p>
 			    <p><span class="glyphicon glyphicon-time"></span> Posted on ${schedule.created}</p>
 			    <hr>
-			    <img class="img-responsive" src="http://placehold.it/900x300" alt="${schedule.title}">
+			    <img class="img-responsive" src="http://www.charitybrooks.com/wp-content/uploads/2012/12/Beachbody-Workouts-Riutine.jpg" alt="${schedule.title}">
 			    <hr>
 			    <p>${schedule.place}<br>${schedule.dateTime}</p>
 			    <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
