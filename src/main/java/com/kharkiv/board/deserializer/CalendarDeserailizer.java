@@ -13,16 +13,17 @@ import com.google.gson.JsonParseException;
 
 public class CalendarDeserailizer implements JsonDeserializer<Calendar> {
 
+	private static final String DATE_FORMAT = "dd.MM.yyyy - hh:mm";
+
 	@Override
-	public Calendar deserialize(JsonElement json, Type typeOfT,
-			JsonDeserializationContext context) throws JsonParseException {
+	public Calendar deserialize(JsonElement json, Type typeOfT,JsonDeserializationContext context) throws JsonParseException {
 		try {
-			SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy - hh:mm");
+			SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 			Date date = formatter.parse(json.getAsString());
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(date.getTime());
 			return calendar;
-		} catch (JsonParseException | ParseException e) {
+		} catch (ParseException e) {
 			return null;
 		}
 	}

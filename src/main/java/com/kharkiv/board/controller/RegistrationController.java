@@ -1,5 +1,10 @@
 package com.kharkiv.board.controller;
 
+import static java.io.File.separator;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +25,6 @@ import javax.servlet.http.Part;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
@@ -35,25 +39,22 @@ import com.kharkiv.board.service.RegistrationService;
 @WebServlet("/registration")
 public class RegistrationController extends AbstractAutowiringServlet {
 
-
-    private static final long serialVersionUID = 1L;
-
+    private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
+	private static final String ERROR_MESSAGE_PASSWORDS_NOT_MATCH = "sing.up.pass.conf.not.match";
+	private static final long serialVersionUID = 1L;
     private static final String LOGIN_PARAMETER = "login";
     private static final String PASSWORD_PARAMETER = "password";
     private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
     private static final String FILEUPLOAD_PARAMETER = "fileupload";
     private static final String AVATAR_FILENAME = "filename";
     private static final String CONTENT_DISPOSITION_HEADER = "content-disposition";
-
     private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5BM
 
+    private String avatarStorage = EMPTY;
     @Value(value = "${avatar.storage.folder}")
     private String avatarDir;
     @Value(value = "${avatar.default}")
     private String defaultAvatar;
-
-    private String avatarStorage = StringUtils.EMPTY;
-
     @Inject
     private RegistrationService registrationService;
     @Inject
@@ -64,44 +65,39 @@ public class RegistrationController extends AbstractAutowiringServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        avatarStorage = config.getServletContext().getRealPath(StringUtils.EMPTY) + File.separator + avatarDir
-                + File.separator;
-        File fileSaveDir = new File(avatarStorage);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdir();
-        }
+        initAvatarDir(config);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	RegistrationResponse response = new RegistrationResponse();
+        
+    	String login = req.getParameter(LOGIN_PARAMETER);
+        String password = req.getParameter(PASSWORD_PARAMETER);
+        String passwordConf = req.getParameter(PASSWORD_CONFIRMATION_PARAMETER);
 
-        String login = req.getParameter(LOGIN_PARAMETER);
-        String pass = req.getParameter(PASSWORD_PARAMETER);
-        String passConf = req.getParameter(PASSWORD_CONFIRMATION_PARAMETER);
 
-        RegistrationResponse response = new RegistrationResponse();
-
-        if (!StringUtils.equals(pass, passConf)) {
+        if (!StringUtils.equals(password, passwordConf)) {
             response.addError(PASSWORD_CONFIRMATION_PARAMETER,
-                    messageSource.getMessage("sing.up.pass.conf.not.match", null, req.getLocale()));
+                    messageSource.getMessage(ERROR_MESSAGE_PASSWORDS_NOT_MATCH, null, req.getLocale()));
         }
 
         User newUser = new User();
         newUser.setLogin(login);
-        newUser.setPassword(pass);
+        newUser.setPassword(password);
 
         Set<ConstraintViolation<User>> validationResult = validator.validate(newUser);
-        if (CollectionUtils.isNotEmpty(validationResult)) {
+        if (isNotEmpty(validationResult)) {
             Iterator<ConstraintViolation<User>> resIterator = validationResult.iterator();
             while (resIterator.hasNext()) {
                 String[] errParts = resIterator.next().getMessage().split(":");
-                String errMsg = messageSource.getMessage(errParts[1], null, req.getLocale());
-                response.addError(errParts[0], errMsg);
+                String errorMessage = messageSource.getMessage(errParts[1], null, req.getLocale());
+                response.addError(errParts[0], errorMessage);
             }
         }
 
-        if (StringUtils.isNotBlank(login) && registrationService.isExistentUser(login)) {
-            response.addError(LOGIN_PARAMETER, messageSource.getMessage("sign.up.existent.user", null, req.getLocale()));
+        if (isNotBlank(login) && registrationService.isExistentUser(login)) {
+            response.addError(LOGIN_PARAMETER, messageSource.getMessage(ERROR_MESSAGE_USER_ALREADY_EXIST, null, req.getLocale()));
         }
         
         Part imagePart = getAvatarPart(req.getParts());
@@ -120,9 +116,8 @@ public class RegistrationController extends AbstractAutowiringServlet {
 
         response.setValid(MapUtils.isEmpty(response.getErrors()));
 
-        if (response.isValid()) {
+        if (response.isValid())
             registrationService.createNewUser(newUser);
-        }
         
         resp.setCharacterEncoding(CharEncoding.UTF_8);
 
@@ -144,12 +139,20 @@ public class RegistrationController extends AbstractAutowiringServlet {
         }
         return StringUtils.EMPTY;
     }
-
+    
+    private void initAvatarDir(ServletConfig config) {
+		String base = config.getServletContext().getRealPath(StringUtils.EMPTY);
+        avatarStorage =  base + separator + avatarDir + separator;
+        File fileSaveDir = new File(avatarStorage);
+        if (!fileSaveDir.exists())
+            fileSaveDir.mkdir();
+	}
+    
     private Part getAvatarPart(Collection<Part> parts) {
         String fileName = StringUtils.EMPTY;
         for (Part part : parts) {
             fileName = extractFileName(part);
-            if (StringUtils.isNotBlank(fileName)) {
+            if (isNotBlank(fileName)) {
                 return part;
             }
         }
