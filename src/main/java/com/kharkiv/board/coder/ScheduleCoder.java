@@ -10,6 +10,9 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -18,7 +21,8 @@ import com.kharkiv.board.dto.schedule.Schedule;
 
 public class ScheduleCoder implements Encoder.Text<Schedule>,
 		Decoder.Text<Schedule> {
-
+	
+	private final static Logger LOG = LoggerFactory.getLogger(ScheduleCoder.class);	
 	private Gson gson;
 
 	@Override
@@ -51,6 +55,7 @@ public class ScheduleCoder implements Encoder.Text<Schedule>,
 				gson.fromJson(json, Schedule.class);
 				willDecode = true;
 			} catch (JsonSyntaxException e) {
+				LOG.info("Cannot decode json %s for class %s",json,Schedule.class.getSimpleName());
 			}
 		}
 		return willDecode;
