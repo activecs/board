@@ -7,7 +7,9 @@
 	    <h1 class="page-header">
 	        Page Heading
 	        <small>Secondary Text</small>
-        	<button  type="button" class="btn btn-primary pull-right add-event"><fmt:message key="event.add.new"/></button>
+	        <secure:authorized roles="user,admin">
+	        </secure:authorized>
+	        <button  type="button" class="btn btn-primary pull-right add-event"><fmt:message key="event.add.new"/></button>
 	        
 	    </h1>
 		

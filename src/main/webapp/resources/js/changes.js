@@ -185,8 +185,14 @@ var scheduleForm = {
 		}, 500);
 	},
 	
+	clear : function() {
+		this.$form.trigger('reset');
+	},
+	
 	send : function(){
 		var json = common.convertFormToJSON(this.$form);
 		scheduleWS.send(json);
+		scheduleForm.hide();
+		scheduleForm.clear();
 	}
 }
