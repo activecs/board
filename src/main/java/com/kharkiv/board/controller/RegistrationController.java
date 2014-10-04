@@ -52,19 +52,19 @@ public class RegistrationController extends AbstractAutowiringServlet {
     private static final String CONTENT_DISPOSITION_HEADER = "content-disposition";
     private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5BM
 
-    private String avatarStorage = EMPTY;
-    @Value(value = "${avatar.storage.folder}")
-    private String avatarDir;
-    @Value(value = "${avatar.default}")
-    private String defaultAvatar;
     @Inject
     private RegistrationService registrationService;
     @Inject
     private Validator validator;
     @Inject
     private ReloadableResourceBundleMessageSource messageSource;
-
-    Gson gson = null;
+    @Value(value = "${avatar.storage.folder}")
+    private String avatarDir;
+    @Value(value = "${avatar.default}")
+    private String defaultAvatar;
+    
+    private String avatarStorage = EMPTY;
+    private Gson gson = null;
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -76,13 +76,13 @@ public class RegistrationController extends AbstractAutowiringServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RegistrationResponse response = new RegistrationResponse();
+        Locale locale = req.getLocale();
+        List<Error> errors = new ArrayList<>();
 
         String login = req.getParameter(LOGIN_PARAMETER);
         String password = req.getParameter(PASSWORD_PARAMETER);
         String passwordConf = req.getParameter(PASSWORD_CONFIRMATION_PARAMETER);
-        Locale locale = req.getLocale();
 
-        List<Error> errors = new ArrayList<>();
         errors.add(this.validatePasswordConfirmation(password, passwordConf, locale));
 
         User newUser = new User();
@@ -99,14 +99,13 @@ public class RegistrationController extends AbstractAutowiringServlet {
         if (CollectionUtils.isNotEmpty(errors)) {
             response.setValid(false);
             response.setErrors(errors);
-        } else {
+        } else
             response.setValid(true);
-        }
 
         if (response.isValid())
             registrationService.createNewUser(newUser);
 
-        this.sendJsonResponse(response, resp);
+        sendJsonResponse(response, resp);
     }
 
     private void sendJsonResponse(RegistrationResponse response, HttpServletResponse resp) throws IOException {
@@ -118,10 +117,9 @@ public class RegistrationController extends AbstractAutowiringServlet {
     }
     
     private Error validatePasswordConfirmation(String pass, String passConf, Locale loc) {
-        if (!StringUtils.equals(pass, passConf)) {
+        if (!StringUtils.equals(pass, passConf))
             return new Error(PASSWORD_CONFIRMATION_PARAMETER, messageSource.getMessage(
                     ERROR_MESSAGE_PASSWORDS_NOT_MATCH, null, loc));
-        }
         return null;
     }
     
@@ -141,9 +139,8 @@ public class RegistrationController extends AbstractAutowiringServlet {
     }
     
     private Error validaUserExistence4Login(String login, Locale loc) {
-        if (isNotBlank(login) && registrationService.isExistentUser(login)) {
+        if (isNotBlank(login) && registrationService.isExistentUser(login))
             return new Error(LOGIN_PARAMETER, messageSource.getMessage(ERROR_MESSAGE_USER_ALREADY_EXIST, null, loc));
-        }
         return null;
     }
     
@@ -154,20 +151,17 @@ public class RegistrationController extends AbstractAutowiringServlet {
                 String fileName = extractFileName(image);
                 image.write(avatarStorage + fileName);
                 user.setLogo(fileName);
-            } else {
+            } else
                 return err;
-            }
-        } else {
+        } else
             user.setLogo(defaultAvatar);
-        }
         return null;
     }
     
     private Error validateAvatarSize(Part image, Locale loc) { 
-        if (image.getSize() > MAX_FILE_SIZE) {
+        if (image.getSize() > MAX_FILE_SIZE)
             return new Error(FILEUPLOAD_PARAMETER,
                     messageSource.getMessage(ERROR_MESSAGE_LARGE_IMAGE_SIZE, null, loc));
-        }
         return null;
     }
     
@@ -175,9 +169,8 @@ public class RegistrationController extends AbstractAutowiringServlet {
         String contentDisp = part.getHeader(CONTENT_DISPOSITION_HEADER);
         String[] items = contentDisp.split(";");
         for (String s : items) {
-            if (s.trim().startsWith(AVATAR_FILENAME)) {
+            if (s.trim().startsWith(AVATAR_FILENAME))
                 return s.substring(s.indexOf("=") + 2, s.length() - 1);
-            }
         }
         return StringUtils.EMPTY;
     }
@@ -194,9 +187,8 @@ public class RegistrationController extends AbstractAutowiringServlet {
         String fileName = StringUtils.EMPTY;
         for (Part part : parts) {
             fileName = extractFileName(part);
-            if (isNotBlank(fileName)) {
+            if (isNotBlank(fileName))
                 return part;
-            }
         }
         return null;
     }
