@@ -1,11 +1,15 @@
 package com.kharkiv.board.service;
 
+import static com.kharkiv.board.util.Constants.CACHE_NAME;
+import static com.kharkiv.board.util.Constants.SCHEDULE_CACHE_CONDITION;
+import static com.kharkiv.board.util.Constants.SCHEDULE_CACHE_KEY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -13,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kharkiv.board.dao.ScheduleDao;
 import com.kharkiv.board.dto.schedule.Schedule;
-import com.kharkiv.board.util.Constants;
 
 @Service("scheduleService")
 @Transactional
+@CacheConfig(cacheNames = CACHE_NAME)
 public class ScheduleServiceImpl implements ScheduleService {
 	
 	private static final String ERR_MESSAGE_USER_ID_CANNOT_BE_NULL = "User id cannot be null";
@@ -29,7 +33,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY)
+	@Cacheable(key = SCHEDULE_CACHE_KEY)
 	public List<Schedule> getAllSchedules() {
 		return scheduleDao.getAllSchedules();
 	}
@@ -59,7 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
+	@CacheEvict(key = SCHEDULE_CACHE_KEY, condition = SCHEDULE_CACHE_CONDITION )
 	public void deleteSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);
@@ -67,7 +71,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
+	@CacheEvict(key = SCHEDULE_CACHE_KEY, condition = SCHEDULE_CACHE_CONDITION)
 	public void deleteScheduleById(Integer scheduleId) {
 		if(scheduleId == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL);
@@ -75,7 +79,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
+	@CacheEvict(key = SCHEDULE_CACHE_KEY, condition = SCHEDULE_CACHE_CONDITION)
 	public Schedule addSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);
@@ -83,11 +87,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	@CacheEvict(value = { Constants.CACHE_NAME }, key = Constants.GET_ALL_SCHEDULE_CACHE_KEY, condition = Constants.GET_ALL_SCHEDULE_CACHE_CONDITION)
+	@CacheEvict(key = SCHEDULE_CACHE_KEY, condition = SCHEDULE_CACHE_CONDITION)
 	public Schedule updateSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);
 		return scheduleDao.updateSchedule(schedule);
 	}
-
 }

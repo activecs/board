@@ -28,7 +28,7 @@
 			<set>
 				<bean
 					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
-					<property name="name" value="serviceGetAllCache" />
+					<property name="name" value="serviceCache" />
 				</bean>
 			</set>
 		</property>

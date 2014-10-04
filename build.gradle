@@ -96,7 +96,7 @@ buildscript {
 }
 
 dependencies {
-    def springVersion = '4.0.5.RELEASE'
+    def springVersion = '4.1.1.RELEASE'
     def tomcatVersion = '7.0.55'
     def hybernateVersion = '4.3.5.Final'
     def jacksonVersion = '2.4.0'
