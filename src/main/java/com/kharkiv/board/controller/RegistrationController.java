@@ -28,7 +28,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -65,10 +64,13 @@ public class RegistrationController extends AbstractAutowiringServlet {
     @Inject
     private ReloadableResourceBundleMessageSource messageSource;
 
+    Gson gson = null;
+    
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         initAvatarDir(config);
+        gson = new Gson();
     }
 
     @Override
@@ -108,8 +110,6 @@ public class RegistrationController extends AbstractAutowiringServlet {
     }
 
     private void sendJsonResponse(RegistrationResponse response, HttpServletResponse resp) throws IOException {
-        resp.setCharacterEncoding(CharEncoding.UTF_8);
-        Gson gson = new Gson();
         String jsonResp = gson.toJson(response);
         PrintWriter out = resp.getWriter();
         out.write(jsonResp);
