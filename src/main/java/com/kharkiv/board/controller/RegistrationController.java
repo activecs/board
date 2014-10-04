@@ -8,10 +8,12 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ import javax.servlet.http.Part;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,13 +41,14 @@ import com.kharkiv.board.service.RegistrationService;
 @WebServlet("/registration")
 public class RegistrationController extends AbstractAutowiringServlet {
 
+    private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
     private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
 	private static final String ERROR_MESSAGE_PASSWORDS_NOT_MATCH = "sing.up.pass.conf.not.match";
 	private static final long serialVersionUID = 1L;
     private static final String LOGIN_PARAMETER = "login";
     private static final String PASSWORD_PARAMETER = "password";
     private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
-    private static final String FILEUPLOAD_PARAMETER = "fileupload";
+    private static final String FILEUPLOAD_PARAMETER = "files";
     private static final String AVATAR_FILENAME = "filename";
     private static final String CONTENT_DISPOSITION_HEADER = "content-disposition";
     private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5BM
@@ -70,57 +73,42 @@ public class RegistrationController extends AbstractAutowiringServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	RegistrationResponse response = new RegistrationResponse();
-        
-    	String login = req.getParameter(LOGIN_PARAMETER);
+        RegistrationResponse response = new RegistrationResponse();
+
+        String login = req.getParameter(LOGIN_PARAMETER);
         String password = req.getParameter(PASSWORD_PARAMETER);
         String passwordConf = req.getParameter(PASSWORD_CONFIRMATION_PARAMETER);
+        Locale locale = req.getLocale();
 
-
-        if (!StringUtils.equals(password, passwordConf)) {
-            response.addError(PASSWORD_CONFIRMATION_PARAMETER,
-                    messageSource.getMessage(ERROR_MESSAGE_PASSWORDS_NOT_MATCH, null, req.getLocale()));
-        }
+        List<Error> errors = new ArrayList<>();
+        errors.add(this.validatePasswordConfirmation(password, passwordConf, locale));
 
         User newUser = new User();
         newUser.setLogin(login);
         newUser.setPassword(password);
 
-        Set<ConstraintViolation<User>> validationResult = validator.validate(newUser);
-        if (isNotEmpty(validationResult)) {
-            Iterator<ConstraintViolation<User>> resIterator = validationResult.iterator();
-            while (resIterator.hasNext()) {
-                String[] errParts = resIterator.next().getMessage().split(":");
-                String errorMessage = messageSource.getMessage(errParts[1], null, req.getLocale());
-                response.addError(errParts[0], errorMessage);
-            }
-        }
+        errors.addAll(this.validateUserConstraints(newUser, locale));
+        errors.add(this.validaUserExistence4Login(login, locale));
 
-        if (isNotBlank(login) && registrationService.isExistentUser(login)) {
-            response.addError(LOGIN_PARAMETER, messageSource.getMessage(ERROR_MESSAGE_USER_ALREADY_EXIST, null, req.getLocale()));
-        }
-        
         Part imagePart = getAvatarPart(req.getParts());
-        if (imagePart != null) {
-            if (imagePart.getSize() > MAX_FILE_SIZE) {
-                response.addError(FILEUPLOAD_PARAMETER,
-                        messageSource.getMessage("sign.up.image.too.big", null, req.getLocale()));
-            } else {
-                String fileName = extractFileName(imagePart);
-                imagePart.write(avatarStorage + fileName);
-                newUser.setLogo(fileName);
-            }
-        } else {
-            newUser.setLogo(defaultAvatar);
-        }
+        errors.add(this.saveAvatar(imagePart, newUser, locale));
 
-        response.setValid(MapUtils.isEmpty(response.getErrors()));
+        errors.removeAll(Collections.singleton(null));
+        if (CollectionUtils.isNotEmpty(errors)) {
+            response.setValid(false);
+            response.setErrors(errors);
+        } else {
+            response.setValid(true);
+        }
 
         if (response.isValid())
             registrationService.createNewUser(newUser);
-        
-        resp.setCharacterEncoding(CharEncoding.UTF_8);
 
+        this.sendJsonResponse(response, resp);
+    }
+
+    private void sendJsonResponse(RegistrationResponse response, HttpServletResponse resp) throws IOException {
+        resp.setCharacterEncoding(CharEncoding.UTF_8);
         Gson gson = new Gson();
         String jsonResp = gson.toJson(response);
         PrintWriter out = resp.getWriter();
@@ -128,7 +116,61 @@ public class RegistrationController extends AbstractAutowiringServlet {
         out.flush();
         out.close();
     }
-
+    
+    private Error validatePasswordConfirmation(String pass, String passConf, Locale loc) {
+        if (!StringUtils.equals(pass, passConf)) {
+            return new Error(PASSWORD_CONFIRMATION_PARAMETER, messageSource.getMessage(
+                    ERROR_MESSAGE_PASSWORDS_NOT_MATCH, null, loc));
+        }
+        return null;
+    }
+    
+    private List<Error> validateUserConstraints(User user, Locale loc) {
+        List<Error> errors = new ArrayList<>();
+        Set<ConstraintViolation<User>> validationResult = validator.validate(user);
+        if (isNotEmpty(validationResult)) {
+            Iterator<ConstraintViolation<User>> resIterator = validationResult.iterator();
+            while (resIterator.hasNext()) {
+                String[] errParts = resIterator.next().getMessage().split(":");
+                String errorMessage = messageSource.getMessage(errParts[1], null, loc);
+                Error err = new Error(errParts[0], errorMessage);
+                errors.add(err);
+            }
+        }
+        return errors;
+    }
+    
+    private Error validaUserExistence4Login(String login, Locale loc) {
+        if (isNotBlank(login) && registrationService.isExistentUser(login)) {
+            return new Error(LOGIN_PARAMETER, messageSource.getMessage(ERROR_MESSAGE_USER_ALREADY_EXIST, null, loc));
+        }
+        return null;
+    }
+    
+    private Error saveAvatar(Part image, User user, Locale loc) throws IOException {
+        if (image != null) {
+            Error err = this.validateAvatarSize(image, loc);
+            if (err == null) {
+                String fileName = extractFileName(image);
+                image.write(avatarStorage + fileName);
+                user.setLogo(fileName);
+            } else {
+                return err;
+            }
+        } else {
+            user.setLogo(defaultAvatar);
+        }
+        return null;
+    }
+    
+    private Error validateAvatarSize(Part image, Locale loc) { 
+        if (image.getSize() > MAX_FILE_SIZE) {
+            return new Error(FILEUPLOAD_PARAMETER,
+                    messageSource.getMessage(ERROR_MESSAGE_LARGE_IMAGE_SIZE, null, loc));
+        }
+        return null;
+    }
+    
     private String extractFileName(Part part) {
         String contentDisp = part.getHeader(CONTENT_DISPOSITION_HEADER);
         String[] items = contentDisp.split(";");
@@ -159,14 +201,11 @@ public class RegistrationController extends AbstractAutowiringServlet {
         return null;
     }
 
+    @SuppressWarnings("unused")
     private static class RegistrationResponse {
 
         private boolean isValid;
-        private Map<String, String> errors;
-
-        public RegistrationResponse() {
-            errors = new HashMap<>();
-        }
+        private List<Error> errors;
 
         public boolean isValid() {
             return isValid;
@@ -176,12 +215,19 @@ public class RegistrationController extends AbstractAutowiringServlet {
             this.isValid = isValid;
         }
 
-        public Map<String, String> getErrors() {
-            return errors;
+        public void setErrors(List<Error> errs) {
+            errors = errs;
         }
-
-        public void addError(String field, String errorMsgs) {
-            errors.put(field, errorMsgs);
+    }
+    
+    @SuppressWarnings("unused")
+    private static class Error {
+        private String field;
+        private String errMsg;
+        
+        public Error(String field, String errMsg) {
+            this.field = field;
+            this.errMsg = errMsg;
         }
     }
 }

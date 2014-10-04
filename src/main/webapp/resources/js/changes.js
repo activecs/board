@@ -13,6 +13,77 @@ $(function(){
 	$('.glyphicon-remove').bind('click', function(){
 		$(this).closest('div').find('input').val('');
 	});
+	
+	var registrationsForm = $('#registrationForm');
+	
+	registrationsForm.validate({
+		  debug: true,
+		  rules: {
+	            login: {
+	            	required: true,
+	            	minlength: 3
+	            },
+	            password: {
+	                required: true,
+	                minlength: 6
+	            },
+	            confirm_password: {
+	            	required: true,
+	            	minlength: 6
+	            },
+	        }
+		});
+	
+	registrationsForm.submit(function(e){
+		var formData = new FormData($(this)[0]);
+			
+		jQuery.ajax({
+			url : registrationService.REGISTRATION_URL,
+			type : 'POST',
+			cache : false,
+			contentType: false,
+			processData: false,
+			data : formData,
+			beforeSend : function() {
+				$('#loading').css({'display' : 'inline'});
+			},
+			complete : function() {
+				$('#loading').css({'display' : 'none'});
+			},
+			success : function(data) {
+				var resp = JSON.parse(data);
+				registrationService.response(resp);
+			},
+			error : function() {
+				alert('Server Error!');
+			}
+		});
+		e.preventDefault();
+	});
+	
+	var input = $("#fileupload");
+	input.on("change", function()
+			    {
+					$('#image_error').css({'display' : 'none'});
+			        var files = !!this.files ? this.files : [];
+			        if (!files.length || !window.FileReader) return;
+			 
+			        if (/^image/.test( files[0].type)){
+			        	// lower than 5MB
+			        	if (files[0].size <= 5242880) {
+				            var reader = new FileReader(); 
+				            reader.readAsDataURL(files[0]); 
+				 
+				            reader.onloadend = function(){ 
+				                $("#files").css("background-image", "url("+this.result+")");
+				            }
+				            input.attr('disabled', 'disabled');
+			        	} else {
+			        		registrationService.clean();
+			        		$('#image_error').css({'display' : 'block'});
+			        	}
+			        }
+			    });
 });
 
 var common = {
@@ -43,25 +114,6 @@ var registrationService = {
 			var confirmation = $('#conf_failed');
 			
 			confirmation.css({'display' : 'none'});
-			
-			loginForm.validate({
-				  debug: true,
-				  rules: {
-			            login: {
-			            	required: true,
-			            	minlength: 3
-			            },
-			            password: {
-			                required: true,
-			                minlength: 6
-			            },
-			            confirm_password: {
-			            	required: true,
-			            	minlength: 6
-			            },
-			        }
-				});
-			
 			loginForm.validate();
 			if (loginForm.valid()) {
 				var pass = $('#password').val();
@@ -77,74 +129,43 @@ var registrationService = {
 		register : function sendData(e) {
 			var loginForm = $('#registrationForm');
 			var input = $("#fileupload");
-			loginForm.submit(function(e){
-			e.preventDefault();
 			if (input.prop('disabled')) {
 				input.prop('disabled', false);
 			}
-			var formData = new FormData($(this)[0]);
-				
-			jQuery.ajax({
-				url : registrationService.REGISTRATION_URL,
-				type : 'POST',
-				cache : false,
-				contentType: false,
-				processData: false,
-				data : formData,
-				beforeSend : function() {
-					$('#loading').css({'display' : 'inline'});
-				},
-				complete : function() {
-					$('#loading').css({'display' : 'none'});
-				},
-				success : function(data) {
-					alert(data);
-				},
-				error : function() {
-					alert('Server Error!');
-				}
-			});
-					
-			return false;
-			});
+			$(".server-error").remove();
 			loginForm.submit();
 			if (input.prop('disabled')) {
 				input.prop('disabled', true);
 			}
 		},
 		
-		preview : function createPreview() {
-			var input = $("#fileupload");
-			input.on("change", function()
-					    {
-					        var files = !!this.files ? this.files : [];
-					        if (!files.length || !window.FileReader) return;
-					 
-					        if (/^image/.test( files[0].type)){
-					        	// lower than 5MB
-					        	if (files[0].size <= 5242880) {
-						            var reader = new FileReader(); 
-						            reader.readAsDataURL(files[0]); 
-						 
-						            reader.onloadend = function(){ 
-						                $("#files").css("background-image", "url("+this.result+")");
-						            }
-						            input.prop('disabled', true);
-					        	} else {
-					        		registrationService.clean();
-					        		alert($('#image_error').text());
-					        	}
-					        }
-					    });
-		}, 
+		response : function parseResponse(response) {
+			if (response.isValid) {
+				$(".reg").css({'display' : 'none'});
+				$(".reg-success").css({'display' : 'block'});
+			} else {
+				$.each(response.errors,function( index, value ) {
+					var field = $("#"+value.field);
+					var errMsg = $("<strong>").html(value.errMsg);
+					var errWrap = $("<span>").addClass("error").addClass("server-error").css({'display' : 'block'});
+					errWrap.append(errMsg);
+					field.after(errWrap);
+				});
+			}
+		},
 		
 		clean : function cleanPreview() {
 			$("#files").css("background-image", "url(/resources/images/profile-placeholder.jpg)");
 			var input = $("#fileupload");
 			input.prop('disabled', false);
 			input.replaceWith(input.val('').clone(true));
-		}
+		},
 		
+		cleanServerErrors : function remove(element) {
+			$('.server-error', element.parentNode).each(function() {
+				$(this).remove();
+			});
+		}
 }
 
 var scheduleForm = {

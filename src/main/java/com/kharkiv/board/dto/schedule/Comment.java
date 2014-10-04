@@ -13,12 +13,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.CommentQueries;
 
 @Entity
+@DynamicInsert
 @Table(name = "comments")
 @NamedQueries(value = {
         @NamedQuery(name = CommentQueries.GET_4_USER_BY_USER_ID, query = "SELECT c FROM Comment c WHERE c.user.id = :userId"),

@@ -40,28 +40,29 @@
 						<img id='loading' src="<c:url value="/resources/images/loading.gif" />" style="display: none;">
 					</h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body reg">
 					<form class="form center-block" enctype="multipart/form-data" id='registrationForm'>
 			            <div class="form-group">
-			              <input name="login" id="login" type="text" class="form-control input-lg" placeholder="<fmt:message key="sign.up.login"/>">
+			              <input name="login" id="login" type="text" onkeydown="registrationService.cleanServerErrors(this)" class="form-control input-lg" placeholder="<fmt:message key="sign.up.login"/>">
 			            </div>
 			            <div class="form-group">
-			              <input type="password" id="password" name="password" class="form-control input-lg" placeholder="<fmt:message key="sign.up.password"/>">
+			              <input type="password" id="password" name="password" onkeydown="registrationService.cleanServerErrors(this)" class="form-control input-lg" placeholder="<fmt:message key="sign.up.password"/>">
 			            </div>
 			            <div class="form-group">
-			              <input type="password" name="confirm_password" id="confirm_password" class="form-control input-lg" placeholder="<fmt:message key="sign.up.confirm.password"/>">
-			              <span id="conf_failed" class=error style="display: none;"><strong><fmt:message key="sing.up.pass.conf.not.match"/></strong></span>
+			              <input type="password" name="confirm_password" id="confirm_password" class="form-control input-lg" onkeydown="registrationService.cleanServerErrors(this)" placeholder="<fmt:message key="sign.up.confirm.password"/>">
+			              <span id="conf_failed" class="error" style="display: none;"><strong><fmt:message key="sing.up.pass.conf.not.match"/></strong></span>
 			            </div>
 				        <hr style="margin-top:0px; margin-bottom:0px"/>
 				        <h4 align="center"><fmt:message key="sign.up.avatar"/></h4>
 				        <div align="center" style="margin-bottom: 1em">
 				        	<div id="files" style="background-image: url('<c:url value="/resources/images/profile-placeholder.jpg" />');"></div>
+			         		<span id="image_error" class="error" style="display: none;"><fmt:message key="sign.up.image.too.big"/></span>
 				        </div>
 				        <div align="right">
 							<span class="btn btn-success fileinput-button">
 								<i class="glyphicon glyphicon-plus"></i>
 							<span><fmt:message key="sign.up.add.file"/></span>
-							<input id="fileupload" type="file" name="file" accept="image/x-png, image/gif, image/jpeg" onclick="registrationService.preview()">
+							<input id="fileupload" type="file" name="file" accept="image/x-png, image/gif, image/jpeg" >
 							</span>
 							<a id='cnlBtn' class="btn btn-danger delete" href="#" role="button" onclick="registrationService.clean()">
 								<i class="glyphicon glyphicon-trash"></i>
@@ -69,13 +70,18 @@
 							</a>
 						</div>
 			         </form>
-			         <span id="image_error" style="display: none;"><fmt:message key="sign.up.image.too.big"/></span>
 				</div>
-				<div class="modal-footer">
+				<div class="modal-footer reg">
 					<div class="col-md-12">
 						<button type="button" class="btn btn-primary" onclick="registrationService.validate(); return false;"><fmt:message key="sign.in"/></button>
 						<button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="sign.up.close"/></button>
 					</div>
+				</div>
+				<div class="modal-body reg-success" style='display: none;'>
+					<h4 align="center"><fmt:message key="sign.up.success"/></h4>
+				</div>
+				<div class="modal-footer reg-success" style='display: none;'>
+						<button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="sign.up.close"/></button>
 				</div>
 			</div>
 			<!-- /.modal-content -->
