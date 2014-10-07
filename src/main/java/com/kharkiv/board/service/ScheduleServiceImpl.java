@@ -5,6 +5,7 @@ import static com.kharkiv.board.util.Constants.SCHEDULE_CACHE_CONDITION;
 import static com.kharkiv.board.util.Constants.SCHEDULE_CACHE_KEY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,7 +30,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private static final String ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL = "Schedule id cannot be null";
 	
 	@Inject
-	private ScheduleDao scheduleDao; 
+	private ScheduleDao scheduleDao;
+	@Inject
+	private UserService userService;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -83,6 +86,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public Schedule addSchedule(Schedule schedule) {
 		if(schedule == null)
 			throw new IllegalArgumentException(ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL);
+		schedule.setCreated(Calendar.getInstance());
+		//schedule.setUser(userService.getCurrentUser());
 		return scheduleDao.addSchedule(schedule);
 	}
 

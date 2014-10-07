@@ -26,6 +26,8 @@ public class UserServiceImplTest {
 	private UserService service = new UserServiceImpl();
 	@Mock
 	private UserDao mockUserDao;
+	@Mock
+	private User mockCurrentUser;
 	
 	private User user = new User();
 	private List<User> users = Lists.newArrayList(user);
@@ -165,5 +167,11 @@ public class UserServiceImplTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserIsNullAndCallUpdateUser() {
 		service.updateUser(null);
+	}
+	
+	@Test
+	public void shouldReturnCurrentUser_whenGetCurrentUser(){
+		User actualUser = service.getCurrentUser();
+		assertThat(actualUser).isSameAs(mockCurrentUser);
 	}
 }

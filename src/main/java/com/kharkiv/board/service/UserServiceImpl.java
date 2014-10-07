@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
     @Inject
     private UserDao userDao;
+    @Inject
+    private User currentUser;
 
     @Override
     @Transactional(readOnly = true)
@@ -92,5 +94,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException(ERR_MESSAGE_USER_CANNOT_BE_NULL);
         return userDao.updateUser(user);
     }
+
+	@Override
+	public User getCurrentUser() {
+		return currentUser;
+	}
 
 }

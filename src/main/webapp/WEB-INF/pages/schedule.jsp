@@ -5,8 +5,8 @@
 	<div class="col-md-8">
 	
 	    <h1 class="page-header">
-	        Page Heading
-	        <small>Secondary Text</small>
+	        <fmt:message key="events"/>
+	        <small></small>
 	        <secure:authorized roles="user,admin">
 	        </secure:authorized>
 	        <button  type="button" class="btn btn-primary pull-right add-event"><fmt:message key="event.add.new"/></button>
@@ -58,14 +58,22 @@
 			    <h2>
 			        <a href="#">${schedule.title}</a>
 			    </h2>
+			    <c:set var="userName" value="${empty schedule.user.login ? 'somebody' : schedule.user.login}" />
 			    <p class="lead">
-			        by <a href="index.php">${schedule.user.login}</a>
+			        <fmt:message key="event.posted.by" /> <a href="#">${userName}</a>
 			    </p>
-			    <p><span class="glyphicon glyphicon-time"></span> Posted on ${schedule.created}</p>
+			    <p>
+			    	<span class="glyphicon glyphicon-time"></span> 
+			    	<fmt:message key="event.posted.on" /> <fmt:formatDate pattern="dd.MM.yyyy - hh:mm" value="${schedule.created.time}"/>
+			    </p>
 			    <hr>
 			    <img class="img-responsive" src="http://www.charitybrooks.com/wp-content/uploads/2012/12/Beachbody-Workouts-Riutine.jpg" alt="${schedule.title}">
 			    <hr>
-			    <p>${schedule.place}<br>${schedule.dateTime}</p>
+			    <p>
+			    	<fmt:message key="event.where"/> ${schedule.place}
+			    	<br>
+			    	<fmt:message key="event.when"/> <fmt:formatDate pattern="dd.MM.yyyy - hh:mm" value="${schedule.dateTime.time}" />
+			    </p>
 			    <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 			    <hr>
 		    </c:forEach>

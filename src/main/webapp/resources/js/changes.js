@@ -1,5 +1,5 @@
 $(function(){
-	scheduleWS.initialize();
+	schedule.initialize();
 	scheduleForm.bindEvents();
 	$('.form_datetime').datetimepicker({
 		language:  locale,
@@ -85,6 +85,38 @@ $(function(){
 			        }
 			    });
 });
+
+var sockets = {
+		
+	connect : function(host, onopen, onclose, onmessage, onerror) {
+		var socket = new WebSocket(host);
+		socket.onopen = function() {
+			if(typeof onopen == 'function')
+				onopen();
+		};
+		socket.onclose = function() {
+			if(typeof onclose == 'function')
+				onclose();
+		};
+		socket.onmessage = function(message) {
+			if(typeof onmessage == 'function')
+				onmessage(message);
+		};
+		socket.onerror = function(cause) {
+			if(typeof onerror == 'function')
+				onerror(cause);
+		}
+		
+		return socket;
+	},
+	
+	getHost : function(url) {
+		var host = window.location.protocol == 'http:' ? 'ws://' : 'wss://';
+		host += window.location.host;
+		host += url;
+		return host;
+	}
+}
 
 var common = {
 	changeLocale : function(loc) {
@@ -212,7 +244,7 @@ var scheduleForm = {
 	
 	send : function(){
 		var json = common.convertFormToJSON(this.$form);
-		scheduleWS.send(json);
+		scheduleAdd.send(json);
 		scheduleForm.hide();
 		scheduleForm.clear();
 	}

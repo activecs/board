@@ -7,15 +7,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import com.kharkiv.board.dao.ScheduleDao;
 import com.kharkiv.board.dto.schedule.Schedule;
+import com.kharkiv.board.dto.user.User;
 
 public class ScheduleServiceImplTest {
 	
@@ -27,6 +31,10 @@ public class ScheduleServiceImplTest {
 	private ScheduleService service = new ScheduleServiceImpl();
 	@Mock
 	private ScheduleDao mockScheduleDao;
+	@Mock
+	private UserService mockUserService;
+	@Mock
+	private User mockUser;
 	
 	private Schedule schedule = new Schedule();
 	private List<Schedule> schedules = newArrayList(schedule);
@@ -44,6 +52,7 @@ public class ScheduleServiceImplTest {
 		when(mockScheduleDao.getScheduleById(SCHEDULE_ID)).thenReturn(schedule);
 		when(mockScheduleDao.addSchedule(schedule)).thenReturn(schedule);
 		when(mockScheduleDao.updateSchedule(schedule)).thenReturn(schedule);
+		when(mockUserService.getCurrentUser()).thenReturn(mockUser);
 	}
 
 	@Test
@@ -168,5 +177,20 @@ public class ScheduleServiceImplTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenScheduleIsNullAndCallUpdateSchedule() {
 		service.updateSchedule(null);
+	}
+	
+	@Test
+	public void shouldSetCurrentTimeToSchedule_whenAddNewSchedule(){
+		assertThat(schedule.getCreated()).isNull();
+		service.addSchedule(schedule);
+		assertThat(schedule.getCreated()).isInstanceOf(Calendar.class);
+	}
+	
+	@Test
+	@Ignore
+	public void shouldSetCurrentUserToSchedule_whenAddNewSchedule(){
+		service.addSchedule(schedule);
+		verify(mockUserService).getCurrentUser();
+		assertThat(schedule.getUser()).isSameAs(mockUser);
 	}
 }

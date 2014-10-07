@@ -1,5 +1,7 @@
 package com.kharkiv.board.dto;
 
+import static com.google.common.base.Objects.equal;
+
 import java.io.Serializable;
 
 import javax.persistence.GeneratedValue;
@@ -35,12 +37,10 @@ public abstract class BaseEntity implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
-            return false;
         if (!(obj instanceof BaseEntity))
             return false;
         if (this.getClass() != obj.getClass())
             return false;
-        return Objects.equal(id, ((BaseEntity) obj).id);
+        return equal(id, ((BaseEntity) obj).id);
     }
 }
