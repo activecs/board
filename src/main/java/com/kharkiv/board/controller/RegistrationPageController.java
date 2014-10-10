@@ -38,12 +38,11 @@ import com.kharkiv.board.service.RegistrationService;
 
 @MultipartConfig
 @WebServlet("/registration")
-public class RegistrationController extends AbstractAutowiringServlet {
+public class RegistrationPageController {
 
     private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
     private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
 	private static final String ERROR_MESSAGE_PASSWORDS_NOT_MATCH = "sing.up.pass.conf.not.match";
-	private static final long serialVersionUID = 1L;
     private static final String LOGIN_PARAMETER = "login";
     private static final String PASSWORD_PARAMETER = "password";
     private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
@@ -66,14 +65,11 @@ public class RegistrationController extends AbstractAutowiringServlet {
     private String avatarStorage = EMPTY;
     private Gson gson = null;
     
-    @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init(config);
         initAvatarDir(config);
         gson = new Gson();
     }
 
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RegistrationResponse response = new RegistrationResponse();
         Locale locale = req.getLocale();

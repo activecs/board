@@ -108,6 +108,7 @@ dependencies {
     compile group: 'org.springframework', 				name:'spring-web', 						version:springVersion
     compile group: 'org.springframework', 				name:'spring-jdbc', 					version:springVersion
     compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
+    compile group: 'org.springframework', 				name: 'spring-webmvc', 					version:springVersion
     compile group: 'org.springframework.security', 		name:'spring-security-core', 			version:'3.2.5.RELEASE'
     compile group: 'org.hibernate',						name:'hibernate-core', 					version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:hybernateVersion

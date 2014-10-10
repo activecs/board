@@ -10,3 +10,9 @@ form {
 		display:none;
 	}	
 }
+
+.btn-group { 
+	&.lang-selector {
+		margin: 7px;
+	}
+}

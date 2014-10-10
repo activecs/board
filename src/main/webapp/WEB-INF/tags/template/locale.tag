@@ -5,18 +5,21 @@
 <link rel="resource" type="application/l10n" href="<c:url value='/resources/js/locales/locales.ini'/>"/>
 <script type="text/javascript" src="<c:url value='/resources/js/l10n.js'/>"></script>
 
-<c:set var="loc" scope="request" value="${not empty sessionScope['javax.servlet.jsp.jstl.fmt.locale.session'] ? sessionScope['javax.servlet.jsp.jstl.fmt.locale.session'] : pageContext.request.locale.language}" />
+<c:set var="loc" scope="request" value="${requestContext.locale.language}" />
 <script>
 	var locale = "${loc}";
 	document.webL10n.setLanguage(locale);
 	var _ = document.webL10n.get;
 </script>
 
-<c:choose>
-	<c:when test="${loc eq 'en'}">
-		<li><a href="#" onclick="common.changeLocale('ru')">ru</a></li>
-	</c:when>
-	<c:otherwise>
-		<li><a href="#" onclick="common.changeLocale('en')">en</a></li>
-	</c:otherwise>
-</c:choose>
+<div class="btn-group lang-selector">
+	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+		<span class="lang-sm lang-lbl" lang="${loc}"></span> 
+		<span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu dropdown-menu-right" role="menu">
+		<li><a><span class="lang-sm lang-lbl" onclick="common.changeLocale('en')" lang="en"></span></a></li>
+		<li><a><span class="lang-sm lang-lbl" onclick="common.changeLocale('ru')" lang="ru"></span></a></li>
+		<li><a><span class="lang-sm lang-lbl" onclick="common.changeLocale('uk')" lang="uk"></span></a></li>
+	</ul>
+</div>

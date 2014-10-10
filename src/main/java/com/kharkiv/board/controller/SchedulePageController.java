@@ -1,31 +1,31 @@
 package com.kharkiv.board.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.kharkiv.board.dto.schedule.Schedule;
 import com.kharkiv.board.service.ScheduleService;
 
-@WebServlet("/schedule")
-public class SchedulePageController extends AbstractAutowiringServlet {
+@Controller
+@RequestMapping("/schedule")
+public class SchedulePageController {
 	
-	private static final long serialVersionUID = 1L;
 	private static final String ATTRIBUTE_SCHEDULES = "schedules";
-	private static final String PAGE_SCHEDULE = "/WEB-INF/pages/schedule.jsp";
+	private static final String PAGE_SCHEDULE = "schedule";
 	
 	@Inject
 	private ScheduleService service;
 	
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Schedule> schedules = service.getAllSchedules();
-        req.setAttribute(ATTRIBUTE_SCHEDULES, schedules);
-    	req.getRequestDispatcher(PAGE_SCHEDULE).forward(req, resp);
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	public String getPage(Model model){
+		List<Schedule> schedules = service.getAllSchedules();
+		model.addAttribute(ATTRIBUTE_SCHEDULES, schedules);
+		return PAGE_SCHEDULE;
+	}
 }

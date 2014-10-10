@@ -49,5 +49,4 @@ public class ScheduleEndpoint {
 			client.sendObject(schedule);
 		}
 	}
-
 }
