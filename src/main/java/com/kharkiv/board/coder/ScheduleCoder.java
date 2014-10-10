@@ -22,7 +22,7 @@ import com.kharkiv.board.dto.schedule.Schedule;
 public class ScheduleCoder implements Encoder.Text<Schedule>,
 		Decoder.Text<Schedule> {
 	
-	private final static Logger LOG = LoggerFactory.getLogger(ScheduleCoder.class);	
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduleCoder.class);	
 	private Gson gson;
 
 	@Override
