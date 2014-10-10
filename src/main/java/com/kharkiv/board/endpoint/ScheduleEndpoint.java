@@ -9,7 +9,6 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.RemoteEndpoint.Basic;
 import javax.websocket.Session;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import com.kharkiv.board.coder.ScheduleCoder;
 import com.kharkiv.board.dto.schedule.Schedule;
 import com.kharkiv.board.service.ScheduleService;
 
-@ServerEndpoint(value = "/schedule/{action}", 
+@ServerEndpoint(value = "/schedule/add", 
 	configurator = SpringConfigurator.class, 
 	encoders = ScheduleCoder.class, 
 	decoders = ScheduleCoder.class)
@@ -32,14 +31,14 @@ public class ScheduleEndpoint {
 	private ScheduleService scheduleService;
 
 	@OnMessage
-	public void publish(@PathParam("action") String action,Session session, Schedule schedule) throws IOException, EncodeException {
+	public void publish(Session session, Schedule schedule) throws IOException, EncodeException {
 		LOG.info("receiver schedule id ->" + schedule.getTitle());
 		scheduleService.addSchedule(schedule);
 		share(schedule, session);
 	}
 
 	@OnError
-	public void onError(Session session, Throwable error) throws Throwable {
+	public void onError(Session session, Throwable error) {
 		LOG.error(error.getMessage());
 	}
 	

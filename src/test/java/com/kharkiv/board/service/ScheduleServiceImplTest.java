@@ -15,7 +15,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import com.kharkiv.board.dao.ScheduleDao;
 import com.kharkiv.board.dto.schedule.Schedule;

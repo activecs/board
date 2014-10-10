@@ -21,8 +21,6 @@ import com.kharkiv.board.service.ScheduleService;
 
 public class ScheduleEndpointTest {
 	
-	private static final String action = "action";
-	
 	@InjectMocks
 	private ScheduleEndpoint endpoint = new ScheduleEndpoint();
 	@Mock
@@ -49,25 +47,25 @@ public class ScheduleEndpointTest {
 
 	@Test
 	public void shouldSaveSchedule_whenPublishNewSchedule() throws IOException, EncodeException{
-		endpoint.publish(action, mockSession, mockSchedule);
+		endpoint.publish(mockSession, mockSchedule);
 		verify(mockService).addSchedule(mockSchedule);
 	}
 	
 	@Test
 	public void shouldGetsAllOpenSessions_whenPublishNewSchedule() throws IOException, EncodeException{
-		endpoint.publish(action, mockSession, mockSchedule);
+		endpoint.publish(mockSession, mockSchedule);
 		verify(mockSession).getOpenSessions();
 	}
 	
 	@Test
 	public void shouldGetsBasicRemoteFromEachOpenSession_whenPublishNewSchedule() throws IOException, EncodeException{
-		endpoint.publish(action, mockSession, mockSchedule);
+		endpoint.publish(mockSession, mockSchedule);
 		verify(mockOpenSession).getBasicRemote();
 	}
 	
 	@Test
 	public void shouldSendNewScheduleToEachOpenSession_whenPublishNewSchedule() throws IOException, EncodeException{
-		endpoint.publish(action, mockSession, mockSchedule);
+		endpoint.publish(mockSession, mockSchedule);
 		verify(mockClient).sendObject(mockSchedule);
 	}
 }
