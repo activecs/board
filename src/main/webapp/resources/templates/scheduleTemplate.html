@@ -2,7 +2,7 @@
 <a href="#">{{>title}}</a>
 </h2>
 <p class="lead">
-	Posted by 
+	{{:postedBy}} 
 	<a href="#">
 		{{if user}}
 	    	{{:user.login}}
@@ -12,17 +12,18 @@
 	</a>
 </p>
 <p><span class="glyphicon glyphicon-time"></span> 
-	Posted on 
+	{{:postedOn}} 
 	{{:created.dayOfMonth}}.{{:created.month + 1}}.{{:created.year}} - {{:created.hourOfDay}}:{{:created.minute}}
 </p>
 <hr>
 <img class="img-responsive" src="http://www.charitybrooks.com/wp-content/uploads/2012/12/Beachbody-Workouts-Riutine.jpg" alt="{{>title}}">
 <hr>
 <p>
-	Where {{>place}}
+	{{:where}} 
+	{{:place}}
 	<br>
-	When 
-		{{:dateTime.dayOfMonth}}.{{:dateTime.month + 1}}.{{:dateTime.year}} - {{:dateTime.hourOfDay}}:{{:dateTime.minute}}
+	{{:when}} 
+	{{:dateTime.dayOfMonth}}.{{:dateTime.month + 1}}.{{:dateTime.year}} - {{:dateTime.hourOfDay}}:{{:dateTime.minute}}
 </p>
 <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 <hr>

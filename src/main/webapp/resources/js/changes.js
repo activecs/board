@@ -12,8 +12,8 @@ $(function(){
 	
 	$('.glyphicon-remove').bind('click', function(){
 		$(this).closest('div').find('input').val('');
-	});
-	
+	});	
+		
 	var registrationsForm = $('#registrationForm');
 	
 	registrationsForm.validate({
