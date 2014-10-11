@@ -27,7 +27,7 @@ import com.kharkiv.board.dto.user.UserRole;
 @Service("registrationService")
 public class RegistrationServiceImpl implements RegistrationService {
 	
-	public static final Logger LOG = LoggerFactory.getLogger(RegistrationServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RegistrationServiceImpl.class);
 	
     @Inject
     private UserService userService;
