@@ -51,8 +51,7 @@ $(function(){
 				$('#loading').css({'display' : 'none'});
 			},
 			success : function(data) {
-				var resp = JSON.parse(data);
-				registrationService.response(resp);
+				registrationService.response(data);
 			},
 			error : function() {
 				alert('Server Error!');

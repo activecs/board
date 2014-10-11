@@ -43,4 +43,7 @@
     		<property name="paramName" value="lang" />
 		</bean>
 	</mvc:interceptors>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+</bean>
 </beans>

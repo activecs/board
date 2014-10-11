@@ -99,5 +99,4 @@ public class UserServiceImpl implements UserService {
 	public User getCurrentUser() {
 		return currentUser;
 	}
-
 }

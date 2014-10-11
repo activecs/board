@@ -77,11 +77,8 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
-	<bean id="validatorFactory" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
-	<bean id="validator" class="org.springframework.beans.factory.config.MethodInvokingBean" scope="prototype" >
-		<property name="targetObject" ref="validatorFactory" />
-		<property name="targetMethod" value="getValidator" />
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource" />
 	</bean>
 	
 	<bean id="user" class="com.kharkiv.board.dto.user.User" scope="session">

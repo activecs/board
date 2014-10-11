@@ -1,5 +1,6 @@
 package com.kharkiv.board.dto.user;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.kharkiv.board.util.QueryNamesConstants.UserQueries.DELETE_BY_ID;
 import static com.kharkiv.board.util.QueryNamesConstants.UserQueries.DELETE_BY_LOGIN;
 import static com.kharkiv.board.util.QueryNamesConstants.UserQueries.GET_ALL;
@@ -24,7 +25,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.schedule.Comment;
 import com.kharkiv.board.dto.schedule.Schedule;
@@ -41,22 +41,37 @@ import com.kharkiv.board.dto.schedule.TrainingVisit;
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5766469760606469192L;
-   
-    private String login;
-    private String password;
-    private UserRole role;
-    private String logo;
-    private Boolean ban;
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<Schedule> schedules;
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<Comment> comments;
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<TrainingVisit> trainigVisited;
     
     @NotNull(message = "login:sign.up.requried.field")
     @Size(min = 3, message = "login:sign.up.field.size")
     @Column(length = 55, nullable = false, unique = true)
+    private String login;
+    
+    @Size(min = 6, message = "password:sign.up.field.size")
+    @NotNull(message = "password:sign.up.requried.field")
+    @Column(length = 65, nullable = false)
+    private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(length = 8, nullable = false)
+    private UserRole role;
+    
+    @Column(length = 150)
+    private String logo;
+    
+    @Basic
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
+    private Boolean ban;
+    
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    private Set<Schedule> schedules;
+    
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    private Set<Comment> comments;
+    
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    private Set<TrainingVisit> trainigVisited;
+    
     public String getLogin() {
         return login;
     }
@@ -65,9 +80,6 @@ public class User extends BaseEntity {
         this.login = login;
     }
     
-    @NotNull(message = "password:sign.up.requried.field")
-    @Size(min = 6, message = "password:sign.up.field.size")
-    @Column(length = 62, nullable = false)
     public String getPassword() {
         return password;
     }
@@ -76,8 +88,6 @@ public class User extends BaseEntity {
         this.password = password;
     }
     
-    @Enumerated(EnumType.STRING)
-    @Column(length = 8, nullable = false)
     public UserRole getRole() {
         return role;
     }
@@ -87,7 +97,6 @@ public class User extends BaseEntity {
         this.role = role;
     }
     
-    @Column(length = 150)
     public String getLogo() {
         return logo;
     }
@@ -96,8 +105,6 @@ public class User extends BaseEntity {
         this.logo = logo;
     }
     
-    @Basic
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
     public Boolean getBan() {
         return ban;
     }
@@ -132,7 +139,11 @@ public class User extends BaseEntity {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("login", login).add("role", role)
-                .add("ban", ban).toString();
+        return toStringHelper(this)
+        		.add("id", super.getId())
+        		.add("login", login)
+        		.add("role", role)
+                .add("ban", ban)
+                .toString();
     }
 }
