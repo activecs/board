@@ -15,8 +15,8 @@ var scheduleAdd = {
 	initialize : function() {
 		var host = sockets.getHost(this.scheduleUrl);
 		this.socket = sockets.connect(host, null, null, this.showNewPost);
-		$(document).on('localized', function(){
-			scheduleAdd.setUpLocalization();
+		document.localePromise.done(function() {
+			scheduleAdd.setUpLocalization();				
 		});
 	},
 

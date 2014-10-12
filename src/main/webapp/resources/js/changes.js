@@ -1,4 +1,5 @@
 $(function(){
+	common.setupLocale();
 	schedule.initialize();
 	scheduleForm.bindEvents();
 	$('.form_datetime').datetimepicker({
@@ -133,6 +134,19 @@ var common = {
 	    });
 	    
 	    return JSON.stringify(json);
+	},
+	
+	setupLocale : function(){
+		document._ = document.webL10n.get;
+		var deferred = $.Deferred();
+		$(document).on('localized', function(){
+			var currentLanguage = document.webL10n.getLanguage();
+			if(currentLanguage == locale)
+				deferred.resolve();
+			else
+				document.webL10n.setLanguage(locale);					
+		});
+		document.localePromise = deferred.promise();
 	}
 }
 

@@ -4,6 +4,10 @@
 <!-- jQuery library -->
 <script type="text/javascript" src="<c:url value='/resources/js/jquery.js'/>"></script>
 
+<!-- localization -->
+<link rel="resource" type="application/l10n" href="<c:url value='/resources/js/locales/locales.ini'/>"/>
+<script type="text/javascript" src="<c:url value='/resources/js/l10n.js'/>"></script>
+
 <script type="text/javascript" src="<c:url value='/resources/js/validationengine.js'/>"></script>
 <c:choose>
 	<c:when test="${loc eq 'en'}">
