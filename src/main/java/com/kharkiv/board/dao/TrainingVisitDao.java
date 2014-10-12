@@ -6,15 +6,15 @@ import com.kharkiv.board.dto.schedule.TrainingVisit;
 
 public interface TrainingVisitDao {
 
-    List<TrainingVisit> getAllTrainigVisitsByUserId(Integer userId);
+	List<TrainingVisit> getAllTrainigVisitsByUserId(Integer userId);
 
-    List<TrainingVisit> getAllTrainigVisitsByScheduleId(Integer scheduleId);
+	List<TrainingVisit> getAllTrainigVisitsByScheduleId(Integer scheduleId);
 
-    TrainingVisit addTrainingVisit(TrainingVisit trainingVisit);
+	TrainingVisit addTrainingVisit(TrainingVisit trainingVisit);
 
-    void deleteTrainingVisit(TrainingVisit trainingVisit);
+	void deleteTrainingVisit(TrainingVisit trainingVisit);
 
-    int deleteTrainingVisitById(Integer id);
+	int deleteTrainingVisitById(Integer id);
 
-    TrainingVisit updateTrainingVisit(TrainingVisit trainingVisit);
+	TrainingVisit updateTrainingVisit(TrainingVisit trainingVisit);
 }

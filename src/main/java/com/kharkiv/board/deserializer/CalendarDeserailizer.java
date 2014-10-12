@@ -15,11 +15,12 @@ import com.google.gson.JsonElement;
 
 public class CalendarDeserailizer implements JsonDeserializer<Calendar> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CalendarDeserailizer.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CalendarDeserailizer.class);
 	private static final String DATE_FORMAT = "dd.MM.yyyy - hh:mm";
 
 	@Override
-	public Calendar deserialize(JsonElement json, Type typeOfT,JsonDeserializationContext context) {
+	public Calendar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
 		try {
 			SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 			Date date = formatter.parse(json.getAsString());

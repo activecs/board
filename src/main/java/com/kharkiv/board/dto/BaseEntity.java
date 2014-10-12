@@ -14,33 +14,33 @@ import com.google.common.base.Objects;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 4974491906471746770L;
+	private static final long serialVersionUID = 4974491906471746770L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!(obj instanceof BaseEntity))
-            return false;
-        if (this.getClass() != obj.getClass())
-            return false;
-        return equal(id, ((BaseEntity) obj).id);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof BaseEntity))
+			return false;
+		if (this.getClass() != obj.getClass())
+			return false;
+		return equal(id, ((BaseEntity) obj).id);
+	}
 }

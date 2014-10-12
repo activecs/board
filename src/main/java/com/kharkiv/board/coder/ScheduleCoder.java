@@ -19,10 +19,9 @@ import com.google.gson.JsonSyntaxException;
 import com.kharkiv.board.deserializer.CalendarDeserailizer;
 import com.kharkiv.board.dto.schedule.Schedule;
 
-public class ScheduleCoder implements Encoder.Text<Schedule>,
-		Decoder.Text<Schedule> {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(ScheduleCoder.class);	
+public class ScheduleCoder implements Encoder.Text<Schedule>,Decoder.Text<Schedule> {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduleCoder.class);
 	private Gson gson;
 
 	@Override
@@ -55,7 +54,7 @@ public class ScheduleCoder implements Encoder.Text<Schedule>,
 				gson.fromJson(json, Schedule.class);
 				willDecode = true;
 			} catch (JsonSyntaxException e) {
-				LOG.info("Cannot decode json %s for class %s",json,Schedule.class.getSimpleName());
+				LOG.info("Cannot decode json %s for class %s", json, Schedule.class.getSimpleName());
 			}
 		}
 		return willDecode;

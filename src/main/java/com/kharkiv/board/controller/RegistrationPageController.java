@@ -33,89 +33,91 @@ import com.kharkiv.board.service.RegistrationService;
 public class RegistrationPageController {
 
 	private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5MB
-	private static final String FILEUPLOAD_PARAMETER = "files";
+	private static final String LOGIN_PARAMETER = "login";
 	private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
-    private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
-    private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
+	private static final String FILEUPLOAD_PARAMETER = "files";
+	private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
+	private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
 	private static final String ERROR_MESSAGE_PASSWORDS_NOT_MATCH = "sing.up.pass.conf.not.match";
 
-    @Inject
-    private RegistrationService registrationService;
-    @Inject
-    private Validator validator;
-    @Inject
-    private ReloadableResourceBundleMessageSource messageSource;
-    
-    @RequestMapping(method=RequestMethod.POST)
-    public RegistrationResponse register(@RequestParam String login,
-    									@RequestParam String password, 
-    									@RequestParam(PASSWORD_CONFIRMATION_PARAMETER) String confirmPassword,
-    									@RequestParam MultipartFile file) throws IOException{
-        User newUser = new User();
-        newUser.setLogin(login);
-        newUser.setPassword(password);
+	@Inject
+	private RegistrationService registrationService;
+	@Inject
+	private Validator validator;
+	@Inject
+	private ReloadableResourceBundleMessageSource messageSource;
 
-        List<Error> errors = validate(confirmPassword, file, newUser);
-        
-        RegistrationResponse response = new RegistrationResponse();
-        if (isNotEmpty(errors)) {
-            response.isValid = false;
-            response.errors = errors;
-        } else{
-        	response.isValid = true;
-	        registrationService.createNewUser(newUser);
-	    }
+	@RequestMapping(method = RequestMethod.POST)
+	public RegistrationResponse register(
+			@RequestParam String login,
+			@RequestParam String password,
+			@RequestParam(PASSWORD_CONFIRMATION_PARAMETER) String confirmPassword,
+			@RequestParam MultipartFile file) throws IOException {
+		User newUser = new User();
+		newUser.setLogin(login);
+		newUser.setPassword(password);
 
-        return response;
-    }
+		List<Error> errors = validate(confirmPassword, file, newUser);
+
+		RegistrationResponse response = new RegistrationResponse();
+		if (isNotEmpty(errors)) {
+			response.isValid = false;
+			response.errors = errors;
+		} else {
+			response.isValid = true;
+			registrationService.createNewUser(newUser);
+		}
+
+		return response;
+	}
 
 	private List<Error> validate(String confirmPassword, MultipartFile file, User newUser) throws IOException {
 		List<Error> errors = Lists.newArrayList();
 		errors.add(validatePasswordConfirmation(newUser.getPassword(), confirmPassword));
-        errors.addAll(validateUserConstraints(newUser));
-        errors.add(validaUserExistence4Login(newUser.getLogin()));
-        errors.add(saveAvatar(file, newUser));
-        errors.removeAll(singleton(null));
-        
-        return errors;
+		errors.addAll(validateUserConstraints(newUser));
+		errors.add(validaUserExistence4Login(newUser.getLogin()));
+		errors.add(saveAvatar(file, newUser));
+		errors.removeAll(singleton(null));
+
+		return errors;
 	}
-    
-    protected String getErrorMessage(String errorCode) {
-    	Locale locale = LocaleContextHolder.getLocale();
-    	return messageSource.getMessage(errorCode, null, locale);
-    }
-    
-    private Error validatePasswordConfirmation(String pass, String passConf) {
-        if (!StringUtils.equals(pass, passConf)){
-        	String message = getErrorMessage(ERROR_MESSAGE_PASSWORDS_NOT_MATCH);
-        	return new Error(PASSWORD_CONFIRMATION_PARAMETER, message);
-        }
-        return null;
-    }
-    
-    private List<Error> validateUserConstraints(User user) {
-        List<Error> errors = new ArrayList<>();
-        Set<ConstraintViolation<User>> validationResult = validator.validate(user);
-        if (isNotEmpty(validationResult)) {
-            Iterator<ConstraintViolation<User>> resIterator = validationResult.iterator();
-            while (resIterator.hasNext()) {
-                String[] errParts = resIterator.next().getMessage().split(":");
-                String errorMessage = getErrorMessage(errParts[1]);
-                Error err = new Error(errParts[0], errorMessage);
-                errors.add(err);
-            }
-        }
-        return errors;
-    }
-    
-    private Error validaUserExistence4Login(String login) {
-        if (isNotBlank(login) && registrationService.isExistentUser(login)){
-        	String message = getErrorMessage(ERROR_MESSAGE_USER_ALREADY_EXIST);
-        	return new Error("login", message);
-        }
-        return null;
-    }
-    
+
+	protected String getErrorMessage(String errorCode) {
+		Locale locale = LocaleContextHolder.getLocale();
+		return messageSource.getMessage(errorCode, null, locale);
+	}
+
+	private Error validatePasswordConfirmation(String pass, String passConf) {
+		if (!StringUtils.equals(pass, passConf)) {
+			String message = getErrorMessage(ERROR_MESSAGE_PASSWORDS_NOT_MATCH);
+			return new Error(PASSWORD_CONFIRMATION_PARAMETER, message);
+		}
+		return null;
+	}
+
+	private List<Error> validateUserConstraints(User user) {
+		List<Error> errors = new ArrayList<>();
+		Set<ConstraintViolation<User>> validationResult = validator.validate(user);
+		if (isNotEmpty(validationResult)) {
+			Iterator<ConstraintViolation<User>> resIterator = validationResult.iterator();
+			while (resIterator.hasNext()) {
+				String[] errParts = resIterator.next().getMessage().split(":");
+				String errorMessage = getErrorMessage(errParts[1]);
+				Error err = new Error(errParts[0], errorMessage);
+				errors.add(err);
+			}
+		}
+		return errors;
+	}
+
+	private Error validaUserExistence4Login(String login) {
+		if (isNotBlank(login) && registrationService.isExistentUser(login)) {
+			String message = getErrorMessage(ERROR_MESSAGE_USER_ALREADY_EXIST);
+			return new Error(LOGIN_PARAMETER, message);
+		}
+		return null;
+	}
+
 	private Error saveAvatar(MultipartFile file, User user) throws IOException {
 		Error validationError = validateAvatarSize(file);
 		if (validationError != null)
@@ -124,26 +126,26 @@ public class RegistrationPageController {
 		return null;
 	}
 
-    private Error validateAvatarSize(MultipartFile image) { 
-        if (image.getSize() > MAX_FILE_SIZE){
-        	String message = getErrorMessage(ERROR_MESSAGE_LARGE_IMAGE_SIZE); 
-        	return new Error(FILEUPLOAD_PARAMETER, message);
-        }
-        return null;
-    }
-    
-    private class RegistrationResponse {
-    	public boolean isValid;
-    	public List<Error> errors;
-    }
-    
-    private class Error {
-        public String field;
-        public String errMsg;
-        
-        public Error(String field, String errMsg) {
-            this.field = field;
-            this.errMsg = errMsg;
-        }
-    }
+	private Error validateAvatarSize(MultipartFile image) {
+		if (image.getSize() > MAX_FILE_SIZE) {
+			String message = getErrorMessage(ERROR_MESSAGE_LARGE_IMAGE_SIZE);
+			return new Error(FILEUPLOAD_PARAMETER, message);
+		}
+		return null;
+	}
+
+	private class RegistrationResponse {
+		public boolean isValid;
+		public List<Error> errors;
+	}
+
+	private class Error {
+		public String field;
+		public String errMsg;
+
+		public Error(String field, String errMsg) {
+			this.field = field;
+			this.errMsg = errMsg;
+		}
+	}
 }

@@ -15,15 +15,15 @@ import com.kharkiv.board.service.ScheduleService;
 @Controller
 @RequestMapping("/schedule")
 public class SchedulePageController {
-	
+
 	private static final String ATTRIBUTE_SCHEDULES = "schedules";
 	private static final String PAGE_SCHEDULE = "schedule";
-	
+
 	@Inject
 	private ScheduleService service;
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public String getPage(Model model){
+	public String getPage(Model model) {
 		List<Schedule> schedules = service.getAllSchedules();
 		model.addAttribute(ATTRIBUTE_SCHEDULES, schedules);
 		return PAGE_SCHEDULE;
