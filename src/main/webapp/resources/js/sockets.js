@@ -11,10 +11,15 @@ var scheduleAdd = {
 	socket : null,
 	
 	messages : null,
+	
+	template : null,
 
 	initialize : function() {
 		var host = sockets.getHost(this.scheduleUrl);
 		this.socket = sockets.connect(host, null, null, this.showNewPost);
+		$.get('/resources/templates/scheduleTemplate.html',function(template){
+			scheduleAdd.template = $.templates(template);
+		});
 		document.localePromise.done(function() {
 			scheduleAdd.setUpLocalization();				
 		});
@@ -36,10 +41,8 @@ var scheduleAdd = {
 	showNewPost : function(message){
 		var data = $.parseJSON(message.data);
 		$.extend(data, scheduleAdd.messages);
-		$.get('/resources/templates/scheduleTemplate.html',function(template) {
-			$postTemplate = $.templates(template);
-			$("#posts").prepend($postTemplate.render(data));
-		});
+		var renderedTemplate = scheduleAdd.template.render(data);
+		$("#posts").prepend(renderedTemplate);
 	} 
 };
 

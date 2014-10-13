@@ -97,8 +97,10 @@ var common = {
 	},
 
 	setupLocale : function() {
-		document._ = document.webL10n.get;
 		var deferred = $.Deferred();
+		document.localePromise = deferred.promise();
+		document._ = document.webL10n.get;
+		
 		$(document).on('localized', function() {
 			var currentLanguage = document.webL10n.getLanguage();
 			if (currentLanguage == locale)
@@ -106,7 +108,6 @@ var common = {
 			else
 				document.webL10n.setLanguage(locale);
 		});
-		document.localePromise = deferred.promise();
 	}
 }
 
