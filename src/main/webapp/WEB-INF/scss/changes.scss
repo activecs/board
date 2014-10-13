@@ -27,3 +27,15 @@ form {
 error {
 	color : red;
 }
+
+.modal-dialog {
+	&.registration {
+		.reg-success {
+		   display:none;
+		}
+		
+		.reg-server-error {
+	       display:none;
+	    }
+	}
+}

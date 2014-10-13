@@ -29,7 +29,7 @@
 
 	<!--login modal-->
 	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog registration">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -77,11 +77,14 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="sign.up.close"/></button>
 					</div>
 				</div>
-				<div class="modal-body reg-success" style='display: none;'>
+				<div class="modal-body reg-success">
 					<h4 align="center"><fmt:message key="sign.up.success"/></h4>
 				</div>
-				<div class="modal-footer reg-success" style='display: none;'>
-						<button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="sign.up.close"/></button>
+				<div class="modal-body reg-server-error">
+                    <h4 align="center"><fmt:message key="sign.up.server.error"/></h4>
+                </div>
+				<div class="modal-footer reg-success reg-server-error">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="sign.up.close"/></button>
 				</div>
 			</div>
 			<!-- /.modal-content -->

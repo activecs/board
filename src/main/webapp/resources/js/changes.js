@@ -113,6 +113,8 @@ var common = {
 var registrationService = {
 
 	REGISTRATION_URL : 'registration',
+	
+	$registrationModal : $(".modal-dialog.registration"),
 
 	validate : function validateForm(e) {
 		var loginForm = $('#registrationForm');
@@ -128,9 +130,7 @@ var registrationService = {
 			if (pass == passConf) {
 				registrationService.register(e);
 			} else {
-				confirmation.css({
-					'display' : 'block'
-				});
+				confirmation.css({'display' : 'block'});
 			}
 		}
 	},
@@ -150,18 +150,17 @@ var registrationService = {
 
 	response : function parseResponse(response) {
 		if (response.isValid) {
-			$(".reg").css({
+			this.$registrationModal.find(".reg").css({
 				'display' : 'none'
 			});
-			$(".reg-success").css({
+			this.$registrationModal.find(".reg-success").css({
 				'display' : 'block'
 			});
 		} else {
 			$.each(response.errors, function(index, value) {
 				var field = $("#" + value.field);
 				var errMsg = $("<strong>").html(value.errMsg);
-				var errWrap = $("<span>").addClass("error").addClass(
-						"server-error").css({
+				var errWrap = $("<span>").addClass("error").addClass("server-error").css({
 					'display' : 'block'
 				});
 				errWrap.append(errMsg);
@@ -175,6 +174,15 @@ var registrationService = {
 		var input = $("#fileupload");
 		input.prop('disabled', false);
 		input.replaceWith(input.val('').clone(true));
+	},
+	
+	handleServerError : function() {
+		this.$registrationModal.find(".reg").css({
+			'display' : 'none'
+		});
+		this.$registrationModal.find(".reg-server-error").css({
+			'display' : 'block'
+		});
 	},
 
 	createPreview : function(element) {
@@ -213,7 +221,7 @@ var registrationService = {
 	formSubmit : function(e) {
 		var formData = new FormData($('#registrationForm')[0]);
 
-		jQuery.ajax({
+		$.ajax({
 			url : registrationService.REGISTRATION_URL,
 			type : 'POST',
 			cache : false,
@@ -234,7 +242,7 @@ var registrationService = {
 				registrationService.response(data);
 			},
 			error : function() {
-				alert('Server Error!');
+				registrationService.handleServerError();
 			}
 		});
 		e.preventDefault();
