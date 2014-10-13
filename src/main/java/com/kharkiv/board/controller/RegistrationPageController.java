@@ -67,8 +67,7 @@ public class RegistrationPageController {
 			response.isValid = true;
 			registrationService.createNewUser(newUser);
 		}
-		throw new IOException();
-		//return response;
+		return response;
 	}
 
 	private List<Error> validate(String confirmPassword, MultipartFile file, User newUser) throws IOException {
