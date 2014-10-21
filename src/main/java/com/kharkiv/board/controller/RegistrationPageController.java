@@ -35,7 +35,7 @@ public class RegistrationPageController {
 	private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5MB
 	private static final String LOGIN_PARAMETER = "login";
 	private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
-	private static final String FILEUPLOAD_PARAMETER = "files";
+	private static final String AVATAR_PARAMETER = "avatar-preview";
 	private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
 	private static final String ERROR_MESSAGE_USER_ALREADY_EXIST = "sign.up.existent.user";
 	private static final String ERROR_MESSAGE_PASSWORDS_NOT_MATCH = "sing.up.pass.conf.not.match";
@@ -128,7 +128,7 @@ public class RegistrationPageController {
 	private Error validateAvatarSize(MultipartFile image) {
 		if (image.getSize() > MAX_FILE_SIZE) {
 			String message = getErrorMessage(ERROR_MESSAGE_LARGE_IMAGE_SIZE);
-			return new Error(FILEUPLOAD_PARAMETER, message);
+			return new Error(AVATAR_PARAMETER, message);
 		}
 		return null;
 	}

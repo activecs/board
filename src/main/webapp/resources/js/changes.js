@@ -171,7 +171,7 @@ var registrationService = {
 	},
 
 	clean : function cleanPreview() {
-		$("#files").attr("src", "/resources/images/profile-placeholder.jpg");
+		$("#avatar-preview").attr("src", "/resources/images/profile-placeholder.jpg");
 		var input = $("#fileupload");
 		input.prop('disabled', false);
 		input.replaceWith(input.val('').clone(true));
@@ -200,7 +200,7 @@ var registrationService = {
 			if (files[0].size <= 5242880) {
 				var reader = new FileReader();
 				reader.onloadend = function(event) {
-					$("#files").attr("src", event.target.result);
+					$("#avatar-preview").attr("src", event.target.result);
 				}
 				reader.readAsDataURL(files[0]);
 				$("#fileupload").prop('disabled', 'disabled');
