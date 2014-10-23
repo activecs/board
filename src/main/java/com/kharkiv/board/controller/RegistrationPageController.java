@@ -5,6 +5,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,13 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.kharkiv.board.dto.user.User;
+import com.kharkiv.board.service.AvatarService;
 import com.kharkiv.board.service.RegistrationService;
 
 @RestController
 @RequestMapping("/registration")
 public class RegistrationPageController {
 
-	private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5MB
+	private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5MB 
 	private static final String LOGIN_PARAMETER = "login";
 	private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
 	private static final String AVATAR_PARAMETER = "avatar-preview";
@@ -43,6 +45,8 @@ public class RegistrationPageController {
 	@Inject
 	private RegistrationService registrationService;
 	@Inject
+	private AvatarService avatarService;
+	@Inject
 	private Validator validator;
 	@Inject
 	private ReloadableResourceBundleMessageSource messageSource;
@@ -52,7 +56,7 @@ public class RegistrationPageController {
 			@RequestParam String login,
 			@RequestParam String password,
 			@RequestParam(PASSWORD_CONFIRMATION_PARAMETER) String confirmPassword,
-			@RequestParam MultipartFile file) throws IOException {
+			@RequestParam MultipartFile file) throws IOException, NoSuchAlgorithmException {
 		User newUser = new User();
 		newUser.setLogin(login);
 		newUser.setPassword(password);
@@ -70,7 +74,7 @@ public class RegistrationPageController {
 		return response;
 	}
 
-	private List<Error> validate(String confirmPassword, MultipartFile file, User newUser) throws IOException {
+	private List<Error> validate(String confirmPassword, MultipartFile file, User newUser) throws IOException, NoSuchAlgorithmException {
 		List<Error> errors = Lists.newArrayList();
 		errors.add(validatePasswordConfirmation(newUser.getPassword(), confirmPassword));
 		errors.addAll(validateUserConstraints(newUser));
@@ -117,11 +121,11 @@ public class RegistrationPageController {
 		return null;
 	}
 
-	private Error saveAvatar(MultipartFile file, User user) throws IOException {
+	private Error saveAvatar(MultipartFile file, User user) throws IOException, NoSuchAlgorithmException {
 		Error validationError = validateAvatarSize(file);
 		if (validationError != null)
 			return validationError;
-		registrationService.saveUserAvatar(user, file);
+		avatarService.saveUserAvatar(user, file);
 		return null;
 	}
 

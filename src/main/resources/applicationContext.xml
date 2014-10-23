@@ -84,4 +84,7 @@
 	<bean id="user" class="com.kharkiv.board.dto.user.User" scope="session">
 		<aop:scoped-proxy/>
 	</bean>
+	
+	<bean id="avatarService" class="com.kharkiv.board.service.AvatarServiceImpl" />
+	
 </beans>
