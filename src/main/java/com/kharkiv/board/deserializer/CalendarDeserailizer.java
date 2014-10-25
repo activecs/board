@@ -15,8 +15,7 @@ import com.google.gson.JsonElement;
 
 public class CalendarDeserailizer implements JsonDeserializer<Calendar> {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(CalendarDeserailizer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CalendarDeserailizer.class);
 	private static final String DATE_FORMAT = "dd.MM.yyyy - hh:mm";
 
 	@Override

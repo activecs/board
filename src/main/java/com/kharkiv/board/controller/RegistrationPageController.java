@@ -143,8 +143,8 @@ public class RegistrationPageController {
 	}
 
 	private class Error {
-		public String field;
-		public String errMsg;
+		public final String field;
+		public final String errMsg;
 
 		public Error(String field, String errMsg) {
 			this.field = field;

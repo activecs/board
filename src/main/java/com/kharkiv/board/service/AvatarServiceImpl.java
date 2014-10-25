@@ -22,13 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kharkiv.board.dto.user.User;
 
 public class AvatarServiceImpl implements AvatarService {  
-	//TODO: rename 
-	private static final String SHA_1 = "SHA-1";
+
 	private static final Logger LOG = LoggerFactory.getLogger(AvatarServiceImpl.class);
-	@Value("${avatar.default}")
-	private String defaultAvatar;
+	private static final String SHA_1 = "SHA-1";
+	
 	@Inject
 	private ServletContext servletContext;
+	@Value("${avatar.default}")
+	private String defaultAvatar;
 	@Value("${avatar.storage.folder}") 
 	private String avatarDir;
 	private String avatarStorage = EMPTY;
@@ -67,18 +68,17 @@ public class AvatarServiceImpl implements AvatarService {
 
 	private String getHashNameOfAvatar(User user)
 			throws NoSuchAlgorithmException {
-		String newNameOfAvatar = user.getLogin() + "_" + user.getId();
+		String newNameOfAvatar = user.getLogin() + user.getId();
 
 		MessageDigest md = MessageDigest.getInstance(SHA_1);
 		md.update(newNameOfAvatar.getBytes());
 
 		byte byteData[] = md.digest();
 
-		StringBuffer hashNameOfAvatar = new StringBuffer();
-		for (int i = 0; i < byteData.length; i++) {
-			hashNameOfAvatar.append(Integer.toString(
-					(byteData[i] & 0xff) + 0x100, 16).substring(1));
-		}
+		StringBuilder hashNameOfAvatar = new StringBuilder();
+		for (int i = 0; i < byteData.length; i++)
+			hashNameOfAvatar.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+		
 		return hashNameOfAvatar.toString();
 	}
 
