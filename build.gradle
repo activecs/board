@@ -13,7 +13,6 @@ apply plugin: 'compass'
 apply plugin: 'ssh'
 
 group = 'com.kharkiv.board'
-version = '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -28,6 +27,8 @@ ext {
     amazonEnv = 'config-amazon';
     openshiftTomcatPath = "/var/lib/openshift/53ea659450044640c600042b/app-root/data/tomcat";
     amazonTomcatPath = "/home/ubuntu/apache-tomcat";
+    versionFilePath = "src/main/resources/version.properties";
+	project.version = getArtifactVersion();
 }
 
 remotes {
@@ -159,6 +160,25 @@ def getEnvironmentName() {
     return defaultEnv;
 }
 
+def Properties getProperties(String filePath){
+	def Properties properties = new Properties()
+	def propsFile = file(filePath)
+
+	if(propsFile.exists())
+	properties.load(new FileInputStream(propsFile))
+
+	return properties
+}
+
+def String getArtifactVersion() {
+	def Properties versionProps = getProperties(versionFilePath)
+	if(hasProperty("releaseArtifact")) {
+		return versionProps['MajorVersion'] + "." + versionProps['MinorVersion']
+	} else {
+		return versionProps['MajorVersion'] + "." + versionProps['MinorVersion'] + "." + versionProps['BuildVersion'] +"-SNAPSHOT"
+	}
+}
+
 jacocoTestReport {
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running tests."
@@ -248,4 +268,34 @@ task deployToAmazon(type: TomcatSshDeploy, description: 'Deploy the war to amazo
     warName = 'ROOT';
     warTask = war;
     runAsRoot = true;
+}
+
+task incrementBuildVersion(group:'versioning', description:'increment build version'){
+doLast {
+		def Properties versionProps = getProperties(versionFilePath)
+		def version = (versionProps['BuildVersion'] ?: "0").toInteger() + 1
+		versionProps['BuildVersion'] = version.toString()
+		versionProps.store(file(versionFilePath).newWriter(), null)
+	}
+}
+
+war.dependsOn incrementBuildVersion
+
+task incrementMinorVersion(group:'versioning', description:'increment minor version'){
+doLast {
+		def Properties versionProps = getProperties(versionFilePath)
+		def version = (versionProps['MinorVersion'] ?: "0").toInteger() + 1
+		versionProps['MinorVersion'] = version.toString()
+		versionProps.store(file(versionFilePath).newWriter(), null)
+	}
+}
+
+task incrementMajorVersion(group:'versioning', description:'increment major version'){
+doLast {
+		def Properties versionProps = getProperties(versionFilePath)
+		def version = (versionProps['MajorVersion'] ?: "0").toInteger() + 1
+		versionProps['MajorVersion'] = version.toString()
+		versionProps['MinorVersion'] = '0'
+		versionProps.store(file(versionFilePath).newWriter(), null)
+	}
 }

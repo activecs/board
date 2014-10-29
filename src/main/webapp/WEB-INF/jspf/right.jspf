@@ -6,7 +6,7 @@
 	    <!-- Blog Search Well -->
 	    <div class="well" align="center">
 	        <a class="btn btn-default" href="#" role="button" ><fmt:message key="log.in"/></a>
-	        <a class="btn btn-default" href="#" role="button" data-toggle="modal" data-target="#loginModal">
+	        <a class="btn btn-default" href="#" role="button" data-toggle="modal" data-target="#registrationModal">
 	        	<fmt:message key="sing.up"/>
 	        </a>
 	        <!-- /.input-group -->
@@ -28,7 +28,7 @@
 	</div>
 
 	<!--login modal-->
-	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog registration">
 			<div class="modal-content">
 				<div class="modal-header">
