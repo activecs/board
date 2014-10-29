@@ -22,7 +22,7 @@ public class CommentServiceImpl implements CommentService {
 	
 	private static final String ERR_MESSAGE_USER_ID_CANNOT_BE_NULL = "User id cannot be null";
 	private static final String ERR_MESSAGE_USER_CANNOT_BE_NULL = "User cannot be null";
-	private static final String ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY = "User login cannot be empty";
+	private static final String ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY = "Username cannot be empty";
 	private static final String ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL = "Schedule cannot be null";
 	private static final String ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL = "Schedule id cannot be null";
 	private static final String ERR_COMMENT_CANNOT_BE_NULL = "Comment cannot be null";
@@ -49,10 +49,10 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Comment> getAllCommentsForUserByUserLogin(String userLogin) {
-		if(isEmpty(userLogin))
-			throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY);
-		return commentDao.getAllCommentsForUserByUserLogin(userLogin);
+	public List<Comment> getAllCommentsForUserByUsername(String username) {
+		if(isEmpty(username))
+			throw new IllegalArgumentException(ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY);
+		return commentDao.getAllCommentsForUserByUserName(username);
 	}
 
 	@Override

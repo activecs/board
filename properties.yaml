@@ -5,9 +5,10 @@ properties:
   global: &global_env
     
     database.driver.class: com.mysql.jdbc.Driver
-    hibernate.hbm2ddl.auto: update
+    hibernate.hbm2ddl.auto: create-drop
     hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-    hibernate.show_sql: true
+    hibernate.show.sql: true
+    hibernate.initial.data: initial_data.sql
     avatar.storage.folder : avatars
     avatar.default : profile-placeholder.jpg
     

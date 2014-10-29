@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,7 @@ import com.kharkiv.board.dto.user.User;
 public class UserServiceImpl implements UserService {
 
     private static final String ERR_MESSAGE_USER_ID_CANNOT_BE_NULL = "User id cannot be null";
-    private static final String ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY = "User login cannot be empty";
+    private static final String ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY = "Username cannot be empty";
     private static final String ERR_MESSAGE_USER_CANNOT_BE_NULL = "User cannot be null";
 
     @Inject
@@ -49,10 +51,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User getUserByLogin(String login) {
-        if (isEmpty(login))
-            throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY);
-        return userDao.getUserByLogin(login);
+    public User getUserByUsername(String username) {
+        if (isEmpty(username))
+            throw new IllegalArgumentException(ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY);
+        return userDao.getUserByUsername(username);
     }
 
     @Override
@@ -73,10 +75,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CacheEvict(key = USER_CACHE_KEY, condition = USER_CACHE_CONDITION)
-    public void deleteUserByLogin(String login) {
-        if (isEmpty(login))
-            throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY);
-        userDao.deleteUserByLogin(login);
+    public void deleteUserByUsername(String username) {
+        if (isEmpty(username))
+            throw new IllegalArgumentException(ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY);
+        userDao.deleteUserByUsername(username);
     }
 
     @Override
@@ -98,5 +100,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getCurrentUser() {
 		return currentUser;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userDao.getUserByUsername(username);
+		if (user == null)
+			throw new UsernameNotFoundException(username);
+		return user;
 	}
 }

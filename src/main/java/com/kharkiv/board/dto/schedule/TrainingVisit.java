@@ -1,5 +1,7 @@
 package com.kharkiv.board.dto.schedule;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -9,7 +11,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.TrainingVisitsQueris;
@@ -51,7 +52,10 @@ public class TrainingVisit extends BaseEntity {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("login", user.getLogin())
-                .add("schedule", schedule.getDateTime()).toString();
+        return toStringHelper(this)
+        		.add("id", super.getId())
+        		.add("username", user.getUsername())
+                .add("schedule", schedule.getDateTime())
+                .toString();
     }
 }

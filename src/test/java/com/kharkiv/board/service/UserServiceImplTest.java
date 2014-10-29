@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.google.common.collect.Lists;
 import com.kharkiv.board.dao.UserDao;
@@ -41,7 +43,7 @@ public class UserServiceImplTest {
 	private void initMockBehaviour() {
 		when(mockUserDao.getAllUsers()).thenReturn(users);
 		when(mockUserDao.getUserById(USER_ID)).thenReturn(user);
-		when(mockUserDao.getUserByLogin(USER_LOGIN)).thenReturn(user);
+		when(mockUserDao.getUserByUsername(USER_LOGIN)).thenReturn(user);
 		when(mockUserDao.addUser(user)).thenReturn(user);
 		when(mockUserDao.updateUser(user)).thenReturn(user);
 	}
@@ -77,24 +79,24 @@ public class UserServiceImplTest {
 	
 	@Test
 	public void shouldCallGetUserByLoginOnDaoWithGivenUserLogin_whenCallGetUserByLogin() {
-		service.getUserByLogin(USER_LOGIN);
-		verify(mockUserDao).getUserByLogin(USER_LOGIN);
+		service.getUserByUsername(USER_LOGIN);
+		verify(mockUserDao).getUserByUsername(USER_LOGIN);
 	}
 	
 	@Test
 	public void shouldReturnUserReturnedByDao_whenCallGetUserByLogin() {
-		User actualUser = service.getUserByLogin(USER_LOGIN);
+		User actualUser = service.getUserByUsername(USER_LOGIN);
 		assertThat(actualUser).isEqualTo(user);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsNullAndCallGetUserByLogin() {
-		service.getUserByLogin(null);
+		service.getUserByUsername(null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsEmptyAndCallGetUserByLogin() {
-		service.getUserByLogin(EMPTY);
+		service.getUserByUsername(EMPTY);
 	}
 	
 	@Test
@@ -121,18 +123,18 @@ public class UserServiceImplTest {
 	
 	@Test
 	public void shouldCallDeleteUserByLoginOnDaoWithGivenUserLogin_whenCallDeleteUserByLogin() {
-		service.deleteUserByLogin(USER_LOGIN);
-		verify(mockUserDao).deleteUserByLogin(USER_LOGIN);
+		service.deleteUserByUsername(USER_LOGIN);
+		verify(mockUserDao).deleteUserByUsername(USER_LOGIN);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsNullAndCallDeleteUserByLogin() {
-		service.deleteUserByLogin(null);
+		service.deleteUserByUsername(null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsEmptyAndCallDeleteUserByLogin() {
-		service.deleteUserByLogin(EMPTY);
+		service.deleteUserByUsername(EMPTY);
 	}
 	
 	@Test
@@ -173,5 +175,17 @@ public class UserServiceImplTest {
 	public void shouldReturnCurrentUser_whenGetCurrentUser(){
 		User actualUser = service.getCurrentUser();
 		assertThat(actualUser).isSameAs(mockCurrentUser);
+	}
+	
+	@Test
+	public void shouldReturnUserReturnedByDao_whenCallLoadUserByUsername() {
+		UserDetails actualUser = service.loadUserByUsername(USER_LOGIN);
+		assertThat(actualUser).isEqualTo(user);
+	}
+	
+	@Test(expected=UsernameNotFoundException.class)
+	public void shouldThrowUsernameNotFoundException_whenUserNotFoundAndCallLoadUserByUsername() {
+		when(mockUserDao.getUserByUsername(USER_LOGIN)).thenReturn(null);
+		service.loadUserByUsername(USER_LOGIN);
 	}
 }

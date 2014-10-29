@@ -31,7 +31,7 @@ public class CommentDaoTest {
 
     private static final Integer ID = 1;
     private static final Integer USER_ID = 1;
-    private static final String USER_LOGIN = "login";
+    private static final String USERNAME = "username";
     private static final Integer SCHEDULE_ID = 1;
 
     @Mock
@@ -92,9 +92,9 @@ public class CommentDaoTest {
     @Test
     public void shouldFindAllUserCommentsForGivenUserLogin_whenCallGetAllCommentsForUserByUserLogin() {
         when(query.getResultList()).thenReturn(Arrays.asList(comment));
-        List<Comment> userComments = commentDao.getAllCommentsForUserByUserLogin(USER_LOGIN);
-        verify(em).createNamedQuery(CommentQueries.GET_4_USER_BY_USER_LOGIN, Comment.class);
-        verify(query).setParameter("login", USER_LOGIN);
+        List<Comment> userComments = commentDao.getAllCommentsForUserByUserName(USERNAME);
+        verify(em).createNamedQuery(CommentQueries.GET_4_USER_BY_USERNAME, Comment.class);
+        verify(query).setParameter("username", USERNAME);
         verify(query).getResultList();
         assertNotNull(userComments);
         assertThat(userComments).containsOnly(comment);

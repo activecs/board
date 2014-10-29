@@ -46,7 +46,7 @@ public class CommentServiceImplTest {
 		when(mockCommentDao.updateComment(comment)).thenReturn(comment);
 		when(mockCommentDao.addComment(comment)).thenReturn(comment);
 		when(mockCommentDao.getAllCommentsForUser(user)).thenReturn(comments);
-		when(mockCommentDao.getAllCommentsForUserByUserLogin(USER_LOGIN)).thenReturn(comments);
+		when(mockCommentDao.getAllCommentsForUserByUserName(USER_LOGIN)).thenReturn(comments);
 		when(mockCommentDao.getAllCommentsForUserByUserId(USER_ID)).thenReturn(comments);
 		when(mockCommentDao.getAllCommentsForSchedule(schedule)).thenReturn(comments);
 		when(mockCommentDao.getAllCommentsForScheduleByScheduleId(SCHEDULE_ID)).thenReturn(comments);
@@ -88,24 +88,24 @@ public class CommentServiceImplTest {
 	
 	@Test
 	public void shouldCallGetAllCommentsForUserOnDaoWithGivenUserLogin_getAllCommentsForUserByUserLogin() {
-		service.getAllCommentsForUserByUserLogin(USER_LOGIN);
-		verify(mockCommentDao).getAllCommentsForUserByUserLogin(USER_LOGIN);
+		service.getAllCommentsForUserByUsername(USER_LOGIN);
+		verify(mockCommentDao).getAllCommentsForUserByUserName(USER_LOGIN);
 	}
 	
 	@Test
 	public void shouldReturnCommentsReturnedByDao_getAllCommentsForUserByUserLogin() {
-		List<Comment> actualComments = service.getAllCommentsForUserByUserLogin(USER_LOGIN);
+		List<Comment> actualComments = service.getAllCommentsForUserByUsername(USER_LOGIN);
 		assertThat(actualComments).isEqualTo(comments);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsNullAndCallGetAllCommentsForUserByUserLogin() {
-		service.getAllCommentsForUserByUserLogin(null);
+		service.getAllCommentsForUserByUsername(null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsEmptyAndCallGetAllCommentsForUserByUserLogin() {
-		service.getAllCommentsForUserByUserLogin(EMPTY);
+		service.getAllCommentsForUserByUsername(EMPTY);
 	}
 	
 	@Test

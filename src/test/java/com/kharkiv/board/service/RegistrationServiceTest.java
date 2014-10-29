@@ -1,6 +1,7 @@
 package com.kharkiv.board.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.kharkiv.board.dto.user.User;
-import com.kharkiv.board.dto.user.UserRole;
 
 public class RegistrationServiceTest {
 
@@ -39,14 +39,14 @@ public class RegistrationServiceTest {
     
     @Test
     public void shouldReturnTrue_whenUserIsExists() {
-        when(userService.getUserByLogin(anyString())).thenReturn(user);
+        when(userService.getUserByUsername(anyString())).thenReturn(user);
         assertTrue(registrationService.isExistentUser(LOGIN));
-        verify(userService).getUserByLogin(LOGIN);
+        verify(userService).getUserByUsername(LOGIN);
     }
     
     @Test
     public void shouldReturnFalse_whenUserIsNotExists() {
-        when(userService.getUserByLogin(anyString())).thenReturn(null);
+        when(userService.getUserByUsername(anyString())).thenReturn(null);
         assertFalse(registrationService.isExistentUser(LOGIN));
     }
     
@@ -56,7 +56,6 @@ public class RegistrationServiceTest {
         registrationService.createNewUser(user);
         verify(passwordEncoder).encode(PASSWORD);
         user.setPassword(ENCODED_PASSWORD);
-        user.setRole(UserRole.USER);
         verify(userService).addUser(user);
     }
     

@@ -18,7 +18,7 @@ public interface CommentService {
 
 	List<Comment> getAllCommentsForUserByUserId(Integer userId);
 
-	List<Comment> getAllCommentsForUserByUserLogin(String userLogin);
+	List<Comment> getAllCommentsForUserByUsername(String username);
 
 	List<Comment> getAllCommentsForSchedule(Schedule schedule);
 

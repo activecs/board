@@ -2,21 +2,23 @@ package com.kharkiv.board.service;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.kharkiv.board.dto.user.User;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
 	List<User> getAllUsers();
 
 	User getUserById(Integer id);
 
-	User getUserByLogin(String login);
+	User getUserByUsername(String username);
 
 	void deleteUser(User user);
 
 	void deleteUserById(Integer id);
 
-	void deleteUserByLogin(String login);
+	void deleteUserByUsername(String username);
 
 	User addUser(User user);
 

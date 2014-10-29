@@ -10,13 +10,13 @@ public interface UserDao {
 
 	User getUserById(Integer id);
 
-	User getUserByLogin(String login);
+	User getUserByUsername(String username);
 
 	void deleteUser(User user);
 
 	int deleteUserById(Integer id);
 
-	int deleteUserByLogin(String login);
+	int deleteUserByUsername(String username);
 
 	User addUser(User user);
 

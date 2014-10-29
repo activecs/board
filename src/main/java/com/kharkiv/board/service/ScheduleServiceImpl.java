@@ -25,7 +25,7 @@ import com.kharkiv.board.dto.schedule.Schedule;
 public class ScheduleServiceImpl implements ScheduleService {
 	
 	private static final String ERR_MESSAGE_USER_ID_CANNOT_BE_NULL = "User id cannot be null";
-	private static final String ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY = "User login cannot be empty";
+	private static final String ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY = "Username cannot be empty";
 	private static final String ERR_MESSAGE_SCHEDULE_CANNOT_BE_NULL = "Schedule cannot be null";
 	private static final String ERR_MESSAGE_SCHEDULE_ID_CANNOT_BE_NULL = "Schedule id cannot be null";
 	
@@ -51,10 +51,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Schedule> getSchedulesByUserLogin(String userLogin) {
-		if(isEmpty(userLogin))
-			throw new IllegalArgumentException(ERR_MESSAGE_USER_LOGIN_CANNOT_BE_EMPTY );
-		return scheduleDao.getSchedulesByUserLogin(userLogin);
+	public List<Schedule> getSchedulesByUsername(String username) {
+		if(isEmpty(username))
+			throw new IllegalArgumentException(ERR_MESSAGE_USERNAME_CANNOT_BE_EMPTY );
+		return scheduleDao.getSchedulesByUsername(username);
 	}
 
 	@Override

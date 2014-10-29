@@ -29,7 +29,7 @@ import com.kharkiv.board.util.QueryNamesConstants.UserQueries;
 public class UserDaoTest {
 
     private static final Integer ID = 1;
-    private static final String LOGIN = "login";
+    private static final String USERNAME = "username";
 
     @Mock
     private EntityManager em;
@@ -48,7 +48,7 @@ public class UserDaoTest {
 
         user = new User();
         user.setId(ID);
-        user.setLogin(LOGIN);
+        user.setUsername(USERNAME);
 
         when(em.createNamedQuery(anyString(), any(Class.class))).thenReturn(query);
         when(query.setParameter(anyString(), any())).thenReturn(query);
@@ -77,18 +77,18 @@ public class UserDaoTest {
     @Test
     public void shouldSetGivenLoginInQuery_whenCallGetUserByLogin() {
         when(query.getResultList()).thenReturn(Arrays.asList(user));
-        User userByLogin = userDao.getUserByLogin(LOGIN);
-        verify(em).createNamedQuery(UserQueries.GET_BY_LOGIN, User.class);
-        verify(query).setParameter("login", LOGIN);
+        User userByLogin = userDao.getUserByUsername(USERNAME);
+        verify(em).createNamedQuery(UserQueries.GET_BY_USERNAME, User.class);
+        verify(query).setParameter("username", USERNAME);
         verify(query).getResultList();
         assertNotNull(userByLogin);
-        assertEquals(LOGIN, userByLogin.getLogin());
+        assertEquals(USERNAME, userByLogin.getUsername());
     }
     
     @Test
     public void shouldReturnNull_whenUserIsNotFound() {
         when(query.getResultList()).thenReturn(Collections.<User>emptyList());
-        User userByLogin = userDao.getUserByLogin(LOGIN);
+        User userByLogin = userDao.getUserByUsername(USERNAME);
         assertNull(userByLogin);
     }
 
@@ -111,9 +111,9 @@ public class UserDaoTest {
     @Test
     public void shouldReturnCountOfDeletedRows_whenCallDeleteUserByLogin() {
         when(query.executeUpdate()).thenReturn(1);
-        int deleted = userDao.deleteUserByLogin(LOGIN);
-        verify(em).createNamedQuery(UserQueries.DELETE_BY_LOGIN, User.class);
-        verify(query).setParameter("login", LOGIN);
+        int deleted = userDao.deleteUserByUsername(USERNAME);
+        verify(em).createNamedQuery(UserQueries.DELETE_BY_USERNAME, User.class);
+        verify(query).setParameter("username", USERNAME);
         assertEquals(1, deleted);
     }
 

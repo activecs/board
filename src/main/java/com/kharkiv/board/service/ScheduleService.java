@@ -10,7 +10,7 @@ public interface ScheduleService {
 
 	List<Schedule> getSchedulesByUserId(Integer userId);
 
-	List<Schedule> getSchedulesByUserLogin(String userLogin);
+	List<Schedule> getSchedulesByUsername(String username);
 
 	Schedule getScheduleById(Integer scheduleId);
 

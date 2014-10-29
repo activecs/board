@@ -11,10 +11,10 @@ public final class QueryNamesConstants {
 
 		public static final String GET_ALL = "Users.getAll";
 		public static final String GET_BY_ID = "Users.getById";
-		public static final String GET_BY_LOGIN = "Users.getByLogin";
+		public static final String GET_BY_USERNAME = "Users.getByUsername";
 
 		public static final String DELETE_BY_ID = "User.deleteById";
-		public static final String DELETE_BY_LOGIN = "User.deleteByLogin";
+		public static final String DELETE_BY_USERNAME = "User.deleteByUsername";
 	}
 
 	public static class CommentQueries {
@@ -22,7 +22,7 @@ public final class QueryNamesConstants {
 		}
 
 		public static final String GET_4_USER_BY_USER_ID = "Comments.get4USerByUserId";
-		public static final String GET_4_USER_BY_USER_LOGIN = "Comments.get4USerByUserLogin";
+		public static final String GET_4_USER_BY_USERNAME = "Comments.get4USerByUsername";
 		public static final String GET_4_SCHEDULE_BY_SCHEDULE_ID = "Comments.get4ScheduleByScheduleId";
 
 		public static final String DELETE_BY_ID = "Comments.deleteById";
@@ -35,7 +35,7 @@ public final class QueryNamesConstants {
 		public static final String GET_ALL = "Schedules.getAll";
 		public static final String GET_BY_ID = "Schedules.getById";
 		public static final String GET_4_USER_BY_USER_ID = "Schedules.get4UserByUserId";
-		public static final String GET_4_USER_BY_USER_LOGIN = "Schedules.get4UserByUserLogin";
+		public static final String GET_4_USER_BY_USERNAME = "Schedules.get4UserByUsername";
 
 		public static final String DELETE_BY_ID = "Schedules.deleteById";
 	}

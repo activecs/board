@@ -31,7 +31,7 @@ import com.kharkiv.board.util.QueryNamesConstants.ScheduleQueries;
         @NamedQuery(name = ScheduleQueries.GET_ALL, query = "SELECT s FROM Schedule s"),
         @NamedQuery(name = ScheduleQueries.GET_BY_ID, query = "SELECT s FROM Schedule s WHERE s.id = :id"),
         @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USER_ID, query = "SELECT s FROM Schedule s WHERE s.user.id = :userId"),
-        @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USER_LOGIN, query = "SELECT s FROM Schedule s WHERE s.user.login = :login"),
+        @NamedQuery(name = ScheduleQueries.GET_4_USER_BY_USERNAME, query = "SELECT s FROM Schedule s WHERE s.user.username = :username"),
         @NamedQuery(name = ScheduleQueries.DELETE_BY_ID, query = "DELETE FROM Schedule s WHERE s.id = :id") })
 public class Schedule extends BaseEntity {
 

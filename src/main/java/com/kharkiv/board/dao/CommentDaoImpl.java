@@ -33,9 +33,9 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public List<Comment> getAllCommentsForUserByUserLogin(String userLogin) {
-        TypedQuery<Comment> query = em.createNamedQuery(CommentQueries.GET_4_USER_BY_USER_LOGIN, Comment.class);
-        return query.setParameter("login", userLogin).getResultList();
+    public List<Comment> getAllCommentsForUserByUserName(String username) {
+        TypedQuery<Comment> query = em.createNamedQuery(CommentQueries.GET_4_USER_BY_USERNAME, Comment.class);
+        return query.setParameter("username", username).getResultList();
     }
 
     @Override

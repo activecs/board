@@ -1,13 +1,15 @@
 package com.kharkiv.board.service;
 
+import static com.google.common.collect.Sets.newHashSet;
+
 import javax.inject.Inject;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kharkiv.board.dto.user.Role;
 import com.kharkiv.board.dto.user.User;
-import com.kharkiv.board.dto.user.UserRole;
 
 @Transactional
 @Service("registrationService")
@@ -20,8 +22,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean isExistentUser(String login) {
-		User user = userService.getUserByLogin(login);
+	public boolean isExistentUser(String username) {
+		User user = userService.getUserByUsername(username);
 		return user != null;
 	}
 
@@ -29,7 +31,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public void createNewUser(User user) {
 		String encodedPass = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPass);
-		user.setRole(UserRole.USER);
+		user.setRoles(newHashSet(new Role()));
 		userService.addUser(user);
 	}
 

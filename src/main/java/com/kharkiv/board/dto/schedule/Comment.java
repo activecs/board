@@ -1,5 +1,7 @@
 package com.kharkiv.board.dto.schedule;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
+
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -15,7 +17,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.google.common.base.MoreObjects;
 import com.kharkiv.board.dto.BaseEntity;
 import com.kharkiv.board.dto.user.User;
 import com.kharkiv.board.util.QueryNamesConstants.CommentQueries;
@@ -25,7 +26,7 @@ import com.kharkiv.board.util.QueryNamesConstants.CommentQueries;
 @Table(name = "comments")
 @NamedQueries(value = {
         @NamedQuery(name = CommentQueries.GET_4_USER_BY_USER_ID, query = "SELECT c FROM Comment c WHERE c.user.id = :userId"),
-        @NamedQuery(name = CommentQueries.GET_4_USER_BY_USER_LOGIN, query = "SELECT c FROM Comment c WHERE c.user.login = :login"),
+        @NamedQuery(name = CommentQueries.GET_4_USER_BY_USERNAME, query = "SELECT c FROM Comment c WHERE c.user.username = :username"),
         @NamedQuery(name = CommentQueries.GET_4_SCHEDULE_BY_SCHEDULE_ID, query = "SELECT c FROM Comment c WHERE c.schedule.id = :scheduleId"),
         @NamedQuery(name = CommentQueries.DELETE_BY_ID, query = "DELETE FROM Comment c WHERE c.id = :id") })
 public class Comment extends BaseEntity {
@@ -80,7 +81,10 @@ public class Comment extends BaseEntity {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("id", super.getId()).add("user", user.getLogin())
-                .add("schedule", schedule.getDateTime()).toString();
+        return toStringHelper(this)
+        		.add("id", super.getId())
+        		.add("user", user.getUsername())
+                .add("schedule", schedule.getDateTime())
+                .toString();
     }
 }

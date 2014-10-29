@@ -31,9 +31,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        TypedQuery<User> query = em.createNamedQuery(UserQueries.GET_BY_LOGIN, User.class);
-        List<User> users = query.setParameter("login", login).getResultList();
+    public User getUserByUsername(String username) {
+        TypedQuery<User> query = em.createNamedQuery(UserQueries.GET_BY_USERNAME, User.class);
+        List<User> users = query.setParameter("username", username).getResultList();
         return CollectionUtils.isEmpty(users) ? null : users.get(0);
     }
 
@@ -49,9 +49,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int deleteUserByLogin(String login) {
-        TypedQuery<User> query = em.createNamedQuery(UserQueries.DELETE_BY_LOGIN, User.class);
-        return query.setParameter("login", login).executeUpdate();
+    public int deleteUserByUsername(String username) {
+        TypedQuery<User> query = em.createNamedQuery(UserQueries.DELETE_BY_USERNAME, User.class);
+        return query.setParameter("username", username).executeUpdate();
     }
 
     @Override

@@ -35,7 +35,7 @@ import com.kharkiv.board.service.RegistrationService;
 public class RegistrationPageController {
 
 	private static final long MAX_FILE_SIZE = 5L * 1024L * 1024L; // 5MB 
-	private static final String LOGIN_PARAMETER = "login";
+	private static final String USERNAME_PARAMETER = "login";
 	private static final String PASSWORD_CONFIRMATION_PARAMETER = "confirm_password";
 	private static final String AVATAR_PARAMETER = "avatar-preview";
 	private static final String ERROR_MESSAGE_LARGE_IMAGE_SIZE = "sign.up.image.too.big";
@@ -58,7 +58,7 @@ public class RegistrationPageController {
 			@RequestParam(PASSWORD_CONFIRMATION_PARAMETER) String confirmPassword,
 			@RequestParam MultipartFile file) throws IOException, NoSuchAlgorithmException {
 		User newUser = new User();
-		newUser.setLogin(login);
+		newUser.setUsername(login);
 		newUser.setPassword(password);
 
 		List<Error> errors = validate(confirmPassword, file, newUser);
@@ -78,7 +78,7 @@ public class RegistrationPageController {
 		List<Error> errors = Lists.newArrayList();
 		errors.add(validatePasswordConfirmation(newUser.getPassword(), confirmPassword));
 		errors.addAll(validateUserConstraints(newUser));
-		errors.add(validaUserExistence4Login(newUser.getLogin()));
+		errors.add(validaUserExistence4Username(newUser.getUsername()));
 		errors.add(saveAvatar(file, newUser));
 		errors.removeAll(singleton(null));
 
@@ -113,10 +113,10 @@ public class RegistrationPageController {
 		return errors;
 	}
 
-	private Error validaUserExistence4Login(String login) {
-		if (isNotBlank(login) && registrationService.isExistentUser(login)) {
+	private Error validaUserExistence4Username(String username) {
+		if (isNotBlank(username) && registrationService.isExistentUser(username)) {
 			String message = getErrorMessage(ERROR_MESSAGE_USER_ALREADY_EXIST);
-			return new Error(LOGIN_PARAMETER, message);
+			return new Error(USERNAME_PARAMETER, message);
 		}
 		return null;
 	}

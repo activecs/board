@@ -83,9 +83,9 @@ public class ScheduleDaoTest {
     @Test
     public void shouldReturnSchedulesForGivenUserLogin_whenCallGetSchedulesByUserLogin() {
         when(query.getResultList()).thenReturn(Arrays.asList(schedule));
-        List<Schedule> usersSchedule = scheduleDao.getSchedulesByUserLogin(USER_LOGIN);
-        verify(em).createNamedQuery(ScheduleQueries.GET_4_USER_BY_USER_LOGIN, Schedule.class);
-        verify(query).setParameter("login", USER_LOGIN);
+        List<Schedule> usersSchedule = scheduleDao.getSchedulesByUsername(USER_LOGIN);
+        verify(em).createNamedQuery(ScheduleQueries.GET_4_USER_BY_USERNAME, Schedule.class);
+        verify(query).setParameter("username", USER_LOGIN);
         verify(query).getResultList();
         assertThat(usersSchedule).containsOnly(schedule);
     }

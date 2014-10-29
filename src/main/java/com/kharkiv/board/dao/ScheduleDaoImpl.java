@@ -36,9 +36,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
-    public List<Schedule> getSchedulesByUserLogin(String login) {
-        TypedQuery<Schedule> query = em.createNamedQuery(ScheduleQueries.GET_4_USER_BY_USER_LOGIN, Schedule.class);
-        return query.setParameter("login", login).getResultList();
+    public List<Schedule> getSchedulesByUsername(String username) {
+        TypedQuery<Schedule> query = em.createNamedQuery(ScheduleQueries.GET_4_USER_BY_USERNAME, Schedule.class);
+        return query.setParameter("username", username).getResultList();
     }
 
     @Override

@@ -47,7 +47,7 @@ public class ScheduleServiceImplTest {
 	private void initMockBehaviour() {
 		when(mockScheduleDao.getAllSchedules()).thenReturn(schedules);
 		when(mockScheduleDao.getSchedulesByUserId(USER_ID)).thenReturn(schedules);
-		when(mockScheduleDao.getSchedulesByUserLogin(USER_LOGIN)).thenReturn(schedules);
+		when(mockScheduleDao.getSchedulesByUsername(USER_LOGIN)).thenReturn(schedules);
 		when(mockScheduleDao.getScheduleById(SCHEDULE_ID)).thenReturn(schedule);
 		when(mockScheduleDao.addSchedule(schedule)).thenReturn(schedule);
 		when(mockScheduleDao.updateSchedule(schedule)).thenReturn(schedule);
@@ -85,24 +85,24 @@ public class ScheduleServiceImplTest {
 	
 	@Test
 	public void shouldCallGetSchedulesByUserLoginOnDaoWithGivenUserLogin_whenCallGetSchedulesByUserLogin() {
-		service.getSchedulesByUserLogin(USER_LOGIN);
-		verify(mockScheduleDao).getSchedulesByUserLogin(USER_LOGIN);
+		service.getSchedulesByUsername(USER_LOGIN);
+		verify(mockScheduleDao).getSchedulesByUsername(USER_LOGIN);
 	}
 	
 	@Test
 	public void shouldReturnSchedulesReturnedByDao_whenCallGetSchedulesByUserLogin() {
-		List<Schedule> actualSchedules = service.getSchedulesByUserLogin(USER_LOGIN);
+		List<Schedule> actualSchedules = service.getSchedulesByUsername(USER_LOGIN);
 		assertThat(actualSchedules).isEqualTo(schedules);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsNullAndCallGetSchedulesByUserLogin() {
-		service.getSchedulesByUserLogin(null);
+		service.getSchedulesByUsername(null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldThrowIllegalArgumentException_whenUserLoginIsEmptyAndCallGetSchedulesByUserLogin() {
-		service.getSchedulesByUserLogin(EMPTY);
+		service.getSchedulesByUsername(EMPTY);
 	}
 	
 	@Test

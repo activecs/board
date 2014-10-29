@@ -10,7 +10,7 @@ public interface ScheduleDao {
 
 	List<Schedule> getSchedulesByUserId(Integer userId);
 
-	List<Schedule> getSchedulesByUserLogin(String login);
+	List<Schedule> getSchedulesByUsername(String username);
 
 	Schedule getScheduleById(Integer id);
 

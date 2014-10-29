@@ -18,7 +18,7 @@ public interface CommentDao {
 
 	List<Comment> getAllCommentsForUserByUserId(Integer userId);
 
-	List<Comment> getAllCommentsForUserByUserLogin(String userLogin);
+	List<Comment> getAllCommentsForUserByUserName(String username);
 
 	List<Comment> getAllCommentsForSchedule(Schedule schedule);
 

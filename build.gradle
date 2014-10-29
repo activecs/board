@@ -50,6 +50,7 @@ remotes {
 
 repositories {
     maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url 'http://repo.spring.io/milestone' }
     mavenCentral()
 }
 
@@ -98,6 +99,7 @@ buildscript {
 
 dependencies {
     def springVersion = '4.1.1.RELEASE'
+    def springSecurityVersion = '4.0.0.M2'
     def tomcatVersion = '7.0.55'
     def hybernateVersion = '4.3.5.Final'
     def jacksonVersion = '2.4.0'
@@ -110,7 +112,10 @@ dependencies {
     compile group: 'org.springframework', 				name:'spring-web', 						version:springVersion
     compile group: 'org.springframework', 				name:'spring-webmvc', 					version:springVersion
     compile group: 'org.springframework', 				name:'spring-websocket', 				version:springVersion
-    compile group: 'org.springframework.security', 		name:'spring-security-core', 			version:'3.2.5.RELEASE'
+    compile group: 'org.springframework.security', 		name:'spring-security-core', 			version:springSecurityVersion
+    compile group: 'org.springframework.security',      name:'spring-security-web',             version:springSecurityVersion
+    compile group: 'org.springframework.security',      name:'spring-security-config',          version:springSecurityVersion
+    compile group: 'org.springframework.security',      name:'spring-security-taglibs',         version:springSecurityVersion
     compile group: 'org.hibernate',						name:'hibernate-core', 					version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-entitymanager',			version:hybernateVersion
     compile group: 'org.hibernate',						name:'hibernate-validator', 			version:'5.1.2.Final'

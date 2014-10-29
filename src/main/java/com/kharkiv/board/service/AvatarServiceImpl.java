@@ -68,7 +68,7 @@ public class AvatarServiceImpl implements AvatarService {
 
 	private String getHashNameOfAvatar(User user)
 			throws NoSuchAlgorithmException {
-		String newNameOfAvatar = user.getLogin() + user.getId();
+		String newNameOfAvatar = user.getUsername() + user.getId();
 
 		MessageDigest md = MessageDigest.getInstance(SHA_1);
 		md.update(newNameOfAvatar.getBytes());
