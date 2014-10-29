@@ -3,15 +3,12 @@ package com.kharkiv.board.service;
 import static java.lang.System.getProperty;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.util.ReflectionUtils.findField;
 import static org.springframework.util.ReflectionUtils.makeAccessible;
 import static org.springframework.util.ReflectionUtils.setField;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletContext;
 
